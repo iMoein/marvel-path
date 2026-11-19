@@ -26,20 +26,20 @@ function episodeDisplay(f,n){const meta=titleMetadata(f.id),ep=(meta?.sourceMism
  const title=ep?.nameFa||ep?.name||META[f.id]?.episodes?.[n-1]||`قسمت ${num(n)}`;
  const checked=getEpisodes(f).includes(n);
  const image=safePhoto(ep?.image);
- return `<article class="episode episode-rich ${checked?'episode-checked':''}" data-episode="${n}">${image?`<div class="episode-still"><img alt="تصویر قسمت ${num(n)}" src="${esc(image)}" loading="lazy" /></div>`:''}<div class="ep-rich-body"><div class="ep-rich-head"><span class="ep-number" aria-hidden="true"><span class="ep-number-label" lang="en">EP</span><span class="ep-number-value">${num(n)}</span></span><div><h4 dir="auto" lang="${ep?.nameFa?'fa':'en'}">${esc(title)}</h4>${ep?.nameFa&&ep.name?`<small class="episode-original-name" dir="ltr">${esc(ep.name)}</small>`:''}<small>قسمت ${num(n)}${ep?.runtime?' · '+duration(ep.runtime):''}${ep?.airDate?' · '+esc(ep.airDate):''}</small></div></div>${ep?.overviewFa?`<p class="ep-synopsis" lang="fa" dir="rtl">${esc(ep.overviewFa)}</p>`:ep?.overview?`<details class="untranslated-source"><summary>خلاصه به زبان اصلی (ترجمه نشده)</summary><p class="ep-synopsis" lang="en" dir="ltr">${esc(ep.overview)}</p></details>`:meta?.source?'<p class="ep-synopsis subtle">برای این قسمت هنوز خلاصه‌ای در منبع ثبت نشده است.</p>':''}<button type="button" class="episode-watch-button ${checked?'checked':''}" role="checkbox" aria-checked="${checked}" data-action="episode" data-id="${esc(f.id)}" data-value="${n}">${ico('check',15)} ${checked?'دیده‌شده؛ برای لغو بزن':'ثبت تماشای قسمت'}</button></div></article>`;
+ return `<article class="episode episode-rich ${checked?'episode-checked':''}" data-episode="${n}">${image?`<div class="episode-still"><img alt="تصویر قسمت ${num(n)}" src="${esc(image)}" loading="lazy" /></div>`:''}<div class="ep-rich-body"><div class="ep-rich-head"><span class="ep-number" aria-hidden="true"><span class="ep-number-label" lang="en">EP</span><span class="ep-number-value">${num(n)}</span></span><div class="episode-heading"><h4 dir="auto" lang="${ep?.nameFa?'fa':'en'}">${esc(title)}</h4>${ep?.nameFa&&ep.name?`<small class="episode-original-name" lang="en" dir="ltr">${esc(ep.name)}</small>`:''}</div><div class="episode-meta" dir="rtl"><span class="episode-meta-number">قسمت ${num(n)}</span>${ep?.runtime?`<span class="episode-meta-runtime">${duration(ep.runtime)}</span>`:''}${ep?.airDate?`<span class="episode-meta-date" dir="ltr">${esc(ep.airDate)}</span>`:''}</div></div>${ep?.overviewFa?`<p class="ep-synopsis" lang="fa" dir="rtl">${esc(ep.overviewFa)}</p>`:ep?.overview?`<details class="untranslated-source"><summary>خلاصه به زبان اصلی (ترجمه نشده)</summary><p class="ep-synopsis" lang="en" dir="ltr">${esc(ep.overview)}</p></details>`:meta?.source?'<p class="ep-synopsis subtle">برای این قسمت هنوز خلاصه‌ای در منبع ثبت نشده است.</p>':''}<button type="button" class="episode-watch-button ${checked?'checked':''}" role="checkbox" aria-checked="${checked}" data-action="episode" data-id="${esc(f.id)}" data-value="${n}">${ico('check',15)} ${checked?'دیده‌شده؛ برای لغو بزن':'ثبت تماشای قسمت'}</button></div></article>`;
 }
 function peoplePage(){const items=information.directory?.items||[],busy=!information.directory;
- return `<div class="page-intro"><span class="page-kicker">THE PEOPLE BEHIND THE STORIES</span><h1>بازیگران <em>مارول</em></h1><p>پروفایل‌ها از روی حضور واقعی بازیگران در عناوین ذخیره‌شده به هم متصل می‌شن.</p></div><div class="people-toolbar"><label class="vault-search">${ico('search',17)}<input id="people-search" placeholder="نام بازیگر یا شخصیت..." autocomplete="off" value="${esc(peopleSearchTerm)}" /></label><span>${num(items.length)} بازیگر در آرشیو</span></div><div id="people-results" class="people-directory">${peopleCards(items,peopleSearchTerm)}</div>${busy?'<p class="metadata-empty">در حال بارگذاری فهرست بازیگران…</p>':''}`;
+ return `<div class="page-intro"><span class="page-kicker">THE PEOPLE BEHIND THE STORIES</span><h1>بازیگران <em>مارول</em></h1><p>پروفایل‌ها از روی حضور واقعی بازیگران در عناوین ذخیره‌شده به هم متصل می‌شن.</p></div><div class="people-toolbar"><label class="vault-search">${ico('search',17)}<input id="people-search" placeholder="نام بازیگر یا شخصیت..." autocomplete="off" value="${esc(peopleSearchTerm)}" /></label><span>${num(items.length)} بازیگر در آرشیو</span></div><div id="people-results" class="people-directory">${busy?'':peopleCards(items,peopleSearchTerm)}</div>${busy?'<p class="metadata-empty">در حال بارگذاری فهرست بازیگران…</p>':''}`;
 }
 let peopleSearchTerm='';
 let publicPeoplePage=0;
 function peopleCards(items,term=''){
- const q=term.toLowerCase().trim();
- const chosen=items.filter(p=>(p.name+' '+(p.credits||[]).map(c=>c.character||'').join(' ')).toLowerCase().includes(q));
+ const q=faSearch(term);
+ const chosen=items.filter(p=>personSearchText(p).includes(q));
  const pages=Math.max(1,Math.ceil(chosen.length/60));
  publicPeoplePage=Math.max(0,Math.min(publicPeoplePage,pages-1));
- const cards=chosen.slice(publicPeoplePage*60,(publicPeoplePage+1)*60).map(p=>`<a class="people-card" href="#person/${encodeURIComponent(p.id)}">${picture(p.photo,p.name)}<strong dir="ltr">${esc(p.name)}</strong><span>${num((p.credits||[]).length)} حضور در آرشیو</span></a>`).join('');
- if(!cards)return '<div class="metadata-empty">بازیگری با این نام پیدا نشد.</div>';
+ const cards=chosen.slice(publicPeoplePage*60,(publicPeoplePage+1)*60).map(p=>`<a class="people-card" href="/person/${encodeURIComponent(p.id)}/">${picture(p.photo,p.name)}<strong dir="auto">${esc(actorName(p))}</strong>${p.nameFa?`<span class="actor-name-en" dir="ltr">${esc(p.name)}</span>`:''}<span>${num((p.credits||[]).length)} حضور در آرشیو</span></a>`).join('');
+ if(!cards)return empty('نام بازیگر یا شخصیت دیگری را جست‌وجو کن.','بازیگری پیدا نشد');
  return cards+(pages>1?`<div class="public-people-pager"><button class="btn btn-outline" data-people-page="-1" ${publicPeoplePage===0?'disabled':''}>قبلی</button><span>صفحه ${num(publicPeoplePage+1)} از ${num(pages)} · ${num(chosen.length)} بازیگر</span><button class="btn btn-outline" data-people-page="1" ${publicPeoplePage===pages-1?'disabled':''}>بعدی</button></div>`:'');
 }
 function personPage(id){const data=information.people[id],p=data?.data;
@@ -50,7 +50,7 @@ function personPage(id){const data=information.people[id],p=data?.data;
 }
 async function publicJson(path){
  const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),12000);
- try{const r=await fetch(path+'?v=3.5.12',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
+ try{const r=await fetch(path+'?v=3.5.15',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
 }
 async function loadInfoForPage(page){
  if(page.name==='title'&&BY_ID[page.id]&&!information.requested.has(page.id)){

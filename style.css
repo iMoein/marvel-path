@@ -963,3 +963,13 @@ html.mp-gs-open{overflow:hidden}
 .empty p{line-height:1.8;max-width:34rem}
 .listing-actions[hidden],.pagination[hidden]{display:none}
 @media(max-width:700px){.empty{min-height:220px;padding:28px 16px}}
+
+/* Keep bilingual episode titles and factual metadata on separate rows. */
+.cinema-episode-grid .ep-rich-head{display:grid;grid-template-columns:42px minmax(0,1fr);gap:8px 11px;align-items:start}
+.cinema-episode-grid .ep-rich-head .ep-number{grid-row:1;grid-column:1}
+.episode-heading{display:flex;flex-direction:column;gap:4px;text-align:right;grid-column:2;min-width:0}
+.episode-heading h4{text-align:right}
+.episode-heading .episode-original-name{display:block;direction:ltr;text-align:right;line-height:1.5}
+.episode-meta{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;color:var(--muted);font-size:11px;line-height:1.6;min-width:0}
+.episode-meta>span{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.episode-meta .episode-meta-date{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
