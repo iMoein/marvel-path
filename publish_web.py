@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.5.4'; SITE='https://marvel.imoein.com'
+VERSION='3.5.5'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -27,7 +27,7 @@ def main():
     shutil.copy2(OUT/'assets/icons/icon-180.png',OUT/'apple-touch-icon.png')
     manifest={'id':'/','name':'مسیر مارول | Marvel Path','short_name':'مسیر مارول','description':'راهنمای غیررسمی ترتیب تماشا، آرشیو آثار، بازیگران و پیگیری پیشرفت شخصی.','lang':'fa','dir':'rtl','start_url':'/','scope':'/','display':'standalone','background_color':'#0c0d11','theme_color':'#0c0d11','icons':[{'src':f'/assets/icons/icon-{n}.png','sizes':f'{n}x{n}','type':'image/png','purpose':'any'} for n in (192,512)]+[{'src':'/assets/icons/maskable-512.png','sizes':'512x512','type':'image/png','purpose':'maskable'}],'shortcuts':[{'name':'مسیر Doomsday','url':'/'},{'name':'آرشیو MCU','url':'/archive/'},{'name':'بازیگران','url':'/actors/'}]}
     (OUT/'manifest.webmanifest').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
-    node="const fs=require('fs'),vm=require('vm'); const src=fs.readFileSync('data.js','utf8')+'\\n'+fs.readFileSync('meta.js','utf8')+'\\nJSON.stringify({films:FILMS,mcu:MCU.map(f=>f.id),route:DOOMSDAY,meta:META})'; console.log(vm.runInNewContext(src));"
+    node="const fs=require('fs'),vm=require('vm'); const src=fs.readFileSync('data.js','utf8')+'\\n'+fs.readFileSync('meta.js','utf8')+'\\nJSON.stringify({films:FILMS,mcu:MCU.map(f=>f.id),route:DOOMSDAY,meta:META,guide:HOME_GUIDE})'; console.log(vm.runInNewContext(src));"
     data=json.loads(subprocess.check_output(['node','-e',node],cwd=ROOT,text=True))
     films={f['id']:f for f in data['films']}; meta=data['meta']; actors=get(P/'people.json')['items']; people={a['id']:a for a in actors}; poster=get(P/'poster-urls.json'); images=get(P/'image-cache.json')
     head=(OUT/'index.html').read_text()
@@ -70,7 +70,9 @@ def main():
     def list_people(items):return '<ul class="seo-catalog">'+''.join('<li>'+link('/person/'+a['id']+'/',a['name'])+'</li>' for a in items)+'</ul>'
     rootdesc='راهنمای فارسی ترتیب تماشای آثار مارول، مسیر پیشنهادی آمادگی برای Avengers: Doomsday، آرشیو MCU، بازیگران و ثبت پیشرفت تماشا.'
     root_schema={'@context':'https://schema.org','@graph':[{'@type':'WebSite','@id':SITE+'/#website','name':'Marvel Path | مسیر مارول','url':SITE+'/','inLanguage':'fa'},{'@type':'WebApplication','@id':SITE+'/#app','name':'مسیر مارول','url':SITE+'/','description':rootdesc,'applicationCategory':'EntertainmentApplication','operatingSystem':'Web','inLanguage':'fa','isAccessibleForFree':True,'image':SITE+OG}]}
-    page('/','مسیر مارول | ترتیب تماشای MCU و مسیر Doomsday',rootdesc,static('مسیر مارول؛ راهنمای تماشای دنیای مارول','<p>'+esc(rootdesc)+'</p><h2>مسیر پیشنهادی Doomsday</h2>'+list_titles(data['route'])+'<h2>آرشیو آثار و بازیگران</h2><p>'+link('/archive/','همه فیلم‌ها و سریال‌های آرشیو')+' · '+link('/actors/','فهرست بازیگران مارول')+'</p>'),root_schema)
+    guide=data['guide']
+    guide_html='<section aria-labelledby="seo-guide-title"><h2 id="seo-guide-title">'+esc(guide['title'])+'</h2>'+''.join('<p>'+esc(p)+'</p>' for p in guide['paragraphs'])+'<p><a href="'+esc(guide['repo'])+'" target="_blank" rel="noopener noreferrer">'+esc(guide['linkLabel'])+'</a></p></section>'
+    page('/','مسیر مارول | ترتیب تماشای MCU و مسیر Doomsday',rootdesc,static('مسیر مارول؛ راهنمای تماشای دنیای مارول','<p>'+esc(rootdesc)+'</p><h2>مسیر پیشنهادی Doomsday</h2>'+list_titles(data['route'])+'<h2>آرشیو آثار و بازیگران</h2><p>'+link('/archive/','همه فیلم‌ها و سریال‌های آرشیو')+' · '+link('/actors/','فهرست بازیگران مارول')+'</p>'+guide_html),root_schema)
     page('/archive/','آرشیو MCU و فیلم‌ها و سریال‌های مارول | مسیر مارول','فهرست فیلم‌ها، سریال‌ها و ویژه‌برنامه‌های آرشیو مارول؛ داستان، بازیگران، قسمت‌ها و ترتیب تماشا.',static('آرشیو فیلم‌ها و سریال‌های مارول','<p>فهرست '+str(len(films))+' عنوان ثبت‌شده در آرشیو مسیر مارول، شامل آثار MCU و جهان‌های مرتبط.</p><h2>همه عناوین</h2>'+list_titles(list(films))))
     page('/actors/','بازیگران مارول؛ نقش‌ها و آثار | مسیر مارول','فهرست بازیگران آرشیو مارول، نقش‌ها، پروفایل و فیلموگرافی در مسیر مارول.',static('بازیگران مارول','<p>فهرست '+str(len(actors))+' بازیگر مرتبط با آثار آرشیو. برای مشاهده نقش‌ها و آثار روی نام بازیگر بزنید.</p>'+list_people(actors)))
     for private,label in [('settings','تنظیمات'),('watchlist','واچ‌لیست من')]:
@@ -153,8 +155,8 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
     css=OUT/'style.css'
     with css.open('a') as f:f.write('\n.seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}\n')
     worker="""'use strict';
-const CORE='marvel-path-v354-core', DATA='marvel-path-v340-data';
-const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.4','/data.js?v=3.5.4','/meta.js?v=3.5.4','/posters.js?v=3.5.4','/admin.js?v=3.5.4','/enrichment.js?v=3.5.4','/app.js?v=3.5.4','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
+const CORE='marvel-path-v355-core', DATA='marvel-path-v340-data';
+const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.5','/data.js?v=3.5.5','/meta.js?v=3.5.5','/posters.js?v=3.5.5','/admin.js?v=3.5.5','/enrichment.js?v=3.5.5','/app.js?v=3.5.5','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{
