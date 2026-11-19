@@ -819,3 +819,6 @@ html.mp-gs-open{overflow:hidden}
  .home-guide-icon{width:34px;height:34px}
  .home-guide-head{margin-bottom:9px}
 }
+
+/* Two supplementary titles side by side on desktop; stacked on smaller screens. */
+@media(min-width:1024px){.bonus-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}

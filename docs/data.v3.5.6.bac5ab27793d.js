@@ -106,3 +106,362 @@ const MCU = FILMS.filter(f=>f.universe==='mcu'||f.universe==='bonus');
 
 /* Curated character/continuity arcs. Editorial viewing paths — not Marvel Studios official timelines. */
 const STORY_ARCS = {"main":{"name":"خط اصلی انتقام‌جویان","en":"THE MAIN SAGA","icon":"✦","desc":"از شکل‌گیری تیم تا پیامد Endgame و پیوند داستان‌های چندجهانی. یک مسیر گزینش‌شده، نه تقویم رسمی.","items":["iron-man","iron-man-2","thor","cap-first","avengers","iron-man-3","cap-winter","avengers-ultron","civil-war","spider-home","black-panther","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","wandavision","falcon","spider-far","spider-no","strange-mom","wakanda","shang-chi","quantumania","deadpool-wolverine","cap-brave","thunderbolts","fantastic-four","visionquest"]},"ironman":{"name":"تونی استارک و میراثش","en":"IRON MAN LEGACY","icon":"◈","desc":"داستان تونی، روابطش با انتقام‌جویان، پیتر پارکر و ادامه میراث فناوری زره.","items":["iron-man","iron-man-2","avengers","iron-man-3","avengers-ultron","civil-war","spider-home","infinity-war","endgame","ironheart"]},"captain":{"name":"از استیو تا سم و باکی","en":"CAPTAIN AMERICA","icon":"✪","desc":"مسیر سپر کاپیتان آمریکا، سرباز زمستان و تیم جدید.","items":["cap-first","avengers","cap-winter","avengers-ultron","civil-war","infinity-war","endgame","falcon","cap-brave","thunderbolts"]},"thorloki":{"name":"ثور، لوکی و آزگارد","en":"THOR & LOKI","icon":"ϟ","desc":"روابط دو برادر، سرنوشت آزگارد و نقش نسخه متفاوت لوکی در TVA.","items":["thor","avengers","thor-dark","avengers-ultron","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","thor-love"]},"wanda":{"name":"واندا، ویژن و جادو","en":"THE SCARLET PATH","icon":"✧","desc":"مسیر واندا از انتقام‌جویان تا جادوی آشوب و ادامه داستان ویژن.","items":["avengers-ultron","civil-war","infinity-war","endgame","wandavision","strange-mom","agatha","visionquest"]},"spider":{"name":"مرد عنکبوتی پیتر پارکر","en":"SPIDER-MAN","icon":"✺","desc":"ورود پیتر به جهان انتقام‌جویان، پیامدهای Endgame و ادامه داستان خودش.","items":["civil-war","spider-home","infinity-war","endgame","spider-far","spider-no","spider-brand"]},"multiverse":{"name":"دکتر استرنج و مولتی‌ورس","en":"THE MULTIVERSE","icon":"⌘","desc":"از جادوهای محافظ زمین تا TVA، جهان‌های موازی و Fantastic Four.","items":["doctor-strange","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","wandavision","spider-no","strange-mom","whatif-1","whatif-2","whatif-3","quantumania","deadpool-wolverine","fantastic-four"]},"wakanda":{"name":"واکاندا و پلنگ سیاه","en":"WAKANDA","icon":"◇","desc":"از معرفی واکاندا تا تغییر نسل قهرمانان و فناوری آیرون‌هارت.","items":["civil-war","black-panther","infinity-war","endgame","wakanda","ironheart","eyes-wakanda"]},"guardians":{"name":"نگهبانان کهکشان","en":"GUARDIANS OF THE GALAXY","icon":"✷","desc":"داستان خانواده کیهانیِ نگهبانان، نقششان در نبرد تانوس و پایان سه‌گانه.","items":["guardians-1","guardians-2","groot-1","groot-2","infinity-war","endgame","thor-love","guardians-holiday","guardians-3"]},"street":{"name":"دردویل و قهرمانان خیابانی","en":"STREET-LEVEL HEROES","icon":"⌁","desc":"مسیر نیویورکی Defenders تا بازگشت دردویل و مجازات‌گر.","items":["daredevil-1","jessica-1","daredevil-2","luke-1","iron-fist-1","defenders","punisher-1","daredevil-3","punisher-2","hawkeye","echo","daredevil-born-1","daredevil-born-2","punisher-special"]},"marvels":{"name":"کاپیتان مارول و قهرمانان فضایی","en":"THE MARVELS","icon":"★","desc":"کارول دنورز، کامالا خان، مونیکا رمبو و پرونده اسکرال‌ها.","items":["captain-marvel","endgame","wandavision","ms-marvel","secret-invasion","marvels"]},"antman":{"name":"انت‌من و قلمرو کوانتومی","en":"QUANTUM REALM","icon":"◎","desc":"اسکات لنگ، خانواده پیم و پیوند فناوری کوانتومی با رویدادهای Endgame.","items":["ant-man","civil-war","antman-wasp","endgame","quantumania"]},"animated":{"name":"انیمیشن‌ها و جهان‌های متفاوت","en":"ANIMATED MULTIVERSE","icon":"✳","desc":"انیمیشن‌های داستانی MCU و شاخه‌های موازی؛ بعضی آثار مستقل و غیرخطی‌اند.","items":["whatif-1","whatif-2","whatif-3","marvel-zombies","friendly-spider-1","groot-1","groot-2","eyes-wakanda"]}};
+
+/* Official title/studio destinations sourced from public studio links and catalogues. */
+const OFFICIAL_TITLE_LINKS = {
+  "iron-man-3": {
+    "url": "https://movies.disney.com/marvels-iron-man-3",
+    "label": "Disney Movies"
+  },
+  "cap-winter": {
+    "url": "https://movies.disney.com/captain-america-the-winter-soldier",
+    "label": "Disney Movies"
+  },
+  "guardians-1": {
+    "url": "https://movies.disney.com/marvels-guardians-of-the-galaxy",
+    "label": "Disney Movies"
+  },
+  "avengers-ultron": {
+    "url": "https://movies.disney.com/marvels-avengers-age-of-ultron",
+    "label": "Disney Movies"
+  },
+  "ant-man": {
+    "url": "https://movies.disney.com/ant-man",
+    "label": "Disney Movies"
+  },
+  "civil-war": {
+    "url": "https://movies.disney.com/captain-america-civil-war",
+    "label": "Disney Movies"
+  },
+  "doctor-strange": {
+    "url": "https://movies.disney.com/doctor-strange",
+    "label": "Disney Movies"
+  },
+  "guardians-2": {
+    "url": "https://movies.disney.com/guardians-of-the-galaxy-vol-2",
+    "label": "Disney Movies"
+  },
+  "thor-ragnarok": {
+    "url": "https://movies.disney.com/thor-ragnarok",
+    "label": "Disney Movies"
+  },
+  "black-panther": {
+    "url": "https://movies.disney.com/black-panther",
+    "label": "Disney Movies"
+  },
+  "antman-wasp": {
+    "url": "https://movies.disney.com/ant-man-and-the-wasp",
+    "label": "Disney Movies"
+  },
+  "infinity-war": {
+    "url": "https://movies.disney.com/avengers-infinity-war",
+    "label": "Disney Movies"
+  },
+  "captain-marvel": {
+    "url": "https://movies.disney.com/captain-marvel",
+    "label": "Disney Movies"
+  },
+  "endgame": {
+    "url": "https://movies.disney.com/avengers-endgame",
+    "label": "Disney Movies"
+  },
+  "black-widow": {
+    "url": "https://movies.disney.com/black-widow",
+    "label": "Disney Movies"
+  },
+  "shang-chi": {
+    "url": "https://movies.disney.com/shang-chi-and-the-legend-of-the-ten-rings",
+    "label": "Disney Movies"
+  },
+  "eternals": {
+    "url": "https://movies.disney.com/eternals",
+    "label": "Disney Movies"
+  },
+  "strange-mom": {
+    "url": "https://movies.disney.com/doctor-strange-in-the-multiverse-of-madness",
+    "label": "Disney Movies"
+  },
+  "thor-love": {
+    "url": "https://movies.disney.com/thor-love-and-thunder",
+    "label": "Disney Movies"
+  },
+  "wakanda": {
+    "url": "https://movies.disney.com/black-panther-wakanda-forever",
+    "label": "Disney Movies"
+  },
+  "quantumania": {
+    "url": "https://movies.disney.com/ant-man-and-the-wasp-quantumania",
+    "label": "Disney Movies"
+  },
+  "guardians-3": {
+    "url": "https://movies.disney.com/guardians-of-the-galaxy-vol-3",
+    "label": "Disney Movies"
+  },
+  "marvels": {
+    "url": "https://movies.disney.com/the-marvels",
+    "label": "Disney Movies"
+  },
+  "cap-brave": {
+    "url": "https://movies.disney.com/captain-america-brave-new-world",
+    "label": "Disney Movies"
+  },
+  "thunderbolts": {
+    "url": "https://movies.disney.com/thunderbolts",
+    "label": "Disney Movies"
+  },
+  "fantastic-four": {
+    "url": "https://movies.disney.com/the-fantastic-four-first-steps",
+    "label": "Disney Movies"
+  },
+  "iron-man": {
+    "url": "https://www.disneyplus.com/browse/entity-0c520152-b81f-4c20-9310-003debd1947e",
+    "label": "Disney+"
+  },
+  "iron-man-2": {
+    "url": "https://www.disneyplus.com/browse/entity-85c5529d-c053-4fa4-9957-4906eb5aedc6",
+    "label": "Disney+"
+  },
+  "thor": {
+    "url": "https://www.disneyplus.com/browse/entity-479d41e3-8438-4ba4-b93d-8223220e069c",
+    "label": "Disney+"
+  },
+  "cap-first": {
+    "url": "https://www.disneyplus.com/browse/entity-8e68c43a-117c-4f4d-b217-0db106a1a614",
+    "label": "Disney+"
+  },
+  "avengers": {
+    "url": "https://www.disneyplus.com/browse/entity-d2ab699b-67da-4906-a7a4-5bc542c953cf",
+    "label": "Disney+"
+  },
+  "thor-dark": {
+    "url": "https://www.disneyplus.com/browse/entity-7c4f4e28-4152-4f64-90ec-8b7f682c33d4",
+    "label": "Disney+"
+  },
+  "deadpool-wolverine": {
+    "url": "https://www.disneyplus.com/browse/entity-120ae1e6-2240-4924-a4ce-f8de6e28b0b1",
+    "label": "Disney+"
+  },
+  "agent-carter-1": {
+    "url": "https://www.disneyplus.com/browse/entity-e4cbebda-a890-4e99-9a29-40d2162f7d46",
+    "label": "Disney+"
+  },
+  "agent-carter-2": {
+    "url": "https://www.disneyplus.com/browse/entity-e4cbebda-a890-4e99-9a29-40d2162f7d46",
+    "label": "Disney+"
+  },
+  "daredevil-1": {
+    "url": "https://www.disneyplus.com/browse/entity-b03f0bdc-ebd5-44df-a16a-1a180a88873a",
+    "label": "Disney+"
+  },
+  "daredevil-2": {
+    "url": "https://www.disneyplus.com/browse/entity-b03f0bdc-ebd5-44df-a16a-1a180a88873a",
+    "label": "Disney+"
+  },
+  "daredevil-3": {
+    "url": "https://www.disneyplus.com/browse/entity-b03f0bdc-ebd5-44df-a16a-1a180a88873a",
+    "label": "Disney+"
+  },
+  "jessica-1": {
+    "url": "https://www.disneyplus.com/browse/entity-6e31f304-024a-41a2-97a5-5a7ced0345a8",
+    "label": "Disney+"
+  },
+  "jessica-2": {
+    "url": "https://www.disneyplus.com/browse/entity-6e31f304-024a-41a2-97a5-5a7ced0345a8",
+    "label": "Disney+"
+  },
+  "jessica-3": {
+    "url": "https://www.disneyplus.com/browse/entity-6e31f304-024a-41a2-97a5-5a7ced0345a8",
+    "label": "Disney+"
+  },
+  "luke-1": {
+    "url": "https://www.disneyplus.com/browse/entity-0e8ba0c3-47da-44d4-bab5-1c6f5d6e61a0",
+    "label": "Disney+"
+  },
+  "luke-2": {
+    "url": "https://www.disneyplus.com/browse/entity-0e8ba0c3-47da-44d4-bab5-1c6f5d6e61a0",
+    "label": "Disney+"
+  },
+  "iron-fist-1": {
+    "url": "https://www.disneyplus.com/browse/entity-d251acf8-4a1a-48d1-b3b7-d9513afeaac0",
+    "label": "Disney+"
+  },
+  "iron-fist-2": {
+    "url": "https://www.disneyplus.com/browse/entity-d251acf8-4a1a-48d1-b3b7-d9513afeaac0",
+    "label": "Disney+"
+  },
+  "defenders": {
+    "url": "https://www.disneyplus.com/browse/entity-61687bed-4a66-4657-9252-df80ca1d1fbc",
+    "label": "Disney+"
+  },
+  "punisher-1": {
+    "url": "https://www.disneyplus.com/browse/entity-bbe154ae-af21-49dd-8129-90077e61c991",
+    "label": "Disney+"
+  },
+  "punisher-2": {
+    "url": "https://www.disneyplus.com/browse/entity-bbe154ae-af21-49dd-8129-90077e61c991",
+    "label": "Disney+"
+  },
+  "punisher-special": {
+    "url": "https://www.disneyplus.com/browse/entity-c5b69f75-f159-4749-873d-9a1d1a4eb878",
+    "label": "Disney+"
+  },
+  "all-hail": {
+    "url": "https://www.disneyplus.com/browse/entity-14988369-345c-4984-9c16-59428bd70609",
+    "label": "Disney+"
+  },
+  "spider-home": {
+    "url": "https://www.sonypictures.com/movies/spidermanhomecoming",
+    "label": "Sony Pictures"
+  },
+  "spider-far": {
+    "url": "https://www.sonypictures.com/movies/spidermanfarfromhome",
+    "label": "Sony Pictures"
+  },
+  "spider-no": {
+    "url": "https://www.sonypictures.com/movies/spidermannowayhome",
+    "label": "Sony Pictures"
+  },
+  "spider-brand": {
+    "url": "https://www.sonypictures.com/movies/spidermanbrandnewday",
+    "label": "Sony Pictures"
+  },
+  "xmen": {
+    "url": "https://www.20thcenturystudios.com/movies/x-men",
+    "label": "20th Century Studios"
+  },
+  "x2": {
+    "url": "https://www.20thcenturystudios.com/movies/x2",
+    "label": "20th Century Studios"
+  },
+  "deadpool": {
+    "url": "https://www.20thcenturystudios.com/movies/deadpool",
+    "label": "20th Century Studios"
+  },
+  "deadpool-2": {
+    "url": "https://www.20thcenturystudios.com/movies/deadpool-2",
+    "label": "20th Century Studios"
+  },
+  "logan": {
+    "url": "https://www.20thcenturystudios.com/movies/logan",
+    "label": "20th Century Studios"
+  },
+  "falcon": {
+    "url": "https://www.marvel.com/tv-shows/the-falcon-and-the-winter-soldier/1",
+    "label": "Marvel"
+  },
+  "wandavision": {
+    "url": "https://www.marvel.com/tv-shows/wandavision/1",
+    "label": "Marvel"
+  },
+  "loki-1": {
+    "url": "https://press.disneyplus.com/media-kits/loki",
+    "label": "Disney+ Press"
+  },
+  "loki-2": {
+    "url": "https://press.disneyplus.com/media-kits/loki",
+    "label": "Disney+ Press"
+  },
+  "whatif-1": {
+    "url": "https://press.disneyplus.com/media-kits/what-if",
+    "label": "Disney+ Press"
+  },
+  "whatif-2": {
+    "url": "https://press.disneyplus.com/media-kits/what-if",
+    "label": "Disney+ Press"
+  },
+  "whatif-3": {
+    "url": "https://press.disneyplus.com/media-kits/what-if",
+    "label": "Disney+ Press"
+  },
+  "hawkeye": {
+    "url": "https://press.disneyplus.com/media-kits/hawkeye",
+    "label": "Disney+ Press"
+  },
+  "moon-knight": {
+    "url": "https://press.disneyplus.com/media-kits/moon-knight",
+    "label": "Disney+ Press"
+  },
+  "ms-marvel": {
+    "url": "https://press.disneyplus.com/media-kits/ms-marvel",
+    "label": "Disney+ Press"
+  },
+  "groot-1": {
+    "url": "https://press.disneyplus.com/media-kits/i-am-groot",
+    "label": "Disney+ Press"
+  },
+  "groot-2": {
+    "url": "https://press.disneyplus.com/media-kits/i-am-groot",
+    "label": "Disney+ Press"
+  },
+  "she-hulk": {
+    "url": "https://press.disneyplus.com/media-kits/she-hulk-attorney-at-law",
+    "label": "Disney+ Press"
+  },
+  "secret-invasion": {
+    "url": "https://press.disneyplus.com/media-kits/secret-invasion",
+    "label": "Disney+ Press"
+  },
+  "echo": {
+    "url": "https://press.disneyplus.com/media-kits/echo",
+    "label": "Disney+ Press"
+  },
+  "agatha": {
+    "url": "https://press.disneyplus.com/media-kits/agatha-all-along",
+    "label": "Disney+ Press"
+  },
+  "werewolf": {
+    "url": "https://press.disneyplus.com/media-kits/werewolf-by-night",
+    "label": "Disney+ Press"
+  },
+  "guardians-holiday": {
+    "url": "https://press.disneyplus.com/media-kits/the-guardians-of-the-galaxy-holiday-special",
+    "label": "Disney+ Press"
+  },
+  "incredible-hulk": {
+    "url": "https://www.disneyplus.com/browse/entity-30d00f7b-331a-4f43-b9e1-1989d39cb1a3",
+    "label": "Disney+"
+  },
+  "friendly-spider-1": {
+    "url": "https://www.disneyplus.com/browse/entity-b1417e49-48ad-4827-bfd6-94580ecbecd7",
+    "label": "Disney+"
+  },
+  "daredevil-born-1": {
+    "url": "https://www.disneyplus.com/browse/entity-85e7a914-c8e6-41db-95df-c740dc2cf1b7",
+    "label": "Disney+"
+  },
+  "daredevil-born-2": {
+    "url": "https://www.disneyplus.com/browse/entity-85e7a914-c8e6-41db-95df-c740dc2cf1b7",
+    "label": "Disney+"
+  },
+  "ironheart": {
+    "url": "https://www.disneyplus.com/browse/entity-b2b50b9a-a055-4b31-a609-8ec46f3add98",
+    "label": "Disney+"
+  },
+  "eyes-wakanda": {
+    "url": "https://www.disneyplus.com/browse/entity-8d16eb3d-b7e5-4c43-abda-a281be4d284a",
+    "label": "Disney+"
+  },
+  "marvel-zombies": {
+    "url": "https://www.disneyplus.com/browse/entity-d274138a-7c29-4ddf-9ea2-2f9d3c1a24a0",
+    "label": "Disney+"
+  },
+  "wonder-man": {
+    "url": "https://www.disneyplus.com/browse/entity-25ee768f-06e3-491c-ad8f-876b4c87ac42",
+    "label": "Disney+"
+  },
+  "visionquest": {
+    "url": "https://www.disneyplus.com/browse/entity-8744ec55-8d14-4631-99b4-c889a2d6013f",
+    "label": "Disney+"
+  }
+};
+
+const HOME_GUIDE = {
+  "title": "درباره مسیر مارول",
+  "paragraphs": [
+    "مسیر مارول یک پروژه مستقل، غیرتجاری و هواداری است که با هدف تسهیل شناخت و دنبال کردن دنیای سینمایی مارول توسعه یافته است. این سرویس صرفا راهنمای ترتیب پیشنهادی تماشا، تاریخ انتشار، خط زمانی داستان و پیوستگی شخصیت‌ها و نقش‌هاست و امکان ثبت پیشرفت شخصی را فراهم می‌کند.",
+    "در این وب‌سایت هیچ فیلم یا سریالی میزبانی، پخش یا برای دانلود عرضه نمی‌شود. برای تماشا یا دریافت قانونی آثار، به پلتفرم‌های رسمی و ارائه‌دهندگان معتبر دارای مجوز مراجعه کنید.",
+    "مسیر مارول وابسته به Marvel، Marvel Studios یا Disney نیست و مورد تایید رسمی آن‌ها قرار ندارد. تمامی حقوق مالکیت معنوی آثار، نام‌ها، شخصیت‌ها، علائم تجاری و تصاویر متعلق به صاحبان قانونی آن‌هاست. انتشار عمومی کد منبع پروژه به معنای اعطای مجوز استفاده از محتوای متعلق به اشخاص ثالث نیست."
+  ],
+  "repo": "https://github.com/iMoein/marvel-path",
+  "linkLabel": "مشاهده کد منبع در گیت‌هاب"
+};

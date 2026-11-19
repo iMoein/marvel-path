@@ -17,16 +17,16 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
  const assert=(x,m)=>{if(!x)throw Error(m);};
  const go=async(url)=>{await send('Page.navigate',{url:base+url});for(let i=0;i<150;i++){await sleep(100);try{if(await ev('document.documentElement.dataset.boot==="ready"&&location.pathname==='+JSON.stringify(url.split('?')[0])))return;}catch(_){} }throw Error('boot timeout '+url);};
  const click=async selector=>{const r=await ev('(()=>{const r=document.querySelector('+JSON.stringify(selector)+').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()');await send('Input.dispatchMouseEvent',{type:'mousePressed',x:r.x,y:r.y,button:'left',clickCount:1});await send('Input.dispatchMouseEvent',{type:'mouseReleased',x:r.x,y:r.y,button:'left',clickCount:1});};
- for(const width of [320,390,430,1440]){
+ for(const width of [320,390,430,768,1024,1440]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:width<700});
   await go('/?home-guide-test='+Date.now());
   const result=await ev(`(()=>{
     const rows=[...document.querySelectorAll('.bonus-grid .bonus-title-row')],grid=document.querySelector('.bonus-grid'),guide=document.querySelector('.home-guide'),repo=guide?.querySelector('a');
     if(rows.length!==2||!grid||!guide)return {count:rows.length};
     const g=grid.getBoundingClientRect(),r=rows.map(el=>el.getBoundingClientRect());
-    return {count:rows.length,onePerRow:r[1].top>=r[0].bottom&&r.every(x=>Math.abs(x.width-g.width)<2),fit:rows.every(el=>el.scrollWidth<=el.clientWidth+2),links:rows.every(el=>{const a=el.querySelector('.bonus-title-name'),b=el.querySelector('.bonus-cover-link');return a.getAttribute('href')===b.getAttribute('href')&&a.getAttribute('href').startsWith('/title/')}),guide:guide.querySelectorAll('p').length===3,repo:repo.href==='https://github.com/iMoein/marvel-path'&&repo.rel.includes('noopener'),guideFit:guide.scrollWidth<=guide.clientWidth+2};
+    return {count:rows.length,layout:innerWidth>=1024?Math.abs(r[0].top-r[1].top)<2&&r[0].left>=r[1].right-2&&Math.abs(r[0].width-r[1].width)<2&&Math.abs(r[0].width+r[1].width+12-g.width)<2:r[1].top>=r[0].bottom&&r.every(x=>Math.abs(x.width-g.width)<2),fit:rows.every(el=>el.scrollWidth<=el.clientWidth+2),links:rows.every(el=>{const a=el.querySelector('.bonus-title-name'),b=el.querySelector('.bonus-cover-link');return a.getAttribute('href')===b.getAttribute('href')&&a.getAttribute('href').startsWith('/title/')}),guide:guide.querySelectorAll('p').length===3,repo:repo.href==='https://github.com/iMoein/marvel-path'&&repo.rel.includes('noopener'),guideFit:guide.scrollWidth<=guide.clientWidth+2};
   })()`);
-  assert(result.count===2&&result.onePerRow&&result.fit&&result.links&&result.guide&&result.repo&&result.guideFit,JSON.stringify(result));
+  assert(result.count===2&&result.layout&&result.fit&&result.links&&result.guide&&result.repo&&result.guideFit,JSON.stringify(result));
   const interactions=await ev(`(()=>{
     const id=BONUS[0],f=BY_ID[id];const row=()=>document.querySelector('[data-bonus-id="'+id+'"]');
     const watched=done(f),saved=state.saved.mcu.includes(id);
