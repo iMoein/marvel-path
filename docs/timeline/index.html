@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<base href="/"/>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-reTNo6g2MO6yKcLmFd0FG65tfFJHpSnbTE0XFlr5XIE='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; manifest-src 'self'; worker-src 'self'; form-action 'self'; upgrade-insecure-requests"/>
+<meta name="referrer" content="no-referrer"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0c0d11"/>
+<!-- Public viewer uses only same-origin assets. -->
+
+
+
+<link rel="icon" href="/favicon.ico" sizes="any"/>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/icon-32.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="manifest" href="/manifest.webmanifest"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="مسیر مارول"/>
+<meta name="application-name" content="Marvel Path"/>
+<link rel="preload" href="./assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2" as="font" type="font/woff2" crossorigin/>
+<style>
+html{background:#0c0d11;color-scheme:dark}body{margin:0}
+#boot-shell,#boot-fallback{display:none}
+html[data-boot=loading] #app{display:none}
+html[data-boot=loading] #boot-shell{display:block;min-height:100vh;min-height:100dvh;background:#0e0f13;color:#f4f4f6;font:14px/1.8 Vazirmatn,Tahoma,Arial,sans-serif}
+html[data-boot=fallback] #boot-fallback{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #ed33444d;background:#251b22;color:#f1b7be;padding:12px 16px;margin:18px auto;width:min(94%,1000px);border-radius:12px;font:13px/1.8 Vazirmatn,Tahoma,Arial,sans-serif}
+#boot-fallback a{color:inherit;text-decoration:underline;white-space:nowrap}
+#boot-shell *{box-sizing:border-box}
+.bs-side{position:fixed;right:0;top:0;bottom:0;width:250px;background:#121318;border-left:1px solid #ffffff12;padding:28px 18px}
+.bs-brand{display:flex;align-items:center;gap:11px;font-size:18px;font-weight:900;white-space:nowrap}
+.bs-mark{display:grid;place-items:center;width:43px;height:43px;flex:none;background:#ed2338;color:white;clip-path:polygon(0 0,100% 0,100% 76%,76% 100%,0 100%);border-radius:6px;font:900 italic 30px Arial}
+.bs-menu{display:grid;gap:12px;margin-top:48px}.bs-menu i{height:42px;border-radius:9px;background:#1d1e25}.bs-menu i:first-child{background:#70212e}
+.bs-work{margin-right:250px}.bs-top{height:74px;border-bottom:1px solid #ffffff12;background:#121318;display:flex;justify-content:space-between;align-items:center;padding:0 clamp(18px,3.4vw,62px);color:#9696a2}
+.bs-mobile{display:none}.bs-state{display:flex;align-items:center;gap:9px;font-size:12px}.bs-state i{width:8px;height:8px;border-radius:50%;background:#eb3347;box-shadow:0 0 13px #ef334077;animation:bs-pulse 1.5s ease-in-out infinite}
+.bs-main{width:100%;max-width:1480px;margin:auto;padding:38px clamp(18px,3.2vw,55px) 90px}
+.bs-head{margin-bottom:28px}.bs-eyebrow{font:800 11px Arial,sans-serif;letter-spacing:2px;color:#ed3347;direction:ltr;text-align:right}
+.bs-title{font-size:clamp(25px,3.1vw,42px);font-weight:900;line-height:1.65;margin:8px 0;color:#f2f2f5}.bs-line,.bs-block,.bs-tile,.bs-card{position:relative;overflow:hidden;background:#202129;border-radius:8px}
+.bs-line{height:12px;width:min(540px,82%);margin-top:12px}.bs-line.short{width:48%}.bs-block{height:76px;margin-bottom:16px;border:1px solid #ffffff0c;background:#191a21}.bs-hero{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:28px;align-items:center;min-height:300px;padding:26px;border:1px solid #ffffff16;border-radius:16px;background:linear-gradient(135deg,#221a20,#15171e);margin-bottom:16px}
+.bs-hero .bs-line:first-child{height:25px;width:63%}.bs-hero .bs-tile{aspect-ratio:2/3;width:100%;min-width:0;border:1px solid #ffffff0d}
+.bs-metrics{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:13px;margin-bottom:28px}.bs-metrics .bs-block{height:119px}
+.bs-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.bs-grid .bs-card{height:220px;border:1px solid #ffffff12;background:#191a21;padding:12px}.bs-card .bs-tile{height:68%}.bs-card .bs-line{width:75%}
+.bs-actors .bs-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.bs-actors .bs-card{height:270px}.bs-detail .bs-hero{grid-template-columns:minmax(0,1fr) 34%;min-height:420px}
+.bs-tile:after,.bs-line:after,.bs-block:after,.bs-menu i:after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 25%,#ffffff08 48%,transparent 72%);transform:translateX(-100%);animation:bs-sheen 1.8s ease-in-out infinite}
+.bs-menu i{position:relative;overflow:hidden}
+.bs-bottom{display:none}
+@keyframes bs-sheen{to{transform:translateX(100%)}}@keyframes bs-pulse{50%{opacity:.45}}
+@media(max-width:1199px){.bs-side{width:220px}.bs-work{margin-right:220px}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.bs-hero{grid-template-columns:minmax(0,1fr) 145px}}
+@media(min-width:701px) and (max-width:900px){.bs-side{width:70px;padding:20px 10px}.bs-side .bs-name{display:none}.bs-work{margin-right:70px}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.bs-side,.bs-desktop{display:none}.bs-work{margin-right:0}.bs-mobile{display:flex}.bs-top{height:60px}.bs-mobile .bs-mark{width:31px;height:31px;font-size:24px}.bs-mobile{font-size:15px}.bs-main{padding:20px 16px 105px}.bs-hero{grid-template-columns:minmax(0,1fr) 96px;gap:14px;padding:15px;min-height:230px}.bs-block{height:66px}.bs-metrics{grid-template-columns:1fr 1fr;gap:9px}.bs-metrics .bs-block:first-child{grid-column:1/-1}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bs-grid .bs-card{height:190px}.bs-actors .bs-card{height:235px}.bs-detail .bs-hero{grid-template-columns:1fr;min-height:340px}.bs-detail .bs-hero .bs-tile{width:42%;max-width:145px;grid-row:1;justify-self:center}.bs-bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:5px;bottom:0;right:0;left:0;background:#191a21;border-top:1px solid #ffffff15;padding:13px 8px calc(13px + env(safe-area-inset-bottom,0px))}.bs-bottom i{height:38px;border-radius:9px;background:#24252d}}
+
+:root{--mp-safe-top:env(safe-area-inset-top,0px);--mp-safe-right:env(safe-area-inset-right,0px);--mp-safe-bottom:env(safe-area-inset-bottom,0px);--bs-height:74px;--bs-edge:clamp(18px,3.4vw,62px)}
+.bs-top{height:calc(var(--bs-height) + var(--mp-safe-top));padding-top:var(--mp-safe-top);padding-left:max(var(--bs-edge),var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(var(--bs-edge),var(--mp-safe-right))}
+.bs-side{padding-top:calc(28px + var(--mp-safe-top));padding-bottom:calc(18px + var(--mp-safe-bottom))}
+#boot-fallback{margin-top:calc(18px + var(--mp-safe-top))}
+html:not([data-boot]) .seo-content{padding-top:calc(28px + var(--mp-safe-top))}
+@media(min-width:701px) and (max-width:900px){.bs-side{padding-top:calc(20px + var(--mp-safe-top))}}
+@media(max-width:700px){
+ :root{--bs-height:60px;--bs-edge:17px}
+ .bs-main{padding-left:max(16px,var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(16px,var(--mp-safe-right));padding-bottom:calc(105px + var(--mp-safe-bottom))}
+ .bs-bottom{padding:13px max(8px,var(--mp-safe-right)) calc(13px + var(--mp-safe-bottom)) max(8px,var(--mp-safe-left,env(safe-area-inset-left,0px)))}
+}
+
+.bs-search-placeholder{display:none}
+@media(max-width:700px){
+ :root{--bs-height:64px;--mp-header-safe:calc(var(--mp-safe-top) + min(10px,var(--mp-safe-top)))}
+ .bs-top{height:calc(var(--bs-height) + var(--mp-header-safe));padding-top:var(--mp-header-safe);gap:14px;box-sizing:border-box}
+ .bs-mobile{flex:0 0 auto;font-size:14px;gap:8px}
+ .bs-mobile .bs-mark{width:29px;height:29px;font-size:23px}
+ .bs-search-placeholder{display:block;flex:1 1 0;height:44px;min-width:0;border:1px solid #ffffff12;background:#202129;border-radius:11px}
+ .bs-state{flex:0 0 16px;font-size:0;gap:0;justify-content:center}
+}
+@media(max-width:360px){.bs-top{gap:10px}.bs-mobile{font-size:13px;gap:6px}}
+@media(prefers-reduced-motion:reduce){#boot-shell *{animation:none!important}#boot-shell *:after{animation:none!important}}
+</style>
+<script>(()=>{const root=document.documentElement;root.dataset.boot='loading';let timer;const end=state=>{clearTimeout(timer);root.dataset.boot=state;};window.marvelBootReady=()=>end('ready');timer=setTimeout(()=>{if(root.dataset.boot==='loading')end('fallback')},12000);document.addEventListener('DOMContentLoaded',()=>{if(root.dataset.boot==='loading')end('fallback')},{once:true});})();</script>
+<link rel="stylesheet" href="/style.v3.5.18.dc1ca566d76b.css"/>
+<title>خط زمانی انتشار فیلم‌ها و سریال‌های MCU | مسیر مارول</title>
+<meta name="description" content="تقویم انتشار آثار مارول از ۲۰۰۸، فیلم‌ها و سریال‌های منتشرشده و برنامه‌های اعلام‌شده آینده."/>
+<link rel="canonical" href="https://marvel.imoein.com/timeline/"/>
+<meta name="robots" content="index,follow,max-image-preview:large"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Marvel Path | مسیر مارول"/>
+<meta property="og:locale" content="fa_IR"/>
+<meta property="og:title" content="خط زمانی انتشار فیلم‌ها و سریال‌های MCU | مسیر مارول"/>
+<meta property="og:description" content="تقویم انتشار آثار مارول از ۲۰۰۸، فیلم‌ها و سریال‌های منتشرشده و برنامه‌های اعلام‌شده آینده."/>
+<meta property="og:url" content="https://marvel.imoein.com/timeline/"/>
+<meta property="og:image" content="https://marvel.imoein.com/assets/social/og.jpg"/>
+<meta property="og:image:secure_url" content="https://marvel.imoein.com/assets/social/og.jpg"/>
+<meta property="og:image:type" content="image/jpeg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="پوستر معرفی اپلیکیشن مسیر مارول"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="خط زمانی انتشار فیلم‌ها و سریال‌های MCU | مسیر مارول"/>
+<meta name="twitter:description" content="تقویم انتشار آثار مارول از ۲۰۰۸، فیلم‌ها و سریال‌های منتشرشده و برنامه‌های اعلام‌شده آینده."/>
+<meta name="twitter:image" content="https://marvel.imoein.com/assets/social/og.jpg"/>
+<meta name="twitter:image:alt" content="پوستر معرفی اپلیکیشن مسیر مارول"/>
+<meta name="marvel-release" content="3.5.18"/>
+</head>
+<body>
+<div id="boot-shell" aria-label="در حال آماده‌سازی صفحه" role="status"><aside class="bs-side" aria-hidden="true"><div class="bs-brand"><span class="bs-mark">M</span><span class="bs-name">مسیر مارول</span></div><div class="bs-menu"><i></i><i></i><i></i><i></i><i></i></div></aside><div class="bs-work"><header class="bs-top"><div class="bs-brand bs-mobile" aria-hidden="true"><span class="bs-mark">M</span><span class="bs-name">مسیر مارول</span></div><span class="bs-desktop" aria-hidden="true">WATCH HUB</span><span class="bs-search-placeholder" aria-hidden="true"></span><span class="bs-state"><i aria-hidden="true"></i>در حال آماده‌سازی</span></header><div class="bs-main bs-default"><div class="bs-head"><div class="bs-eyebrow">MARVEL PATH / EARTH-616</div><div class="bs-title">خط زمانی انتشار فیلم‌ها و سریال‌های MCU</div><div class="bs-line" aria-hidden="true"></div></div><div aria-hidden="true"><div class="bs-block"></div><div class="bs-metrics"><div class="bs-block"></div><div class="bs-block"></div><div class="bs-block"></div></div><div class="bs-grid"><div class="bs-card"><div class="bs-tile"></div><div class="bs-line"></div><div class="bs-line short"></div></div><div class="bs-card"><div class="bs-tile"></div><div class="bs-line"></div><div class="bs-line short"></div></div><div class="bs-card"><div class="bs-tile"></div><div class="bs-line"></div><div class="bs-line short"></div></div><div class="bs-card"><div class="bs-tile"></div><div class="bs-line"></div><div class="bs-line short"></div></div><div class="bs-card"><div class="bs-tile"></div><div class="bs-line"></div><div class="bs-line short"></div></div><div class="bs-card"><div class="bs-tile"></div><div class="bs-line"></div><div class="bs-line short"></div></div></div></div></div></div><div class="bs-bottom" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div></div>
+<div id="boot-fallback" role="status"><span>بارگذاری کامل برنامه ممکن نشد؛ فعلا اطلاعات پایه در دسترس است.</span><a href="/timeline/">تلاش دوباره</a></div>
+<div id="app"><main class="seo-content" id="main-content"><nav class="seo-nav" aria-label="صفحات اصلی"><a href="/">مسیر Doomsday</a><a href="/archive/">آرشیو MCU</a><a href="/timeline/">خط زمانی انتشار</a><a href="/actors/">بازیگران</a></nav><h1>خط زمانی انتشار مارول</h1><p>تاریخ انتشار آثار آرشیو و بازه‌های اعلام‌شده آینده؛ زمان‌های آینده ممکن است تغییر کنند.</p><ul class="seo-catalog"><li>2008-05-02 · <a href="/title/iron-man/">Iron Man</a></li><li>2008-06-13 · <a href="/title/incredible-hulk/">The Incredible Hulk</a></li><li>2010-05-07 · <a href="/title/iron-man-2/">Iron Man 2</a></li><li>2011-05-06 · <a href="/title/thor/">Thor</a></li><li>2011-07-22 · <a href="/title/cap-first/">Captain America: The First Avenger</a></li><li>2012-05-04 · <a href="/title/avengers/">The Avengers</a></li><li>2013-05-03 · <a href="/title/iron-man-3/">Iron Man 3</a></li><li>2013-11-08 · <a href="/title/thor-dark/">Thor: The Dark World</a></li><li>2014-02-04 · <a href="/title/all-hail/">All Hail the King</a></li><li>2014-04-04 · <a href="/title/cap-winter/">Captain America: The Winter Soldier</a></li><li>2014-08-01 · <a href="/title/guardians-1/">Guardians of the Galaxy</a></li><li>2015-01-06 · <a href="/title/agent-carter-1/">Agent Carter — Season 1</a></li><li>2015-04-10 · <a href="/title/daredevil-1/">Daredevil — Season 1</a></li><li>2015-05-01 · <a href="/title/avengers-ultron/">Avengers: Age of Ultron</a></li><li>2015-07-17 · <a href="/title/ant-man/">Ant-Man</a></li><li>2015-11-20 · <a href="/title/jessica-1/">Jessica Jones — Season 1</a></li><li>2016-01-19 · <a href="/title/agent-carter-2/">Agent Carter — Season 2</a></li><li>2016-03-18 · <a href="/title/daredevil-2/">Daredevil — Season 2</a></li><li>2016-05-06 · <a href="/title/civil-war/">Captain America: Civil War</a></li><li>2016-09-30 · <a href="/title/luke-1/">Luke Cage — Season 1</a></li><li>2016-11-04 · <a href="/title/doctor-strange/">Doctor Strange</a></li><li>2017-03-17 · <a href="/title/iron-fist-1/">Iron Fist — Season 1</a></li><li>2017-05-05 · <a href="/title/guardians-2/">Guardians of the Galaxy Vol. 2</a></li><li>2017-07-07 · <a href="/title/spider-home/">Spider-Man: Homecoming</a></li><li>2017-08-18 · <a href="/title/defenders/">The Defenders</a></li><li>2017-11-03 · <a href="/title/thor-ragnarok/">Thor: Ragnarok</a></li><li>2017-11-17 · <a href="/title/punisher-1/">The Punisher — Season 1</a></li><li>2018-02-16 · <a href="/title/black-panther/">Black Panther</a></li><li>2018-03-08 · <a href="/title/jessica-2/">Jessica Jones — Season 2</a></li><li>2018-04-27 · <a href="/title/infinity-war/">Avengers: Infinity War</a></li><li>2018-06-22 · <a href="/title/luke-2/">Luke Cage — Season 2</a></li><li>2018-07-06 · <a href="/title/antman-wasp/">Ant-Man and the Wasp</a></li><li>2018-09-07 · <a href="/title/iron-fist-2/">Iron Fist — Season 2</a></li><li>2018-10-19 · <a href="/title/daredevil-3/">Daredevil — Season 3</a></li><li>2019-01-18 · <a href="/title/punisher-2/">The Punisher — Season 2</a></li><li>2019-03-08 · <a href="/title/captain-marvel/">Captain Marvel</a></li><li>2019-04-26 · <a href="/title/endgame/">Avengers: Endgame</a></li><li>2019-06-14 · <a href="/title/jessica-3/">Jessica Jones — Season 3</a></li><li>2019-07-02 · <a href="/title/spider-far/">Spider-Man: Far From Home</a></li><li>2021-01-15 · <a href="/title/wandavision/">WandaVision</a></li><li>2021-03-19 · <a href="/title/falcon/">The Falcon and the Winter Soldier</a></li><li>2021-06-09 · <a href="/title/loki-1/">Loki — Season 1</a></li><li>2021-07-09 · <a href="/title/black-widow/">Black Widow</a></li><li>2021-08-11 · <a href="/title/whatif-1/">What If...? — Season 1</a></li><li>2021-09-03 · <a href="/title/shang-chi/">Shang-Chi and the Legend of the Ten Rings</a></li><li>2021-11-05 · <a href="/title/eternals/">Eternals</a></li><li>2021-11-24 · <a href="/title/hawkeye/">Hawkeye</a></li><li>2021-12-17 · <a href="/title/spider-no/">Spider-Man: No Way Home</a></li><li>2022-03-30 · <a href="/title/moon-knight/">Moon Knight</a></li><li>2022-05-06 · <a href="/title/strange-mom/">Doctor Strange in the Multiverse of Madness</a></li><li>2022-06-08 · <a href="/title/ms-marvel/">Ms. Marvel</a></li><li>2022-07-08 · <a href="/title/thor-love/">Thor: Love and Thunder</a></li><li>2022-08-10 · <a href="/title/groot-1/">I Am Groot — Season 1</a></li><li>2022-08-18 · <a href="/title/she-hulk/">She-Hulk: Attorney at Law</a></li><li>2022-10-07 · <a href="/title/werewolf/">Werewolf by Night</a></li><li>2022-11-11 · <a href="/title/wakanda/">Black Panther: Wakanda Forever</a></li><li>2022-11-25 · <a href="/title/guardians-holiday/">Guardians of the Galaxy Holiday Special</a></li><li>2023-02-17 · <a href="/title/quantumania/">Ant-Man and the Wasp: Quantumania</a></li><li>2023-05-05 · <a href="/title/guardians-3/">Guardians of the Galaxy Vol. 3</a></li><li>2023-06-21 · <a href="/title/secret-invasion/">Secret Invasion</a></li><li>2023-09-06 · <a href="/title/groot-2/">I Am Groot — Season 2</a></li><li>2023-10-05 · <a href="/title/loki-2/">Loki — Season 2</a></li><li>2023-11-10 · <a href="/title/marvels/">The Marvels</a></li><li>2023-12-22 · <a href="/title/whatif-2/">What If...? — Season 2</a></li><li>2024-01-09 · <a href="/title/echo/">Echo</a></li><li>2024-03-20 · X-Men ’97 — Season 1 · منتشرشده · <a href="https://thewaltdisneycompany.com/news/x-men-97-marvel-debut-disney/">منبع</a></li><li>2024-07-26 · <a href="/title/deadpool-wolverine/">Deadpool &amp; Wolverine</a></li><li>2024-09-18 · <a href="/title/agatha/">Agatha All Along</a></li><li>2024-12-22 · <a href="/title/whatif-3/">What If...? — Season 3</a></li><li>2025-01-29 · <a href="/title/friendly-spider-1/">Your Friendly Neighborhood Spider-Man — Season 1</a></li><li>2025-02-14 · <a href="/title/cap-brave/">Captain America: Brave New World</a></li><li>2025-03-04 · <a href="/title/daredevil-born-1/">Daredevil: Born Again — Season 1</a></li><li>2025-05-02 · <a href="/title/thunderbolts/">Thunderbolts*</a></li><li>2025-06-24 · <a href="/title/ironheart/">Ironheart</a></li><li>2025-07-25 · <a href="/title/fantastic-four/">The Fantastic Four: First Steps</a></li><li>2025-08-01 · <a href="/title/eyes-wakanda/">Eyes of Wakanda</a></li><li>2025-09-24 · <a href="/title/marvel-zombies/">Marvel Zombies</a></li><li>2026-01-27 · <a href="/title/wonder-man/">Wonder Man</a></li><li>2026-03-24 · <a href="/title/daredevil-born-2/">Daredevil: Born Again — Season 2</a></li><li>2026-05-12 · <a href="/title/punisher-special/">The Punisher: One Last Kill</a></li><li>2026-07-01 · X-Men ’97 — Season 2 · منتشرشده · <a href="https://www.disneyplus.com/explore/articles/x-men-97-season-2">منبع</a></li><li>2026-07-31 · <a href="/title/spider-brand/">Spider-Man: Brand New Day</a></li><li>2026-10-14 · <a href="/title/visionquest/">VisionQuest</a></li><li>2026-12-18 · Avengers: Doomsday · برنامه‌ریزی‌شده · <a href="https://www.disneyplus.com/explore/articles/marvel-movies-in-order">منبع</a></li><li>2027 · Daredevil: Born Again — Season 3 · برنامه‌ریزی‌شده · <a href="https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B">منبع</a></li><li>2027 · X-Men ’97 — Season 3 · برنامه‌ریزی‌شده · <a href="https://www.murphysmultiverse.com/marvel-studios-confirms-release-windows-for-x-men-97-seasons-3-and-4/">منبع</a></li><li>2027-01-13 · Your Friendly Neighborhood Spider-Man — Season 2 · برنامه‌ریزی‌شده · <a href="https://www.disneyplus.com/whats-on/entity-b1417e49-48ad-4827-bfd6-94580ecbecd7">منبع</a></li><li>2027-10 · Marvel Zombies: The Winter Soldier · برنامه‌ریزی‌شده · <a href="https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B">منبع</a></li><li>2027-12-17 · Avengers: Secret Wars · برنامه‌ریزی‌شده · <a href="https://au.variety.com/2025/film/news/avengers-delayed-doomsday-secret-wars-december-2-22910/">منبع</a></li><li>2028 · X-Men ’97 — Season 4 · برنامه‌ریزی‌شده · <a href="https://www.murphysmultiverse.com/marvel-studios-confirms-release-windows-for-x-men-97-seasons-3-and-4/">منبع</a></li><li>2028 · Zodiac · برنامه‌ریزی‌شده · <a href="https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B">منبع</a></li><li>2028-05-05 · Untitled X-Men · برنامه‌ریزی‌شده · <a href="https://thewaltdisneycompany.com/news/d23-2026-disney-entertainment-showcase/">منبع</a></li><li>2028-07-28 · Ghost Rider · برنامه‌ریزی‌شده · <a href="https://au.variety.com/2026/film/news/ghost-rider-release-date-marvel-ryan-gosling-39479/">منبع</a></li><li>2028-10 · Marvel Zombies: The Fist of Khonshu · برنامه‌ریزی‌شده · <a href="https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B">منبع</a></li><li>2028-12-15 · Black Panther 3 · برنامه‌ریزی‌شده · <a href="https://thewaltdisneycompany.com/news/marvel-studios-comic-con-2026/">منبع</a></li><li>2029-10 · Marvel Zombies: The Last Guardian · برنامه‌ریزی‌شده · <a href="https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B">منبع</a></li></ul><p class="seo-note">مسیر مارول؛ پروژه هواداری غیررسمی برای دنبال کردن داستان‌ها و ثبت پیشرفت تماشا. پخش فیلم در سایت ارائه نمی‌شود.</p></main></div>
+<div id="toasts" aria-live="polite" aria-atomic="true"></div>
+<script defer src="/data.v3.5.18.3c5f01b135c4.js"></script>
+<script defer src="/meta.v3.5.18.575b4e436227.js"></script>
+<script defer src="/posters.v3.5.18.c3d5c6ad86fd.js"></script>
+<script defer src="/admin.v3.5.18.3f5f93a72d83.js"></script>
+<script defer src="/enrichment.v3.5.18.3d97c3679a8b.js"></script>
+
+<script defer src="/app.v3.5.18.ed6d9c52e5fc.js"></script>
+</body>
+</html>

@@ -107,3 +107,16 @@ fixture `tests/catalog_phase_actor_cdp.cjs`:
 
 The audit covers existing catalogue records, not completeness of the catalogue
 or all possible story chronology interpretations.
+
+### Release calendar (3.5.18)
+The public /timeline/ page is a release-order calendar, distinct from the
+in-universe story order. It reads existing MCU archive records and the
+`RELEASE_CALENDAR_EXTRA` snapshot in data.js (checked 2026-11-19). Upcoming
+titles carry source links, date precision (day, year or Halloween window),
+and an announced/scheduled status; titles without a confirmed release
+window are omitted. Dates refer to first premieres and US theatrical dates.
+Only the existing watch catalogue contributes to personal progress;
+calendar-only records are not automatically promoted into that catalogue.
+The calendar is a curated snapshot, not a live feed. Historical coverage
+is the current archive plus the two released X-Men ’97 seasons; the archive
+does not claim to cover every legacy Marvel Television release.

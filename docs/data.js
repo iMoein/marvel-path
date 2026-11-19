@@ -465,3 +465,188 @@ const HOME_GUIDE = {
   "repo": "https://github.com/iMoein/marvel-path",
   "linkLabel": "مشاهده کد منبع در گیت‌هاب"
 };
+
+/* Release calendar supplements; deliberately excluded from watch-progress catalogue. */
+const RELEASE_CALENDAR_CHECKED="2026-11-19";
+const RELEASE_CALENDAR_EXTRA = [
+  {
+    "id": "xmen97-1",
+    "title": "X-Men ’97 — Season 1",
+    "fa": "مردان ایکس ۹۷ — فصل ۱",
+    "date": "2024-03-20",
+    "precision": "day",
+    "type": "animation",
+    "phase": 0,
+    "status": "released",
+    "source": "https://thewaltdisneycompany.com/news/x-men-97-marvel-debut-disney/",
+    "note": "انیمیشن جهان موازی"
+  },
+  {
+    "id": "xmen97-2",
+    "title": "X-Men ’97 — Season 2",
+    "fa": "مردان ایکس ۹۷ — فصل ۲",
+    "date": "2026-07-01",
+    "precision": "day",
+    "type": "animation",
+    "phase": 0,
+    "status": "released",
+    "source": "https://www.disneyplus.com/explore/articles/x-men-97-season-2",
+    "note": "انیمیشن جهان موازی"
+  },
+  {
+    "id": "doomsday-film",
+    "title": "Avengers: Doomsday",
+    "fa": "انتقام‌جویان: روز رستاخیز",
+    "date": "2026-12-18",
+    "precision": "day",
+    "type": "movie",
+    "phase": 6,
+    "status": "planned",
+    "source": "https://www.disneyplus.com/explore/articles/marvel-movies-in-order",
+    "note": "اکران سینمایی اعلام‌شده"
+  },
+  {
+    "id": "friendly-spider-2",
+    "title": "Your Friendly Neighborhood Spider-Man — Season 2",
+    "fa": "مرد عنکبوتی همسایه شما — فصل ۲",
+    "date": "2027-01-13",
+    "precision": "day",
+    "type": "animation",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://www.disneyplus.com/whats-on/entity-b1417e49-48ad-4827-bfd6-94580ecbecd7",
+    "note": "زمان رسمی پخش در Disney+"
+  },
+  {
+    "id": "daredevil-born-3",
+    "title": "Daredevil: Born Again — Season 3",
+    "fa": "دردویل: تولد دوباره — فصل ۳",
+    "date": "2027",
+    "precision": "year",
+    "type": "series",
+    "phase": 6,
+    "status": "planned",
+    "source": "https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B",
+    "note": "فصل پایانی؛ سال پخش اعلام شده"
+  },
+  {
+    "id": "xmen97-3",
+    "title": "X-Men ’97 — Season 3",
+    "fa": "مردان ایکس ۹۷ — فصل ۳",
+    "date": "2027",
+    "precision": "year",
+    "type": "animation",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://www.murphysmultiverse.com/marvel-studios-confirms-release-windows-for-x-men-97-seasons-3-and-4/",
+    "note": "بازه اعلام‌شده توسط مدیر Marvel Television"
+  },
+  {
+    "id": "zombies-winter",
+    "title": "Marvel Zombies: The Winter Soldier",
+    "fa": "زامبی‌های مارول: سرباز زمستان",
+    "date": "2027-10",
+    "precision": "halloween",
+    "type": "animation",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B",
+    "note": "ویژه‌برنامه دو قسمتی؛ حوالی هالووین"
+  },
+  {
+    "id": "secret-wars",
+    "title": "Avengers: Secret Wars",
+    "fa": "انتقام‌جویان: جنگ‌های پنهان",
+    "date": "2027-12-17",
+    "precision": "day",
+    "type": "movie",
+    "phase": 6,
+    "status": "planned",
+    "source": "https://au.variety.com/2025/film/news/avengers-delayed-doomsday-secret-wars-december-2-22910/",
+    "note": "تاریخ اعلام‌شده اکران سینمایی"
+  },
+  {
+    "id": "xmen-new",
+    "title": "Untitled X-Men",
+    "fa": "فیلم جدید مردان ایکس",
+    "date": "2028-05-05",
+    "precision": "day",
+    "type": "movie",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://thewaltdisneycompany.com/news/d23-2026-disney-entertainment-showcase/",
+    "note": "عنوان نهایی اعلام نشده"
+  },
+  {
+    "id": "ghost-rider",
+    "title": "Ghost Rider",
+    "fa": "گوست رایدر",
+    "date": "2028-07-28",
+    "precision": "day",
+    "type": "movie",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://au.variety.com/2026/film/news/ghost-rider-release-date-marvel-ryan-gosling-39479/",
+    "note": "فیلم جدید؛ کار روی پروژه آغاز شده"
+  },
+  {
+    "id": "zodiac",
+    "title": "Zodiac",
+    "fa": "زودیاک",
+    "date": "2028",
+    "precision": "year",
+    "type": "series",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B",
+    "note": "انتخاب بازیگران؛ آغاز تولید برنامه‌ریزی‌شده در ۲۰۲۷"
+  },
+  {
+    "id": "xmen97-4",
+    "title": "X-Men ’97 — Season 4",
+    "fa": "مردان ایکس ۹۷ — فصل ۴",
+    "date": "2028",
+    "precision": "year",
+    "type": "animation",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://www.murphysmultiverse.com/marvel-studios-confirms-release-windows-for-x-men-97-seasons-3-and-4/",
+    "note": "بازه اعلام‌شده توسط مدیر Marvel Television"
+  },
+  {
+    "id": "zombies-khonshu",
+    "title": "Marvel Zombies: The Fist of Khonshu",
+    "fa": "زامبی‌های مارول: مشت خونشو",
+    "date": "2028-10",
+    "precision": "halloween",
+    "type": "animation",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B",
+    "note": "ویژه‌برنامه دو قسمتی؛ حوالی هالووین"
+  },
+  {
+    "id": "black-panther-3",
+    "title": "Black Panther 3",
+    "fa": "پلنگ سیاه ۳",
+    "date": "2028-12-15",
+    "precision": "day",
+    "type": "movie",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://thewaltdisneycompany.com/news/marvel-studios-comic-con-2026/",
+    "note": "اکران سینمایی اعلام‌شده"
+  },
+  {
+    "id": "zombies-guardian",
+    "title": "Marvel Zombies: The Last Guardian",
+    "fa": "زامبی‌های مارول: آخرین نگهبان",
+    "date": "2029-10",
+    "precision": "halloween",
+    "type": "animation",
+    "phase": 0,
+    "status": "planned",
+    "source": "https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B",
+    "note": "ویژه‌برنامه دو قسمتی؛ حوالی هالووین"
+  }
+];

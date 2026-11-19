@@ -30,7 +30,7 @@ def main(version):
 const RELEASE=__VERSION__, CORE=__CORE__, DATA='marvel-path-v340-data';
 const RUNTIME=__RUNTIME__;
 const EXTRAS=['/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
-const PAGES=['/','/archive/','/actors/','/settings/','/watchlist/'];
+const PAGES=['/','/archive/','/timeline/','/actors/','/settings/','/watchlist/'];
 const pageRelease=async r=>r.ok&&(r.headers.get('content-type')||'').includes('text/html')?((await r.clone().text()).match(/<meta name="marvel-release" content="(\d+\.\d+\.\d+)"\s*\/?>/)||[])[1]||'':'';
 const releaseHTML=async r=>(await pageRelease(r))===RELEASE;
 const older=v=>{if(!v)return true;const a=v.split('.').map(Number),b=RELEASE.split('.').map(Number);for(let i=0;i<3;i++){if(a[i]!==b[i])return a[i]<b[i];}return false;};

@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.5.17'; SITE='https://marvel.imoein.com'
+VERSION='3.5.18'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -27,7 +27,7 @@ def main():
     shutil.copy2(OUT/'assets/icons/icon-180.png',OUT/'apple-touch-icon.png')
     manifest={'id':'/','name':'مسیر مارول | Marvel Path','short_name':'مسیر مارول','description':'راهنمای غیررسمی ترتیب تماشا، آرشیو آثار، بازیگران و پیگیری پیشرفت شخصی.','lang':'fa','dir':'rtl','start_url':'/','scope':'/','display':'standalone','background_color':'#0c0d11','theme_color':'#0c0d11','icons':[{'src':f'/assets/icons/icon-{n}.png','sizes':f'{n}x{n}','type':'image/png','purpose':'any'} for n in (192,512)]+[{'src':'/assets/icons/maskable-512.png','sizes':'512x512','type':'image/png','purpose':'maskable'}],'shortcuts':[{'name':'مسیر Doomsday','url':'/'},{'name':'آرشیو MCU','url':'/archive/'},{'name':'بازیگران','url':'/actors/'}]}
     (OUT/'manifest.webmanifest').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
-    node="const fs=require('fs'),vm=require('vm'); const src=fs.readFileSync('data.js','utf8')+'\\n'+fs.readFileSync('meta.js','utf8')+'\\nJSON.stringify({films:FILMS,mcu:MCU.map(f=>f.id),route:DOOMSDAY,meta:META,guide:HOME_GUIDE})'; console.log(vm.runInNewContext(src));"
+    node="const fs=require('fs'),vm=require('vm'); const src=fs.readFileSync('data.js','utf8')+'\\n'+fs.readFileSync('meta.js','utf8')+'\\nJSON.stringify({films:FILMS,mcu:MCU.map(f=>f.id),route:DOOMSDAY,meta:META,guide:HOME_GUIDE,releaseExtra:RELEASE_CALENDAR_EXTRA})'; console.log(vm.runInNewContext(src));"
     data=json.loads(subprocess.check_output(['node','-e',node],cwd=ROOT,text=True))
     films={f['id']:f for f in data['films']}; meta=data['meta']; actors=get(P/'people.json')['items']; people={a['id']:a for a in actors}; poster=get(P/'poster-urls.json'); images=get(P/'image-cache.json')
     head=(OUT/'index.html').read_text()
@@ -51,7 +51,7 @@ def main():
     head=head.replace('<div id="app"></div>','<div id="app"><!--PAGE-CONTENT--></div>')
     head=head.replace('<script src="app.js?v='+VERSION+'"></script>','<!--PAGE-DATA-->\n<script src="app.js?v='+VERSION+'"></script>')
     urls=[]
-    nav='<nav class="seo-nav" aria-label="صفحات اصلی">'+''.join(link(p,l) for p,l in [('/','مسیر Doomsday'),('/archive/','آرشیو MCU'),('/actors/','بازیگران')])+'</nav>'
+    nav='<nav class="seo-nav" aria-label="صفحات اصلی">'+''.join(link(p,l) for p,l in [('/','مسیر Doomsday'),('/archive/','آرشیو MCU'),('/timeline/','خط زمانی انتشار'),('/actors/','بازیگران')])+'</nav>'
     def static(title,body):return f'<main class="seo-content" id="main-content">{nav}<h1>{esc(title)}</h1>{body}<p class="seo-note">مسیر مارول؛ پروژه هواداری غیررسمی برای دنبال کردن داستان‌ها و ثبت پیشرفت تماشا. پخش فیلم در سایت ارائه نمی‌شود.</p></main>'
     def page(path,title,desc,body,schema=None,record=None,index=True):
         canonical=SITE+path
@@ -75,6 +75,9 @@ def main():
     page('/','مسیر مارول | ترتیب تماشای MCU و مسیر Doomsday',rootdesc,static('مسیر مارول؛ راهنمای تماشای دنیای مارول','<p>'+esc(rootdesc)+'</p><h2>مسیر پیشنهادی Doomsday</h2>'+list_titles(data['route'])+'<h2>آرشیو آثار و بازیگران</h2><p>'+link('/archive/','همه فیلم‌ها و سریال‌های آرشیو')+' · '+link('/actors/','فهرست بازیگران مارول')+'</p>'+guide_html),root_schema)
     page('/archive/','آرشیو MCU و فیلم‌ها و سریال‌های مارول | مسیر مارول','فهرست فیلم‌ها، سریال‌ها و ویژه‌برنامه‌های آرشیو مارول؛ داستان، بازیگران، قسمت‌ها و ترتیب تماشا.',static('آرشیو فیلم‌ها و سریال‌های مارول','<p>فهرست '+str(len(films))+' عنوان ثبت‌شده در آرشیو مسیر مارول، شامل آثار MCU و جهان‌های مرتبط.</p><h2>همه عناوین</h2>'+list_titles(list(films))))
     page('/actors/','بازیگران مارول؛ نقش‌ها و آثار | مسیر مارول','فهرست بازیگران آرشیو مارول، نقش‌ها، پروفایل و فیلموگرافی در مسیر مارول.',static('بازیگران مارول','<p>فهرست '+str(len(actors))+' بازیگر مرتبط با آثار آرشیو. برای مشاهده نقش‌ها و آثار روی نام بازیگر بزنید.</p>'+list_people(actors)))
+    calendar_rows=[(f['release'],'<li>'+esc(f['release'])+' · '+link('/title/'+f['id']+'/',f['title'])+'</li>') for f in films.values() if f['id'] in data['mcu']]
+    calendar_rows += [(r['date'],'<li>'+esc(r['date'])+' · '+esc(r['title'])+' · '+('برنامه‌ریزی‌شده' if r['status']=='planned' else 'منتشرشده')+' · '+link(r['source'],'منبع')+'</li>') for r in data['releaseExtra']]
+    page('/timeline/','خط زمانی انتشار فیلم‌ها و سریال‌های MCU | مسیر مارول','تقویم انتشار آثار مارول از ۲۰۰۸، فیلم‌ها و سریال‌های منتشرشده و برنامه‌های اعلام‌شده آینده.',static('خط زمانی انتشار مارول','<p>تاریخ انتشار آثار آرشیو و بازه‌های اعلام‌شده آینده؛ زمان‌های آینده ممکن است تغییر کنند.</p><ul class="seo-catalog">'+''.join(row for _,row in sorted(calendar_rows))+'</ul>'))
     for private,label in [('settings','تنظیمات'),('watchlist','واچ‌لیست من')]:
         page('/'+private+'/',label+' | مسیر مارول','فضای شخصی ثبت و مدیریت اطلاعات تماشا.',static(label,'<p>این بخش اطلاعات شخصی را فقط در مرورگر شما ذخیره می‌کند.</p>'),index=False)
     for fid,f in films.items():
@@ -116,8 +119,8 @@ def main():
     app=OUT/'app.js';s=app.read_text()
     s=s.replace('v3.3.1</div></aside>','v'+VERSION+'</div></aside>').replace('./sw.js?v=3.3.1','/sw.js?v='+VERSION)
     pos=s.index('function activePage(){')
-    route="""function seoRoute(){const path=location.pathname.replace(/^\\/|\\/$/g,'');if(!path||path==='index.html')return 'doomsday';if(path==='archive')return 'mcu';if(path==='actors')return 'people';if(/^(title|person)\\/[a-z0-9-]+$/.test(path))return path;if(['settings','watchlist'].includes(path))return path;return 'doomsday';}
-function seoPath(route){if(route==='doomsday')return '/';if(route==='mcu')return '/archive/';if(route==='people')return '/actors/';if(/^(title|person)\\/[a-z0-9-]+$/.test(route)||['settings','watchlist'].includes(route))return '/'+route+'/';return null;}
+    route="""function seoRoute(){const path=location.pathname.replace(/^\\/|\\/$/g,'');if(!path||path==='index.html')return 'doomsday';if(path==='archive')return 'mcu';if(path==='actors')return 'people';if(path==='timeline')return 'timeline';if(/^(title|person)\\/[a-z0-9-]+$/.test(path))return path;if(['settings','watchlist'].includes(path))return path;return 'doomsday';}
+function seoPath(route){if(route==='doomsday')return '/';if(route==='mcu')return '/archive/';if(route==='people')return '/actors/';if(route==='timeline')return '/timeline/';if(/^(title|person)\\/[a-z0-9-]+$/.test(route)||['settings','watchlist'].includes(route))return '/'+route+'/';return null;}
 function seoLinks(){document.querySelectorAll('a[href^="#"]').forEach(a=>{const href=seoPath(a.getAttribute('href').slice(1));if(href)a.setAttribute('href',href);});}
 """
     s=s[:pos]+route+s[pos:]
@@ -157,7 +160,7 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
     with css.open('a') as f:f.write('\n.seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}\n')
     worker="""'use strict';
 const CORE='marvel-path-v3512-core', DATA='marvel-path-v340-data';
-const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.17','/data.js?v=3.5.17','/meta.js?v=3.5.17','/posters.js?v=3.5.17','/admin.js?v=3.5.17','/enrichment.js?v=3.5.17','/app.js?v=3.5.17','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
+const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.18','/data.js?v=3.5.18','/meta.js?v=3.5.18','/posters.js?v=3.5.18','/admin.js?v=3.5.18','/enrichment.js?v=3.5.18','/app.js?v=3.5.18','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{

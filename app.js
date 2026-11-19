@@ -125,17 +125,17 @@ const arc=pct=>`<div class="progress-circle" style="--pct:${pct}%"><div><strong>
 function poster(f,cls=''){const url=posterUrl(f);return `<div class="poster-art p-${esc(f.palette)} ${cls}" aria-label="پوستر ${esc(f.title)}">${url?`<img class="poster-image" data-poster-id="${esc(f.id)}" src="${esc(url)}" alt="پوستر ${esc(f.title)}" loading="${['cinema-cover','feature-poster-frame'].includes(cls)?'eager':'lazy'}" referrerpolicy="no-referrer"/>`:''}<div class="poster-fallback"><div class="poster-mark">M<span>PATH</span></div><span class="poster-symbol">${esc(f.sigil)}</span><span class="poster-fallback-name" dir="ltr" lang="en">${esc(f.title)}</span></div></div>`}
 function artBackdrop(f){const url=posterUrl(f);return `<div class="feature-background p-${esc(f.palette)}" aria-hidden="true">${url?`<img class="poster-image" data-poster-id="${esc(f.id)}" src="${esc(url)}" alt="" referrerpolicy="no-referrer"/>`:''}<span class="feature-glow"></span></div>`}
 function pill(f,extra=''){return `<span class="pill ${extra}">${isAnimation(f)?ico('spark',13):f.type==='movie'?ico('film',13):ico('monitor',13)}${kind(f)}</span>`}
-function navIcon(id){return id==='doomsday'?'target':id==='mcu'?'layers':id==='watchlist'?'bookmark':id==='posters'?'film':id==='people'?'grid':id==='metadata'?'info':'settings'}
-const pageNames={doomsday:'مسیر Doomsday',mcu:'آرشیو MCU',watchlist:'واچ‌لیست من',settings:'تنظیمات',posters:'مدیریت کاورها',people:'بازیگران',metadata:'اطلاعات آثار'};
+function navIcon(id){return id==='doomsday'?'target':id==='mcu'?'layers':id==='timeline'?'clock':id==='watchlist'?'bookmark':id==='posters'?'film':id==='people'?'grid':id==='metadata'?'info':'settings'}
+const pageNames={doomsday:'مسیر Doomsday',mcu:'آرشیو MCU',timeline:'خط زمانی',watchlist:'واچ‌لیست من',settings:'تنظیمات',posters:'مدیریت کاورها',people:'بازیگران',metadata:'اطلاعات آثار'};
 function navLink(key){const current=(window.location.hash||'#doomsday').split('/')[0];const isActive=current==='#'+key||(current==='#title'&&detailOrigin===key);return `<a href="#${key}" class="nav-link ${isActive?'active':''}" ${isActive?'aria-current="page"':''}>${ico(navIcon(key),19)}<span>${pageNames[key]}</span>${key==='mcu'?`<small>${num(MCU.length)}</small>`:''}</a>`}
 function routeIds(){return (state.routeMode==='disney'?DOOMSDAY.filter(id=>OFFICIAL.has(id)):DOOMSDAY)}
 function shell(body,active){const s=stats(routeIds());return `<div class="app-shell">
  <aside class="sidebar"><a class="logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
- <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav>
+ <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','timeline','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
  <div class="sidebar-end">MARVEL PATH <span> / </span> v3.0</div></aside>
  <div class="workspace"><header class="topbar"><a class="mobile-logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="mini-m" aria-hidden="true">M</span><span>مسیر مارول</span></a><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions"><button type="button" class="mp-search-launch" data-global-search aria-label="جستجوی سراسری" aria-keyshortcuts="Meta+K Control+K">${ico('search',18)}<span>جستجو</span><kbd class="mp-search-hint"></kbd></button>${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status" role="status" title="${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}" data-storage-ok="${storageReady}"><span class="local-dot" aria-hidden="true"></span><span class="storage-label">${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer"><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer></div>
- <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
+ <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','timeline','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
 function feature(f,section){if(!f)return `<section class="feature feature-finished"><div class="feature-content"><span class="eyebrow">MISSION COMPLETE</span><h1>تمام مسیر رو دیدی!</h1><p>همه عنوان‌های این مسیر رو به پایان رسوندی.</p></div></section>`;return `<section class="feature feature-next">${artBackdrop(f)}<div class="feature-content"><div class="eyebrow with-dot feature-next-label" dir="rtl"><i aria-hidden="true"></i><span>${section==='doomsday'?'توقف بعدی در مسیر Doomsday':'ادامه داستان MCU'}</span></div><div class="feature-identity"><div class="feature-index"><span class="feature-kicker-en">UP NEXT</span><span class="feature-separator"></span><span>${formatYear(f.year)} / ${f.universe==='fox'?'FOX':'MCU'}</span></div><h1 dir="ltr" lang="en"><a class="feature-title-link" href="#title/${encodeURIComponent(f.id)}">${esc(f.title)}</a></h1></div><p>${esc(META[f.id]?.summary||'')}</p><div class="feature-tags">${pill(f)}<span>${duration(f.minutes)}</span><span>${f.episodes?`${num(f.episodes)} قسمت`:'نسخه سینمایی'}</span></div><div class="feature-ctas">${buttonOpen(f,watching(f)?'ادامه ثبت پیشرفت':'مشاهده و شروع تماشا')}<button type="button" class="btn btn-glass feature-save" aria-label="${state.saved[section==='doomsday'?'doomsday':'mcu'].includes(f.id)?'حذف از واچ‌لیست':'ذخیره در واچ‌لیست'}" aria-pressed="${state.saved[section==='doomsday'?'doomsday':'mcu'].includes(f.id)}" data-action="toggle-save" data-id="${f.id}" data-scope="${section}">${ico('bookmark',18)} <span>${state.saved[section==='doomsday'?'doomsday':'mcu'].includes(f.id)?'حذف از لیست':'ذخیره در واچ‌لیست'}</span></button></div></div><div class="feature-artwork"><a class="feature-poster" href="#title/${encodeURIComponent(f.id)}" aria-label="مشاهده جزئیات ${esc(f.fa)}">${poster(f,'feature-poster-frame')}</a><div class="feature-corner" aria-hidden="true">THE MARVEL PATH COLLECTION</div></div></section>`}
 function metric(icon,label,value,sub){return `<div class="metric"><div class="metric-icon">${ico(icon,19)}</div><div><span>${label}</span><strong>${value}</strong><small>${sub}</small></div></div>`}
@@ -195,6 +195,38 @@ function mcuPage(){const s=stats(MCU.map(f=>f.id)),visible=filterMCU(),{page,pag
  <div id="archive-results" class="${state.mcuView==='grid'?'poster-grid':'compact-list'}">${mcuResultCards(paged,page,size)}</div>
  ${paginationHTML(page,pages,visible.length)}
  <p class="footnote">خط زمانی، ترتیب تقریبی وقوع رویدادهاست؛ مسیرهای پیوستگی روایی انتخاب سردبیری‌اند و لزوماً فهرست رسمی مارول نیستند. تیک‌ها بین هر سه حالت مشترک‌اند. زمان سریال‌ها تقریبی است.</p>`}
+
+/* Release time, not story chronology. Upcoming records never alter watch progress. */
+let releaseFilter='all',releaseType='all',releaseYear='all';
+const releaseMonths=['ژانویه','فوریه','مارس','آوریل','مه','ژوئن','ژوئیه','اوت','سپتامبر','اکتبر','نوامبر','دسامبر'];
+const releaseDateText=r=>{const [y,m,d]=r.date.split('-').map(Number);return r.precision==='halloween'?'حوالی هالووین '+formatYear(y):r.precision==='year'?formatYear(y):[d?num(d):'',releaseMonths[m-1],formatYear(y)].filter(Boolean).join(' ')};
+const releaseKind=r=>({movie:'فیلم سینمایی',series:'سریال',animation:'انیمیشن',special:'ویژه‌برنامه'})[r.type];
+function releaseRecords(){
+ const existing=MCU.map(f=>({id:f.id,title:f.title,fa:f.fa,date:f.release,precision:'day',type:isAnimation(f)?'animation':f.type,phase:f.phase,status:'released',catalog:f}));
+ return [...existing,...RELEASE_CALENDAR_EXTRA];
+}
+const releaseSortKey=r=>r.precision==='day'?r.date:r.precision==='halloween'?r.date+'-31':r.precision==='year'?r.date+'-99-99':r.date+'-99';
+const releaseSorted=(a,b)=>releaseSortKey(a).localeCompare(releaseSortKey(b))||a.title.localeCompare(b.title);
+function releaseRow(r){
+ const planned=r.status==='planned';
+ const visual=r.catalog?poster(r.catalog):'<div class="release-placeholder" aria-hidden="true">'+ico(r.type==='movie'?'film':r.type==='animation'?'spark':'monitor',25)+'</div>';
+ const title=r.catalog?'<a class="release-title" href="#title/'+encodeURIComponent(r.id)+'" dir="auto">'+esc(r.title)+'</a>':'<strong class="release-title" dir="auto">'+esc(r.title)+'</strong>';
+ const source=r.source?'<a class="release-source" href="'+esc(r.source)+'" target="_blank" rel="noopener noreferrer">'+ico('external',13)+' منبع اعلام</a>':'';
+ return `<article class="release-entry ${planned?'release-planned':''}" data-release-id="${esc(r.id)}"><div class="release-date"><time datetime="${esc(r.date)}">${releaseDateText(r)}</time><small>${r.precision==='day'?(planned?'تاریخ اعلام‌شده':'تاریخ انتشار'):'بازه اعلام‌شده'}</small></div><div class="release-dot"></div><div class="release-card">${visual}<div class="release-copy"><div class="release-meta"><span>${releaseKind(r)}</span>${r.phase?'<span>فاز '+num(r.phase)+'</span>':''}<span class="release-status ${planned?'future':'past'}">${planned?'برنامه‌ریزی‌شده':'منتشرشده'}</span></div>${title}<span class="release-fa">${esc(r.fa)}</span>${r.note?'<small class="release-note">'+esc(r.note)+'</small>':''}</div>${source}</div></article>`;
+}
+function timelinePage(){
+ const all=releaseRecords(),future=all.filter(r=>r.status==='planned').sort(releaseSorted),past=all.filter(r=>r.status==='released').sort((a,b)=>releaseSorted(b,a)),next=future.find(r=>r.precision==='day'&&r.date>=new Date().toISOString().slice(0,10));
+ const filtered=r=>(releaseType==='all'||r.type===releaseType)&&(releaseYear==='all'||r.date.slice(0,4)===releaseYear);
+ const years=[...new Set(all.map(r=>r.date.slice(0,4)))].sort((a,b)=>b.localeCompare(a));
+ const group=(items,heading)=>{const y=[...new Set(items.map(r=>r.date.slice(0,4)))];return items.length?`<section class="release-section"><div class="section-head"><h2>${heading}</h2><span class="section-count">${num(items.length)} عنوان</span></div>${y.map(year=>`<section class="release-year"><h3>${formatYear(year)}</h3><div class="release-track">${items.filter(r=>r.date.startsWith(year)).map(releaseRow).join('')}</div></section>`).join('')}</section>`:''};
+ const f=releaseFilter==='released'?[]:future.filter(filtered),p=releaseFilter==='planned'?[]:past.filter(filtered);
+ return `<div class="page-intro"><span class="page-kicker">MARVEL RELEASE CALENDAR</span><h1>خط زمانی <em>انتشار</em></h1><p>از نخستین فیلم MCU تا برنامه‌های اعلام‌شده آینده؛ بر اساس زمان انتشار، نه ترتیب رویدادهای داستان.</p></div>
+ <section class="release-hero"><div><span class="cinema-kicker">NEXT CONFIRMED DATE</span><h2>${next?esc(next.title):'فعلا تاریخ آینده‌ای ثبت نشده'}</h2>${next?`<p>${esc(next.fa)} · ${releaseDateText(next)} · ${releaseKind(next)}</p>`:''}<p class="release-checked">آخرین بررسی منابع: ${releaseDateText({date:RELEASE_CALENDAR_CHECKED,precision:'day'})}</p></div><div class="release-stats"><div><strong>${num(past.length)}</strong><span>منتشرشده</span></div><div><strong>${num(future.length)}</strong><span>در تقویم آینده</span></div></div></section>
+ <div class="release-controls"><div class="filter-tabs" role="group" aria-label="وضعیت انتشار">${[['all','همه'],['planned','آثار آینده'],['released','منتشرشده']].map(([id,label])=>`<button class="filter-tab ${releaseFilter===id?'selected':''}" data-action="release-filter" data-value="${id}" aria-pressed="${releaseFilter===id}">${label}</button>`).join('')}</div><label>نوع اثر<select id="release-type">${[['all','همه آثار'],['movie','فیلم‌ها'],['series','سریال‌ها'],['animation','انیمیشن‌ها'],['special','ویژه‌برنامه‌ها']].map(([v,l])=>`<option value="${v}" ${releaseType===v?'selected':''}>${l}</option>`).join('')}</select></label><label>سال<select id="release-year"><option value="all">همه سال‌ها</option>${years.map(y=>`<option value="${y}" ${releaseYear===y?'selected':''}>${formatYear(y)}</option>`).join('')}</select></label></div>
+ <p class="release-disclaimer">تاریخ آغاز انتشار، مبنای مرتب‌سازی است؛ برای آثار آینده تاریخ‌ها ممکن است تغییر کنند. عنوان‌هایی که فقط سال انتشارشان اعلام شده، در انتهای گروه همان سال آمده‌اند. آثار فقط با تاریخ یا بازه اعلام‌شده وارد تقویم شده‌اند. عناوین مرتبط Marvel Animation نیز با نوع اثر مشخص شده‌اند. تاریخ‌های سینمایی بر مبنای اکران آمریکا هستند.</p>
+ ${group(f,'در راه مارول')}${group(p,'تاریخچه انتشار')}${!f.length&&!p.length?empty('فیلتر نوع اثر یا سال را تغییر بده.'):''}
+ <p class="footnote">تاریخچه بر مبنای آرشیو فعلی و رکوردهای تکمیلی تقویم است. آثار آینده تا زمان انتشار به آمار تماشا اضافه نمی‌شوند.</p>`;
+}
 function watchlistPage(){const a=state.saved.doomsday.filter(id=>BY_ID[id]),b=state.saved.mcu.filter(id=>BY_ID[id]);const r=stats(a),m=stats(b);return `<div class="page-intro"><div class="page-kicker">YOUR COLLECTION <span class="accent-slash">/</span> ذخیره‌شده‌ها</div><h1>واچ‌لیست <em>من</em></h1><p>آثاری که برای بعد کنار گذاشتی؛ واچ‌لیست Doomsday و آرشیو MCU مستقل هستند.</p></div><div class="watch-summary">${metric('bookmark','در لیست Doomsday',num(a.length),'باقی‌مانده: '+num(r.pending))}${metric('layers','در لیست MCU',num(b.length),'باقی‌مانده: '+num(m.pending))}${metric('clock','زمان لیست‌ها',duration(r.remaining+m.remaining),'تخمین مستقل هر لیست')}</div>${sectionTitle('واچ‌لیست Doomsday','آثار نشان‌گذاری‌شده در مسیر اصلی.')}<div class="route-list">${a.length?a.map((id,i)=>filmRow(BY_ID[id],i+1,'doomsday')).join(''):empty('هنوز موردی از مسیر Doomsday نشان‌گذاری نکردی.')}</div>${sectionTitle('واچ‌لیست MCU','فیلم‌ها و سریال‌های انتخابی از آرشیو.')}<div class="route-list">${b.length?b.map((id,i)=>filmRow(BY_ID[id],i+1,'mcu')).join(''):empty('از آرشیو MCU روی آیکن نشانک بزن تا اینجا اضافه بشه.')}</div>`}
 function empty(m,title='موردی پیدا نشد'){return `<div class="empty" role="status"><span aria-hidden="true">${ico('search',28)}</span><b>${esc(title)}</b><p>${esc(m)}</p></div>`}
 /* v2.6: Film detail follows the Figma film-page composition: full-height poster, contextual backdrop, editorial content, and episode-first progress. */
@@ -311,7 +343,7 @@ function activePage(){
  if(ADMIN_MODE){if(h.startsWith('person/'))return {name:'person',id:h.slice(7)};return {name:['dashboard','posters','metadata','people'].includes(h)?h:'dashboard'}}
  if(h.startsWith('title/'))return {name:'title',id:h.slice(6)};
  if(h.startsWith('person/'))return {name:'person',id:h.slice(7)};
- return {name:['doomsday','mcu','watchlist','people','settings'].includes(h)?h:'doomsday'};
+ return {name:['doomsday','mcu','timeline','watchlist','people','settings'].includes(h)?h:'doomsday'};
 }
 function selectDetailSection(nav,value){
  if(!nav)return;
@@ -349,6 +381,7 @@ function render(){
    else if(p.name==='person'){body=personPage(p.id);title='پروفایل بازیگر'}
    else if(p.name==='people'){body=peoplePage();title='بازیگران'}
    else if(p.name==='mcu'){body=mcuPage();title='آرشیو MCU'}
+   else if(p.name==='timeline'){body=timelinePage();title='خط زمانی انتشار'}
    else if(p.name==='watchlist'){body=watchlistPage();title='واچ‌لیست من'}
    else if(p.name==='settings'){body=settingsPage();title='تنظیمات'}
    else{body=doomsdayPage();title='مسیر Doomsday'}
@@ -370,6 +403,7 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-action]');
 if(action==='detail-jump'){jumpToDetailSection(v);return;}
 if(action==='route-mode'&&['all','disney'].includes(v)){state.routeMode=v;state.routeStatus='all';save();render();toast(v==='disney'?'مسیر منتخب دیزنی+ فعال شد.':'مسیر پیشنهادی کامل فعال شد.');}
 if(action==='filter'){if(scope==='route-status'){state.routeStatus=v}else{state.mcuFilter=v;state.mcuPage=0}save();render()}
+if(action==='release-filter'&&['all','planned','released'].includes(v)){releaseFilter=v;render();}
 if(action==='order'&&['story','release','arc'].includes(v)){state.order=v;state.mcuPage=0;save();render();toast(state.order==='arc'?'مسیر پیوستگی شخصیت‌ها فعال شد.':state.order==='story'?'ترتیب خط زمانی فعال شد.':'ترتیب تاریخ انتشار فعال شد.')}
 if(action==='view'){state.mcuView=v;save();render()}
 if(action==='page'){const size=state.mcuPageSize==='all'?Infinity:state.mcuPageSize;state.mcuPage=clamp(state.mcuPage+Number(v),0,Math.max(0,Math.ceil(filterMCU().length/size)-1));save();render();document.querySelector('.listing-top')?.scrollIntoView({behavior:'smooth',block:'start'})}
@@ -393,6 +427,8 @@ document.addEventListener('input',e=>{if(e.target.id==='search'){
 if(e.target.id==='movie-range'){const f=BY_ID[e.target.dataset.id],v=Number(e.target.value);document.getElementById('slider-value').textContent=f.minutes==null?(v?'کامل':'ثبت نشده'):duration(v);document.querySelector('.detail-panel .wide-meter > span')?.style.setProperty('width',`${100*v/maxVal(f)}%`)}
 });
 document.addEventListener('change',e=>{if(e.target.id==='movie-range'){const f=BY_ID[e.target.dataset.id];if(f){state.progress[f.id]=Number(e.target.value);state.watching[f.id]=state.progress[f.id]>0&&state.progress[f.id]<maxVal(f);if(done(f))delete state.watching[f.id];save();render();toast('پیشرفت تماشا ذخیره شد.')}}
+if(e.target.id==='release-type'){releaseType=e.target.value;render()}
+if(e.target.id==='release-year'){releaseYear=e.target.value;render()}
 if(e.target.id==='status-filter'){state.mcuStatus=e.target.value;state.mcuPage=0;save();render()}
 if(e.target.id==='page-size'){const n=e.target.value==='all'?'all':Number(e.target.value);if([10,20,50,'all'].includes(n)){state.mcuPageSize=n;state.mcuPage=0;save();render();toast(n==='all'?'همه عنوان‌ها نمایش داده می‌شن.':`نمایش ${num(n)} عنوان در هر صفحه.`)}}
 if(e.target.id==='arc-pick'){if(Object.hasOwn(STORY_ARCS,e.target.value)){state.arc=e.target.value;state.mcuPage=0;save();render();toast('مسیر شخصیت‌ها تغییر کرد.')}}
