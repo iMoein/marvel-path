@@ -72,17 +72,21 @@ may use the parent series page. No external source is fetched by the viewer
 until the user opens an external link.
 
 ### Persian localization (editorial, incremental)
-`translations/fa.json` stores manually translated title overviews, episode headlines
+`translations/fa.json` stores editorial and machine-translated title overviews, episode headlines
 and descriptions, actor names, bios, and exact role labels. English originals remain
 in the source catalogue. Fields are matched using SHA-256 of their source text;
 a new or changed source requires a new translation. The public build and local API
 apply the same overlay without a runtime translation service.
-This first batch covers 80 title overviews, 44 episodes, 11 biographies, 17 names
-and 56 distinct role labels. Other original text remains available with an
-untranslated label; missing biographies are not fabricated.
-The stored TMDB records for Daredevil season 3 (207555) and The Defenders (32736)
-were identified as unrelated titles. Their synopsis, episode details and cast
-are withheld from the title page until the source records are corrected.
+Final localization includes fingerprints for all available valid-source title
+synopses, episode titles and descriptions, actor names, existing biographies,
+birthplaces, taglines and directors. Existing editorial translations are retained;
+the remaining public catalogue text was translated in a one-time machine batch
+and selectively normalized. This is not a fully human-reviewed translation.
+Original text remains in the catalogue. External filmography titles remain in
+their source language; role labels shared with the Marvel archive are localized.
+Missing source text is not invented. Known wrong source records for Daredevil
+season 3 (TMDB 207555) and The Defenders (TMDB 32736 / TVmaze 1217) are withheld
+from the title viewer until corrected.
 Actor directory linkage from those records requires a separate source audit.
 
 ### MCU phases and curated viewing steps (3.5.17)

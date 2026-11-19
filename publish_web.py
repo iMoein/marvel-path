@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.5.23'; SITE='https://marvel.imoein.com'
+VERSION='3.5.24'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())

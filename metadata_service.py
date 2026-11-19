@@ -225,7 +225,7 @@ def title_info_tmdb(id_, item):
 def title_info_tvmaze(id_,item):
     title=base_title(item['name']);season=item['season']
     found=fetch_json('api.tvmaze.com','/singlesearch/shows',{'q':title})
-    if norm(found.get('name',''))!=norm(title):raise ValueError('نام سریال با نتیجه TVmaze تطبیق ندارد.')
+    if norm(found.get('name',''))!=norm(title) or (id_ in localize_catalog.TVMAZE_MISMATCH and found.get('id')==localize_catalog.TVMAZE_MISMATCH[id_]):raise ValueError('نام سریال با نتیجه TVmaze تطبیق ندارد.')
     show_id=found['id']
     castdata=fetch_json('api.tvmaze.com',f'/shows/{show_id}/cast')
     epis=fetch_json('api.tvmaze.com',f'/shows/{show_id}/episodes')
@@ -434,7 +434,7 @@ def title_missing(id_,record=None):
     item=lookup[id_]
     r=record if record is not None else get_json(TITLES/(id_+'.json'))
     if not isinstance(r,dict) or not r:return ['record']
-    if r.get('sourceMismatch') or (id_ in localize_catalog.MISMATCH and r.get('tmdbId')==localize_catalog.MISMATCH[id_]):return ['source']
+    if localize_catalog.source_mismatch(id_,r):return ['source']
     missing=[k for k in ('overview','cast') if not r.get(k)]
     if item['episodes']:
         episodes={e.get('number'):e for e in r.get('episodes',[]) if isinstance(e,dict)}

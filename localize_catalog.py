@@ -6,6 +6,9 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parent
 TABLE=json.loads((ROOT/'translations/fa.json').read_text(encoding='utf-8'))
 MISMATCH={'daredevil-3':207555,'defenders':32736}
+TVMAZE_MISMATCH={'defenders':1217}
+def source_mismatch(id_,r):
+    return bool(r.get('sourceMismatch') or (id_ in MISMATCH and r.get('tmdbId')==MISMATCH[id_]) or (id_ in TVMAZE_MISMATCH and r.get('tvmazeId')==TVMAZE_MISMATCH[id_]))
 def field(row,key,entry):
     value=row.get(key)
     if isinstance(value,str) and entry and hashlib.sha256(value.encode()).hexdigest()==entry['sha256']:
@@ -29,12 +32,14 @@ def person(d,id_=None):
     return d
 def title(d,id_):
     if not isinstance(d,dict):return d
-    if id_ in MISMATCH and d.get('tmdbId')==MISMATCH[id_]:
+    if source_mismatch(id_,d):
         # Keep the original source snapshot on disk; do not present the wrong show's synopsis/cast.
         d['sourceMismatch']=True
         return d
     tx=TABLE['titles'].get(id_,{})
-    field(d,'overview',tx.get('overview'))
+    for k in ('overview','tagline','director'):field(d,k,tx.get(k))
+    genres={'Action':'اکشن','Action & Adventure':'اکشن و ماجراجویی','Adventure':'ماجراجویی','Animation':'انیمیشن','Comedy':'کمدی','Crime':'جنایی','Documentary':'مستند','Drama':'درام','Family':'خانوادگی','Fantasy':'فانتزی','Horror':'ترسناک','Kids':'کودک','Legal':'حقوقی','Mystery':'معمایی','Reality':'واقع‌نما','Sci-Fi & Fantasy':'علمی‌تخیلی و فانتزی','Science Fiction':'علمی‌تخیلی','Science-Fiction':'علمی‌تخیلی','Thriller':'دلهره‌آور'}
+    if d.get('genres'):d['genresFa']=[genres.get(g,g) for g in d['genres']]
     for e in d.get('episodes',[]):
         te=tx.get('episodes',{}).get(str(e.get('number')),{})
         for k in ('name','overview'):field(e,k,te.get(k))
