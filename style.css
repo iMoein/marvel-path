@@ -562,3 +562,38 @@ body{background:var(--bg);line-height:1.75}
   .main-footer{padding:16px 16px 92px}
   .footer-tagline{font-size:10px;padding:9px 14px}
 }
+
+
+/* Safe area: preserve the normal bar size while extending its background
+   around iOS status bar / Dynamic Island and the home indicator. */
+:root{
+ --mp-safe-top:env(safe-area-inset-top,0px);
+ --mp-safe-right:env(safe-area-inset-right,0px);
+ --mp-safe-bottom:env(safe-area-inset-bottom,0px);
+ --mp-safe-left:env(safe-area-inset-left,0px);
+ --mp-bar-height:74px;
+ --mp-edge:clamp(22px,3.4vw,62px);
+ scroll-padding-top:calc(var(--mp-bar-height) + var(--mp-safe-top) + 12px);
+}
+.topbar{
+ height:calc(var(--mp-bar-height) + var(--mp-safe-top));
+ min-height:calc(var(--mp-bar-height) + var(--mp-safe-top));
+ flex-shrink:0;
+ padding-top:var(--mp-safe-top);
+ padding-right:max(var(--mp-edge),var(--mp-safe-right));
+ padding-left:max(var(--mp-edge),var(--mp-safe-left));
+}
+.sidebar{padding-top:calc(30px + var(--mp-safe-top));padding-bottom:calc(19px + var(--mp-safe-bottom))}
+.main-content{padding-right:max(var(--mp-edge),var(--mp-safe-right));padding-left:max(var(--mp-edge),var(--mp-safe-left))}
+.main-footer{padding-bottom:calc(24px + var(--mp-safe-bottom))}
+#toasts{bottom:calc(30px + var(--mp-safe-bottom));left:max(30px,var(--mp-safe-left))}
+@media(min-width:701px) and (max-width:900px){
+ .sidebar{padding-top:calc(22px + var(--mp-safe-top))}
+}
+@media(max-width:700px){
+ :root{--mp-bar-height:60px;--mp-edge:17px}
+ .main-content{padding-right:max(16px,var(--mp-safe-right));padding-left:max(16px,var(--mp-safe-left))}
+ .mobile-nav{padding:7px max(5px,var(--mp-safe-right)) calc(6px + var(--mp-safe-bottom)) max(5px,var(--mp-safe-left))}
+ .main-footer{padding-bottom:calc(92px + var(--mp-safe-bottom))}
+ #toasts{bottom:calc(86px + var(--mp-safe-bottom));left:max(14px,var(--mp-safe-left));right:max(14px,var(--mp-safe-right))}
+}

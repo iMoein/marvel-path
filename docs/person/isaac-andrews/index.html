@@ -50,10 +50,22 @@ html[data-boot=fallback] #boot-fallback{display:flex;align-items:center;justify-
 @media(max-width:1199px){.bs-side{width:220px}.bs-work{margin-right:220px}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.bs-hero{grid-template-columns:minmax(0,1fr) 145px}}
 @media(min-width:701px) and (max-width:900px){.bs-side{width:70px;padding:20px 10px}.bs-side .bs-name{display:none}.bs-work{margin-right:70px}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){.bs-side,.bs-desktop{display:none}.bs-work{margin-right:0}.bs-mobile{display:flex}.bs-top{height:60px}.bs-mobile .bs-mark{width:31px;height:31px;font-size:24px}.bs-mobile{font-size:15px}.bs-main{padding:20px 16px 105px}.bs-hero{grid-template-columns:minmax(0,1fr) 96px;gap:14px;padding:15px;min-height:230px}.bs-block{height:66px}.bs-metrics{grid-template-columns:1fr 1fr;gap:9px}.bs-metrics .bs-block:first-child{grid-column:1/-1}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bs-grid .bs-card{height:190px}.bs-actors .bs-card{height:235px}.bs-detail .bs-hero{grid-template-columns:1fr;min-height:340px}.bs-detail .bs-hero .bs-tile{width:42%;max-width:145px;grid-row:1;justify-self:center}.bs-bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:5px;bottom:0;right:0;left:0;background:#191a21;border-top:1px solid #ffffff15;padding:13px 8px calc(13px + env(safe-area-inset-bottom,0px))}.bs-bottom i{height:38px;border-radius:9px;background:#24252d}}
+
+:root{--mp-safe-top:env(safe-area-inset-top,0px);--mp-safe-right:env(safe-area-inset-right,0px);--mp-safe-bottom:env(safe-area-inset-bottom,0px);--bs-height:74px;--bs-edge:clamp(18px,3.4vw,62px)}
+.bs-top{height:calc(var(--bs-height) + var(--mp-safe-top));padding-top:var(--mp-safe-top);padding-left:max(var(--bs-edge),var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(var(--bs-edge),var(--mp-safe-right))}
+.bs-side{padding-top:calc(28px + var(--mp-safe-top));padding-bottom:calc(18px + var(--mp-safe-bottom))}
+#boot-fallback{margin-top:calc(18px + var(--mp-safe-top))}
+html:not([data-boot]) .seo-content{padding-top:calc(28px + var(--mp-safe-top))}
+@media(min-width:701px) and (max-width:900px){.bs-side{padding-top:calc(20px + var(--mp-safe-top))}}
+@media(max-width:700px){
+ :root{--bs-height:60px;--bs-edge:17px}
+ .bs-main{padding-left:max(16px,var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(16px,var(--mp-safe-right));padding-bottom:calc(105px + var(--mp-safe-bottom))}
+ .bs-bottom{padding:13px max(8px,var(--mp-safe-right)) calc(13px + var(--mp-safe-bottom)) max(8px,var(--mp-safe-left,env(safe-area-inset-left,0px)))}
+}
 @media(prefers-reduced-motion:reduce){#boot-shell *{animation:none!important}#boot-shell *:after{animation:none!important}}
 </style>
 <script>(()=>{const root=document.documentElement;root.dataset.boot='loading';let timer;const end=state=>{clearTimeout(timer);root.dataset.boot=state;};window.marvelBootReady=()=>end('ready');timer=setTimeout(()=>{if(root.dataset.boot==='loading')end('fallback')},12000);document.addEventListener('DOMContentLoaded',()=>{if(root.dataset.boot==='loading')end('fallback')},{once:true});})();</script>
-<link rel="stylesheet" href="style.css?v=3.4.1"/>
+<link rel="stylesheet" href="style.css?v=3.4.2"/>
 <title>Isaac Andrews | بازیگران مارول | مسیر مارول</title>
 <meta name="description" content="Isaac Andrews؛ بازیگر مرتبط با انتقام‌جویان: عصر اولتران. مشاهده نقش‌ها و فیلموگرافی در مسیر مارول."/>
 <link rel="canonical" href="https://marvel.imoein.com/person/isaac-andrews/"/>
@@ -82,12 +94,12 @@ html[data-boot=fallback] #boot-fallback{display:flex;align-items:center;justify-
 <div id="boot-fallback" role="status"><span>بارگذاری کامل برنامه ممکن نشد؛ فعلا اطلاعات پایه در دسترس است.</span><a href="/person/isaac-andrews/">تلاش دوباره</a></div>
 <div id="app"><main class="seo-content" id="main-content"><nav class="seo-nav" aria-label="صفحات اصلی"><a href="/">مسیر Doomsday</a><a href="/archive/">آرشیو MCU</a><a href="/actors/">بازیگران</a></nav><h1>Isaac Andrews</h1><div class="seo-hero"><img src="/public-data/images/people/isaac-andrews.webp" alt="Isaac Andrews" loading="lazy" width="160" height="240"><div><p>Isaac Andrews؛ بازیگر مرتبط با انتقام‌جویان: عصر اولتران. مشاهده نقش‌ها و فیلموگرافی در مسیر مارول.</p></div></div><h2>حضور در آثار مارول</h2><ul class="seo-catalog"><li><a href="/title/avengers-ultron/">Avengers: Age of Ultron</a> — Costel</li></ul><h2>فیلموگرافی ثبت‌شده</h2><ul class="seo-catalog"><li>Ready Player One (2018)</li><li>Alice Through the Looking Glass (2016)</li><li>The Living and the Dead (2016)</li><li>Avengers: Age of Ultron (2015)</li><li>Blackwood (2014)</li><li>Hercules (2014)</li><li>Exodus: Gods and Kings (2014)</li><li>Having You (2013)</li><li>The Hollow Crown (2012)</li></ul><p class="seo-note">مسیر مارول؛ پروژه هواداری غیررسمی برای دنبال کردن داستان‌ها و ثبت پیشرفت تماشا. پخش فیلم در سایت ارائه نمی‌شود.</p></main></div>
 <div id="toasts" aria-live="polite" aria-atomic="true"></div>
-<script defer src="data.js?v=3.4.1"></script>
-<script defer src="meta.js?v=3.4.1"></script>
-<script defer src="posters.js?v=3.4.1"></script>
-<script defer src="admin.js?v=3.4.1"></script>
-<script defer src="enrichment.js?v=3.4.1"></script>
+<script defer src="data.js?v=3.4.2"></script>
+<script defer src="meta.js?v=3.4.2"></script>
+<script defer src="posters.js?v=3.4.2"></script>
+<script defer src="admin.js?v=3.4.2"></script>
+<script defer src="enrichment.js?v=3.4.2"></script>
 <script type="application/json" id="page-data">{"kind":"person","id":"isaac-andrews","record":{"ready":true,"data":{"id":"isaac-andrews","name":"Isaac Andrews","birthDate":"","birthPlace":"","bio":"","source":"TMDB","fetchedAt":"2026-11-16T12:15:09+00:00","tmdbId":1264233,"sourceUrl":"https://www.themoviedb.org/person/1264233","credits":[{"id":"avengers-ultron","title":"Avengers: Age of Ultron","character":"Costel"}],"photo":"./public-data/images/people/isaac-andrews.webp","filmography":[{"name":"Ready Player One","year":2018,"character":"Halliday 7 Years Old","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/pU1ULUq8D3iRxl1fdX2lZIzdHuI.jpg"},{"name":"Alice Through the Looking Glass","year":2016,"character":"Second Mate Tom","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/kbGamUkYfgKIYIrU8kW5oc0NatZ.jpg"},{"name":"The Living and the Dead","year":2016,"character":"Charlie","mediaType":"tv","poster":"https://image.tmdb.org/t/p/w185/yIN4Se4XeP2JQ5dATrDlWv6TXlt.jpg"},{"name":"Avengers: Age of Ultron","year":2015,"character":"Costel","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg"},{"name":"Blackwood","year":2014,"character":"Harry Marshall","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/uqQT68BJ2Skiuk5S2elmvAijmfJ.jpg"},{"name":"Hercules","year":2014,"character":"Arius","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/sKNIwY6UENCJ36FvYvnBW3Vdzt7.jpg"},{"name":"Exodus: Gods and Kings","year":2014,"character":"Malak","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/uaDj37JtvLan9tihxZ18e6qL33b.jpg"},{"name":"Having You","year":2013,"character":"Phoenix","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/csfRcJvRkA1zHNq4edaNDOsFo4p.jpg"},{"name":"The Hollow Crown","year":2012,"character":"Prince Richard","mediaType":"tv","poster":"https://image.tmdb.org/t/p/w185/1Q8m6nI5m66DjnQ5V661anWqpVu.jpg"}]}}}</script>
-<script defer src="app.js?v=3.4.1"></script>
+<script defer src="app.js?v=3.4.2"></script>
 </body>
 </html>

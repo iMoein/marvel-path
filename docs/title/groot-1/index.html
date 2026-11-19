@@ -50,10 +50,22 @@ html[data-boot=fallback] #boot-fallback{display:flex;align-items:center;justify-
 @media(max-width:1199px){.bs-side{width:220px}.bs-work{margin-right:220px}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.bs-hero{grid-template-columns:minmax(0,1fr) 145px}}
 @media(min-width:701px) and (max-width:900px){.bs-side{width:70px;padding:20px 10px}.bs-side .bs-name{display:none}.bs-work{margin-right:70px}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){.bs-side,.bs-desktop{display:none}.bs-work{margin-right:0}.bs-mobile{display:flex}.bs-top{height:60px}.bs-mobile .bs-mark{width:31px;height:31px;font-size:24px}.bs-mobile{font-size:15px}.bs-main{padding:20px 16px 105px}.bs-hero{grid-template-columns:minmax(0,1fr) 96px;gap:14px;padding:15px;min-height:230px}.bs-block{height:66px}.bs-metrics{grid-template-columns:1fr 1fr;gap:9px}.bs-metrics .bs-block:first-child{grid-column:1/-1}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bs-grid .bs-card{height:190px}.bs-actors .bs-card{height:235px}.bs-detail .bs-hero{grid-template-columns:1fr;min-height:340px}.bs-detail .bs-hero .bs-tile{width:42%;max-width:145px;grid-row:1;justify-self:center}.bs-bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:5px;bottom:0;right:0;left:0;background:#191a21;border-top:1px solid #ffffff15;padding:13px 8px calc(13px + env(safe-area-inset-bottom,0px))}.bs-bottom i{height:38px;border-radius:9px;background:#24252d}}
+
+:root{--mp-safe-top:env(safe-area-inset-top,0px);--mp-safe-right:env(safe-area-inset-right,0px);--mp-safe-bottom:env(safe-area-inset-bottom,0px);--bs-height:74px;--bs-edge:clamp(18px,3.4vw,62px)}
+.bs-top{height:calc(var(--bs-height) + var(--mp-safe-top));padding-top:var(--mp-safe-top);padding-left:max(var(--bs-edge),var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(var(--bs-edge),var(--mp-safe-right))}
+.bs-side{padding-top:calc(28px + var(--mp-safe-top));padding-bottom:calc(18px + var(--mp-safe-bottom))}
+#boot-fallback{margin-top:calc(18px + var(--mp-safe-top))}
+html:not([data-boot]) .seo-content{padding-top:calc(28px + var(--mp-safe-top))}
+@media(min-width:701px) and (max-width:900px){.bs-side{padding-top:calc(20px + var(--mp-safe-top))}}
+@media(max-width:700px){
+ :root{--bs-height:60px;--bs-edge:17px}
+ .bs-main{padding-left:max(16px,var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(16px,var(--mp-safe-right));padding-bottom:calc(105px + var(--mp-safe-bottom))}
+ .bs-bottom{padding:13px max(8px,var(--mp-safe-right)) calc(13px + var(--mp-safe-bottom)) max(8px,var(--mp-safe-left,env(safe-area-inset-left,0px)))}
+}
 @media(prefers-reduced-motion:reduce){#boot-shell *{animation:none!important}#boot-shell *:after{animation:none!important}}
 </style>
 <script>(()=>{const root=document.documentElement;root.dataset.boot='loading';let timer;const end=state=>{clearTimeout(timer);root.dataset.boot=state;};window.marvelBootReady=()=>end('ready');timer=setTimeout(()=>{if(root.dataset.boot==='loading')end('fallback')},12000);document.addEventListener('DOMContentLoaded',()=>{if(root.dataset.boot==='loading')end('fallback')},{once:true});})();</script>
-<link rel="stylesheet" href="style.css?v=3.4.1"/>
+<link rel="stylesheet" href="style.css?v=3.4.2"/>
 <title>من گروت هستم — فصل ۱ (2022) | I Am Groot — Season 1 | مسیر مارول</title>
 <meta name="description" content="ماجراجویی‌های کوتاه و بامزه گروت کوچک در قالب انیمیشن‌های چنددقیقه‌ای."/>
 <link rel="canonical" href="https://marvel.imoein.com/title/groot-1/"/>
@@ -82,12 +94,12 @@ html[data-boot=fallback] #boot-fallback{display:flex;align-items:center;justify-
 <div id="boot-fallback" role="status"><span>بارگذاری کامل برنامه ممکن نشد؛ فعلا اطلاعات پایه در دسترس است.</span><a href="/title/groot-1/">تلاش دوباره</a></div>
 <div id="app"><main class="seo-content" id="main-content"><nav class="seo-nav" aria-label="صفحات اصلی"><a href="/">مسیر Doomsday</a><a href="/archive/">آرشیو MCU</a><a href="/actors/">بازیگران</a></nav><h1>من گروت هستم — فصل ۱ — I Am Groot — Season 1</h1><div class="seo-hero"><img src="/public-data/images/posters/groot-1.webp" alt="من گروت هستم — فصل ۱" loading="lazy" width="160" height="240"><div><p>ماجراجویی‌های کوتاه و بامزه گروت کوچک در قالب انیمیشن‌های چنددقیقه‌ای.</p><p>سال: 2022 · 5 قسمت</p></div></div><h2>بازیگران و نقش‌ها</h2><ul class="seo-catalog"><li><a href="/person/vin-diesel/">Vin Diesel</a> — Baby Groot (voice)</li></ul><h2>قسمت‌ها</h2><ol><li>Groot&#x27;s First Steps — Baby Groot takes his first steps out of his pot, only to learn you have to walk before you can run.</li><li>The Little Guy — Groot discovers a miniature civilization that believes the seemingly enormous tree toddler is the hero they’ve been waiting for.</li><li>Groot&#x27;s Pursuit — Groot investigates a spooky noise that’s been haunting the Quadrant, which leads to an intense dance off.</li><li>Groot Takes a Bath — Everybody needs some alone time to relax and wash up, but things go quite differently when you’re a Flora Colossi toddler.</li><li>Magnum Opus — Groot sets out to paint a family portrait of himself and the Guardians, only to discover just how messy the artistic process can be.</li></ol><p class="seo-note">مسیر مارول؛ پروژه هواداری غیررسمی برای دنبال کردن داستان‌ها و ثبت پیشرفت تماشا. پخش فیلم در سایت ارائه نمی‌شود.</p></main></div>
 <div id="toasts" aria-live="polite" aria-atomic="true"></div>
-<script defer src="data.js?v=3.4.1"></script>
-<script defer src="meta.js?v=3.4.1"></script>
-<script defer src="posters.js?v=3.4.1"></script>
-<script defer src="admin.js?v=3.4.1"></script>
-<script defer src="enrichment.js?v=3.4.1"></script>
+<script defer src="data.js?v=3.4.2"></script>
+<script defer src="meta.js?v=3.4.2"></script>
+<script defer src="posters.js?v=3.4.2"></script>
+<script defer src="admin.js?v=3.4.2"></script>
+<script defer src="enrichment.js?v=3.4.2"></script>
 <script type="application/json" id="page-data">{"kind":"title","id":"groot-1","record":{"ready":true,"data":{"id":"groot-1","title":"I Am Groot — Season 1","overview":"There's no guarding the galaxy from this mischievous toddler! Get ready as Baby Groot takes center stage in his very own collection of shorts, exploring his glory days growing up and getting into trouble among the stars.","tagline":"A hero of few words returns.","director":"","season":1,"seasonCountExpected":5,"source":"TMDB","fetchedAt":"2026-11-16T11:54:50+00:00","tmdbId":232125,"type":"tv","sourceUrl":"https://www.themoviedb.org/tv/232125","genres":["Animation","Comedy","Family","Sci-Fi \u0026 Fantasy","Kids"],"cast":[{"personId":"vin-diesel","name":"Vin Diesel","character":"Baby Groot (voice)","order":0,"tmdbId":12835,"photo":"./public-data/images/people/vin-diesel.webp"}],"episodes":[{"number":1,"name":"Groot's First Steps","overview":"Baby Groot takes his first steps out of his pot, only to learn you have to walk before you can run.","airDate":"2022-08-10","runtime":6,"image":"https://image.tmdb.org/t/p/w300/iecIwrRoq1uZfhJ9XRrZD29Zr4R.jpg"},{"number":2,"name":"The Little Guy","overview":"Groot discovers a miniature civilization that believes the seemingly enormous tree toddler is the hero they’ve been waiting for.","airDate":"2022-08-10","runtime":6,"image":"https://image.tmdb.org/t/p/w300/6pFcTY18M9EpKQEEZZMzVnX4bMF.jpg"},{"number":3,"name":"Groot's Pursuit","overview":"Groot investigates a spooky noise that’s been haunting the Quadrant, which leads to an intense dance off.","airDate":"2022-08-10","runtime":6,"image":"https://image.tmdb.org/t/p/w300/nv0q5V1vGwRVO4Rv3MOEmniUbWj.jpg"},{"number":4,"name":"Groot Takes a Bath","overview":"Everybody needs some alone time to relax and wash up, but things go quite differently when you’re a Flora Colossi toddler.","airDate":"2022-08-10","runtime":6,"image":"https://image.tmdb.org/t/p/w300/stKeLppDBwscxoE9RXxNyrur27G.jpg"},{"number":5,"name":"Magnum Opus","overview":"Groot sets out to paint a family portrait of himself and the Guardians, only to discover just how messy the artistic process can be.","airDate":"2022-08-10","runtime":5,"image":"https://image.tmdb.org/t/p/w300/cnhzecqkKHBIyM4QMbxRy5fbW3l.jpg"}]}}}</script>
-<script defer src="app.js?v=3.4.1"></script>
+<script defer src="app.js?v=3.4.2"></script>
 </body>
 </html>

@@ -50,10 +50,22 @@ html[data-boot=fallback] #boot-fallback{display:flex;align-items:center;justify-
 @media(max-width:1199px){.bs-side{width:220px}.bs-work{margin-right:220px}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.bs-hero{grid-template-columns:minmax(0,1fr) 145px}}
 @media(min-width:701px) and (max-width:900px){.bs-side{width:70px;padding:20px 10px}.bs-side .bs-name{display:none}.bs-work{margin-right:70px}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){.bs-side,.bs-desktop{display:none}.bs-work{margin-right:0}.bs-mobile{display:flex}.bs-top{height:60px}.bs-mobile .bs-mark{width:31px;height:31px;font-size:24px}.bs-mobile{font-size:15px}.bs-main{padding:20px 16px 105px}.bs-hero{grid-template-columns:minmax(0,1fr) 96px;gap:14px;padding:15px;min-height:230px}.bs-block{height:66px}.bs-metrics{grid-template-columns:1fr 1fr;gap:9px}.bs-metrics .bs-block:first-child{grid-column:1/-1}.bs-grid,.bs-actors .bs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bs-grid .bs-card{height:190px}.bs-actors .bs-card{height:235px}.bs-detail .bs-hero{grid-template-columns:1fr;min-height:340px}.bs-detail .bs-hero .bs-tile{width:42%;max-width:145px;grid-row:1;justify-self:center}.bs-bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:5px;bottom:0;right:0;left:0;background:#191a21;border-top:1px solid #ffffff15;padding:13px 8px calc(13px + env(safe-area-inset-bottom,0px))}.bs-bottom i{height:38px;border-radius:9px;background:#24252d}}
+
+:root{--mp-safe-top:env(safe-area-inset-top,0px);--mp-safe-right:env(safe-area-inset-right,0px);--mp-safe-bottom:env(safe-area-inset-bottom,0px);--bs-height:74px;--bs-edge:clamp(18px,3.4vw,62px)}
+.bs-top{height:calc(var(--bs-height) + var(--mp-safe-top));padding-top:var(--mp-safe-top);padding-left:max(var(--bs-edge),var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(var(--bs-edge),var(--mp-safe-right))}
+.bs-side{padding-top:calc(28px + var(--mp-safe-top));padding-bottom:calc(18px + var(--mp-safe-bottom))}
+#boot-fallback{margin-top:calc(18px + var(--mp-safe-top))}
+html:not([data-boot]) .seo-content{padding-top:calc(28px + var(--mp-safe-top))}
+@media(min-width:701px) and (max-width:900px){.bs-side{padding-top:calc(20px + var(--mp-safe-top))}}
+@media(max-width:700px){
+ :root{--bs-height:60px;--bs-edge:17px}
+ .bs-main{padding-left:max(16px,var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(16px,var(--mp-safe-right));padding-bottom:calc(105px + var(--mp-safe-bottom))}
+ .bs-bottom{padding:13px max(8px,var(--mp-safe-right)) calc(13px + var(--mp-safe-bottom)) max(8px,var(--mp-safe-left,env(safe-area-inset-left,0px)))}
+}
 @media(prefers-reduced-motion:reduce){#boot-shell *{animation:none!important}#boot-shell *:after{animation:none!important}}
 </style>
 <script>(()=>{const root=document.documentElement;root.dataset.boot='loading';let timer;const end=state=>{clearTimeout(timer);root.dataset.boot=state;};window.marvelBootReady=()=>end('ready');timer=setTimeout(()=>{if(root.dataset.boot==='loading')end('fallback')},12000);document.addEventListener('DOMContentLoaded',()=>{if(root.dataset.boot==='loading')end('fallback')},{once:true});})();</script>
-<link rel="stylesheet" href="style.css?v=3.4.1"/>
+<link rel="stylesheet" href="style.css?v=3.4.2"/>
 <title>Jason Genao | بازیگران مارول | مسیر مارول</title>
 <meta name="description" content="Jason Genao؛ بازیگر مرتبط با لوگان. مشاهده نقش‌ها و فیلموگرافی در مسیر مارول."/>
 <link rel="canonical" href="https://marvel.imoein.com/person/jason-genao/"/>
@@ -84,12 +96,12 @@ html[data-boot=fallback] #boot-fallback{display:flex;align-items:center;justify-
 
 Description above from the Wikipedia article Jason Genao, licensed under CC-BY-SA, full list of contributors on Wikipedia.</p></div></div><h2>حضور در آثار مارول</h2><ul class="seo-catalog"><li><a href="/title/logan/">Logan</a> — Rictor</li></ul><h2>فیلموگرافی ثبت‌شده</h2><ul class="seo-catalog"><li>Regulars (2026)</li><li>Physical Therapy (2024)</li><li>Divinity (2023)</li><li>Ambush (2023)</li><li>Boo, Bitch (2022)</li><li>Max Winslow and The House of Secrets (2020)</li><li>The Priest (2020)</li><li>Film Fest (2020)</li><li>On My Block (2018)</li><li>God Friended Me (2018)</li><li>Logan (2017)</li><li>Law &amp; Order: Special Victims Unit (1999)</li></ul><p class="seo-note">مسیر مارول؛ پروژه هواداری غیررسمی برای دنبال کردن داستان‌ها و ثبت پیشرفت تماشا. پخش فیلم در سایت ارائه نمی‌شود.</p></main></div>
 <div id="toasts" aria-live="polite" aria-atomic="true"></div>
-<script defer src="data.js?v=3.4.1"></script>
-<script defer src="meta.js?v=3.4.1"></script>
-<script defer src="posters.js?v=3.4.1"></script>
-<script defer src="admin.js?v=3.4.1"></script>
-<script defer src="enrichment.js?v=3.4.1"></script>
+<script defer src="data.js?v=3.4.2"></script>
+<script defer src="meta.js?v=3.4.2"></script>
+<script defer src="posters.js?v=3.4.2"></script>
+<script defer src="admin.js?v=3.4.2"></script>
+<script defer src="enrichment.js?v=3.4.2"></script>
 <script type="application/json" id="page-data">{"kind":"person","id":"jason-genao","record":{"ready":true,"data":{"id":"jason-genao","name":"Jason Genao","birthDate":"1996-07-03","birthPlace":"","bio":"Jason Genao (born 3 July 1997) is an American actor. He is best known for his appearance as the character Ruby Martinez on the Netflix show On My Block.\n\nDescription above from the Wikipedia article Jason Genao, licensed under CC-BY-SA, full list of contributors on Wikipedia.","source":"TMDB","fetchedAt":"2026-11-16T12:44:16+00:00","tmdbId":1769757,"sourceUrl":"https://www.themoviedb.org/person/1769757","credits":[{"id":"logan","title":"Logan","character":"Rictor"}],"photo":"./public-data/images/people/jason-genao.webp","filmography":[{"name":"Regulars","year":2026,"character":"Hermando","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/4JfEwhr1p42WFYC7xIrL5HgYYLZ.jpg"},{"name":"Physical Therapy","year":2024,"character":"","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/nvUIGh7MMU7S8iWclJd78OqnmVj.jpg"},{"name":"Divinity","year":2023,"character":"Star","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/3Ri4XxXNCUKwlZWXgoVNftF7GIY.jpg"},{"name":"Ambush","year":2023,"character":"Boyd","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/3QjtDMS7PB4SMj0nAJQiE86Lo0w.jpg"},{"name":"Boo, Bitch","year":2022,"character":"Devon","mediaType":"tv","poster":"https://image.tmdb.org/t/p/w185/b3zagQAHUUePg29xjp9SYoxtsv7.jpg"},{"name":"Max Winslow and The House of Secrets","year":2020,"character":"Benny","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/gPF67nMClP8ZUIvHhaOZe5F0V9K.jpg"},{"name":"The Priest","year":2020,"character":"Jason Lopez","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/hPkJC42iu4bntgSPLNthWCRnBok.jpg"},{"name":"Film Fest","year":2020,"character":"Max","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/kGM6lk2LfEezDULl3YTH5K0bmo9.jpg"},{"name":"On My Block","year":2018,"character":"Ruben 'Ruby' Martinez","mediaType":"tv","poster":"https://image.tmdb.org/t/p/w185/w6oviv65UEducvjAdH3sYYaxdu2.jpg"},{"name":"God Friended Me","year":2018,"character":"Isaac","mediaType":"tv","poster":"https://image.tmdb.org/t/p/w185/u2LsYYVniqK95fKHid85x2kngRT.jpg"},{"name":"Logan","year":2017,"character":"Rictor","mediaType":"movie","poster":"https://image.tmdb.org/t/p/w185/fnbjcRDYn6YviCcePDnGdyAkYsB.jpg"},{"name":"Law \u0026 Order: Special Victims Unit","year":1999,"character":"Will Reeves","mediaType":"tv","poster":"https://image.tmdb.org/t/p/w185/pHNhUwSXuDQ9jPZOCb8SgJaQZsc.jpg"}]}}}</script>
-<script defer src="app.js?v=3.4.1"></script>
+<script defer src="app.js?v=3.4.2"></script>
 </body>
 </html>

@@ -563,6 +563,41 @@ body{background:var(--bg);line-height:1.75}
   .footer-tagline{font-size:10px;padding:9px 14px}
 }
 
+
+/* Safe area: preserve the normal bar size while extending its background
+   around iOS status bar / Dynamic Island and the home indicator. */
+:root{
+ --mp-safe-top:env(safe-area-inset-top,0px);
+ --mp-safe-right:env(safe-area-inset-right,0px);
+ --mp-safe-bottom:env(safe-area-inset-bottom,0px);
+ --mp-safe-left:env(safe-area-inset-left,0px);
+ --mp-bar-height:74px;
+ --mp-edge:clamp(22px,3.4vw,62px);
+ scroll-padding-top:calc(var(--mp-bar-height) + var(--mp-safe-top) + 12px);
+}
+.topbar{
+ height:calc(var(--mp-bar-height) + var(--mp-safe-top));
+ min-height:calc(var(--mp-bar-height) + var(--mp-safe-top));
+ flex-shrink:0;
+ padding-top:var(--mp-safe-top);
+ padding-right:max(var(--mp-edge),var(--mp-safe-right));
+ padding-left:max(var(--mp-edge),var(--mp-safe-left));
+}
+.sidebar{padding-top:calc(30px + var(--mp-safe-top));padding-bottom:calc(19px + var(--mp-safe-bottom))}
+.main-content{padding-right:max(var(--mp-edge),var(--mp-safe-right));padding-left:max(var(--mp-edge),var(--mp-safe-left))}
+.main-footer{padding-bottom:calc(24px + var(--mp-safe-bottom))}
+#toasts{bottom:calc(30px + var(--mp-safe-bottom));left:max(30px,var(--mp-safe-left))}
+@media(min-width:701px) and (max-width:900px){
+ .sidebar{padding-top:calc(22px + var(--mp-safe-top))}
+}
+@media(max-width:700px){
+ :root{--mp-bar-height:60px;--mp-edge:17px}
+ .main-content{padding-right:max(16px,var(--mp-safe-right));padding-left:max(16px,var(--mp-safe-left))}
+ .mobile-nav{padding:7px max(5px,var(--mp-safe-right)) calc(6px + var(--mp-safe-bottom)) max(5px,var(--mp-safe-left))}
+ .main-footer{padding-bottom:calc(92px + var(--mp-safe-bottom))}
+ #toasts{bottom:calc(86px + var(--mp-safe-bottom));left:max(14px,var(--mp-safe-left));right:max(14px,var(--mp-safe-right))}
+}
+
 .public-people-pager{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;color:var(--muted);font-size:12px}.public-people-pager button:disabled{opacity:.4;cursor:not-allowed}
 
 .seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}
