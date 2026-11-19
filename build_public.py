@@ -101,3 +101,6 @@ print('Built public pages:',sum(p.is_file() for p in OUT.rglob('*')))
 
 import harden_public
 harden_public.main()
+
+import publish_web
+publish_web.main()

@@ -1,6 +1,7 @@
 'use strict';
 /* Metadata UX. Title progress stays exclusively in the v2 localStorage schema. */
 const information={titles:Object.create(null),people:Object.create(null),directory:publicPeopleDirectory,status:null,requested:new Set(),personRequested:new Set(),busy:false};
+
 const titleMetadata=id=>information.titles[id]?.data||null;
 const safePhoto=url=>{if(typeof url!=='string')return '';if(/^\.\/public-data\/images\/(?:people|remote)\/[a-z0-9-]+\.webp$/.test(url))return url;return Object.hasOwn(publicImageMap,url)?publicImageMap[url]:'';};
 const picture=(src,caption,cls='actor-img')=>{const safe=safePhoto(src);return `<span class="${cls}">${safe?`<img src="${esc(safe)}" loading="lazy" alt="${esc(caption)}" referrerpolicy="no-referrer">`:''}<span class="actor-fallback">${esc((caption||'?').trim().charAt(0).toUpperCase())}</span></span>`};
@@ -37,7 +38,7 @@ function personPage(id){const data=information.people[id],p=data?.data;
 }
 async function publicJson(path){
  const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),12000);
- try{const r=await fetch(path+'?v=3.3.1',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
+ try{const r=await fetch(path+'?v=3.4.0',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
 }
 async function loadInfoForPage(page){
  if(page.name==='title'&&BY_ID[page.id]&&!information.requested.has(page.id)){

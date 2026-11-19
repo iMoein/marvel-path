@@ -38,3 +38,14 @@ viewer serves the bundled Vazirmatn variable font from its own origin.
 
 ### Local typography (3.3)
 Vazirmatn 33.003, by Saber Rastikerdar, is served directly from assets/fonts. The accompanying OFL 1.1 and AUTHORS notices are retained in both the source and public build. No external font requests are required for the local or public viewer.
+
+### Public web release (3.4.0)
+
+The public build generates clean, crawlable URLs for the archive and actor index,
+each title and actor profile, and noindex personal settings/watchlist pages.
+Hash-based legacy links remain supported. Generate the site with
+`python3 build_public.py`; the new publishing phase adds metadata, canonical
+URLs, Open Graph/Twitter cards, sitemap, robots, an installable web app manifest,
+and same-origin icons/assets. The original social graphics can be regenerated
+with `python3 generate_brand_assets.py` on macOS with Chrome and Pillow.
+Progress continues to reside in localStorage; no API key is published.
