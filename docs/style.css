@@ -570,3 +570,5 @@ body{background:var(--bg);line-height:1.75}
   .main-footer{padding:16px 16px 92px}
   .footer-tagline{font-size:10px;padding:9px 14px}
 }
+
+.public-people-pager{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;color:var(--muted);font-size:12px}.public-people-pager button:disabled{opacity:.4;cursor:not-allowed}

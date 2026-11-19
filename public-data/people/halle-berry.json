@@ -1,1 +1,1 @@
-{"ready":true,"data":{"id":"halle-berry","name":"Halle Berry","photo":"","credits":[{"id":"xmen","title":"X-Men","character":"Ororo Munroe / Storm"},{"id":"x2","title":"X2: X-Men United","character":"Ororo Munroe / Storm"}],"source":"Curated catalogue; TMDB images"}}
+{"ready":true,"data":{"id":"halle-berry","name":"Halle Berry","tmdbId":4587,"sourceUrl":"","credits":[{"id":"xmen","title":"X-Men","character":"Storm"},{"id":"x2","title":"X2: X-Men United","character":"Ororo Munroe / Storm"}],"photo":"./public-data/images/people/halle-berry.webp","filmography":[]}}

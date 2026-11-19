@@ -1,1 +1,1 @@
-{"ready":true,"data":{"id":"gemma-chan","name":"Gemma Chan","photo":"","credits":[{"id":"eternals","title":"Eternals","character":"Sersi"}],"source":"Curated catalogue; TMDB images"}}
+{"ready":true,"data":{"id":"gemma-chan","name":"Gemma Chan","tmdbId":97576,"sourceUrl":"","credits":[{"id":"captain-marvel","title":"Captain Marvel","character":"Minn-Erva"},{"id":"eternals","title":"Eternals","character":"Sersi"}],"photo":"./public-data/images/people/gemma-chan.webp","filmography":[]}}

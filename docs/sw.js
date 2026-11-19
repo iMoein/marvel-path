@@ -1,5 +1,5 @@
 /* Optional offline-after-first-view cache. Never stores watch status or personal data. */
-const CORE='marvel-path-v30-core';const IMG='marvel-path-v30-posters';
+const CORE='marvel-path-v31-core';const IMG='marvel-path-v31-posters';
 const SHELL=['./','./index.html','./style.css','./data.js','./meta.js','./posters.js','./app.js','./admin.js','./enrichment.js','./assets/favicon.svg'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()).catch(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('marvel-path-v')&&![CORE,IMG].includes(k)).map(k=>caches.delete(k)))),self.clients.claim()]));});

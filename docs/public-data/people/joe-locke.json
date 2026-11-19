@@ -1,1 +1,1 @@
-{"ready":true,"data":{"id":"joe-locke","name":"Joe Locke","photo":"","credits":[{"id":"agatha","title":"Agatha All Along","character":"Billy Maximoff"}],"source":"Curated catalogue; TMDB images"}}
+{"ready":true,"data":{"id":"joe-locke","name":"Joe Locke","tmdbId":3467732,"sourceUrl":"","credits":[{"id":"agatha","title":"Agatha All Along","character":"Teen"}],"photo":"./public-data/images/people/joe-locke.webp","filmography":[]}}

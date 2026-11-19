@@ -1,1 +1,1 @@
-{"ready":true,"data":{"id":"pedro-pascal","name":"Pedro Pascal","photo":"","credits":[{"id":"fantastic-four","title":"The Fantastic Four: First Steps","character":"Reed Richards / Mister Fantastic"}],"source":"Curated catalogue; TMDB images"}}
+{"ready":true,"data":{"id":"pedro-pascal","name":"Pedro Pascal","tmdbId":1253360,"sourceUrl":"","credits":[{"id":"fantastic-four","title":"The Fantastic Four: First Steps","character":"Reed Richards / Mister Fantastic"}],"photo":"./public-data/images/people/pedro-pascal.webp","filmography":[]}}

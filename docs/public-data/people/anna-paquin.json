@@ -1,1 +1,1 @@
-{"ready":true,"data":{"id":"anna-paquin","name":"Anna Paquin","photo":"","credits":[{"id":"xmen","title":"X-Men","character":"Rogue"},{"id":"x2","title":"X2: X-Men United","character":"Rogue"}],"source":"Curated catalogue; TMDB images"}}
+{"ready":true,"data":{"id":"anna-paquin","name":"Anna Paquin","tmdbId":10690,"sourceUrl":"","credits":[{"id":"xmen","title":"X-Men","character":"Rogue"},{"id":"x2","title":"X2: X-Men United","character":"Rogue"}],"photo":"./public-data/images/people/anna-paquin.webp","filmography":[]}}
