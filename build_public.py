@@ -10,6 +10,9 @@ for name in ['index.html','app.js','data.js','meta.js','posters.js','enrichment.
     shutil.copy2(ROOT/name,OUT/name)
 (OUT/'assets').mkdir()
 shutil.copy2(ROOT/'assets/favicon.svg',OUT/'assets/favicon.svg')
+(OUT/'assets/fonts').mkdir()
+for name in ('Vazirmatn-wght.woff2','OFL.txt','AUTHORS.txt'):
+    shutil.copy2(ROOT/'assets/fonts'/name,OUT/'assets/fonts'/name)
 shutil.copytree(ROOT/'public-data',OUT/'public-data')
 (OUT/'CNAME').write_text('marvel.imoein.com\n')
 (OUT/'.nojekyll').touch()

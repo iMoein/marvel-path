@@ -11,7 +11,10 @@
 __pycache__/
 *.pyc
 .DS_Store
-assets/fonts/
+/assets/fonts/*
+!/assets/fonts/Vazirmatn-wght.woff2
+!/assets/fonts/OFL.txt
+!/assets/fonts/AUTHORS.txt
 assets/people/
 assets/metadata/
 assets/posters/*

@@ -1,6 +1,5 @@
-/* Version 2.3: authoritative font definition for all Persian/Latin UI labels and digits.
-   No font binary is bundled. The first URL is the upstream official mirrored package. */
-
+/* Vazirmatn variable font — same-origin, OFL 1.1. */
+@font-face{font-family:'Vazirmatn';src:url('./assets/fonts/Vazirmatn-wght.woff2?v=33.003') format('woff2');font-weight:100 900;font-display:swap;font-style:normal;}
 /* MARVEL PATH 2.0 — cinematic local-first tracker */
 :root{color-scheme:dark;--bg:#08090d;--sidebar:#0e1016;--surface:#11131a;--surface2:#171a22;--surface3:#1d202a;--text:#f5f5f8;--muted:#9194a1;--faint:#666a78;--border:rgba(238,239,255,.095);--border2:rgba(238,239,255,.16);--red:#ef3340;--red-hover:#ff5360;--red-shadow:rgba(239,51,64,.25);--tint:rgba(239,51,64,.10);--track:#282a34;--shadow:0 20px 65px rgba(0,0,0,.32);--font:'Vazirmatn','Noto Sans Arabic',Tahoma,Arial,sans-serif;--font-en:'Vazirmatn','Noto Sans Arabic',Tahoma,Arial,sans-serif}
 :root[data-theme=light]{color-scheme:light;--bg:#f2f2f5;--sidebar:#fff;--surface:#fff;--surface2:#f7f7f9;--surface3:#ececf0;--text:#1b1c24;--muted:#646773;--faint:#9da0a9;--border:rgba(30,30,49,.11);--border2:rgba(30,30,49,.2);--red:#d72a38;--red-hover:#ed4252;--red-shadow:rgba(215,42,56,.2);--tint:rgba(215,42,56,.07);--track:#dedfe6;--shadow:0 18px 50px rgba(30,30,50,.10)}

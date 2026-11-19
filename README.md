@@ -34,4 +34,7 @@ portraits as sanitized WebP images. The public build embeds the poster map
 and actor directory in its startup script, never waits for external images,
 and uses same-origin-only CSP and public metadata requests. Remote-only
 images without a cached copy are not requested by the browser. Public
-viewer fonts fall back to system fonts when no licensed local font is bundled.
+viewer serves the bundled Vazirmatn variable font from its own origin.
+
+### Local typography (3.3)
+Vazirmatn 33.003, by Saber Rastikerdar, is served directly from assets/fonts. The accompanying OFL 1.1 and AUTHORS notices are retained in both the source and public build. No external font requests are required for the local or public viewer.
