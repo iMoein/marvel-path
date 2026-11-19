@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.5.27'; SITE='https://marvel.imoein.com'
+VERSION='3.5.28'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -32,7 +32,7 @@ def main():
     films={f['id']:f for f in data['films']}; meta=data['meta']; actors=get(P/'people.json')['items']; people={a['id']:a for a in actors}; poster=get(P/'poster-urls.json'); images=get(P/'image-cache.json')
     head=(OUT/'index.html').read_text()
     head=head.replace("base-uri 'none'","base-uri 'self'; manifest-src 'self'; worker-src 'self'")
-    # Analytics is opt-in and production-only. Preserve the strict script policy;
+    # Analytics is configurable and production-only. Preserve the strict script policy;
     # boot_shell later adds the hash for its existing inline bootstrap.
     head=head.replace("img-src 'self' data:;", "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com;")
     head=head.replace("connect-src 'self';", "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com https://cloudflareinsights.com;")

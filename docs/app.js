@@ -152,7 +152,7 @@ function shell(body,active){const s=stats(routeIds());return `<div class="app-sh
  <aside class="sidebar"><a class="logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
  <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','timeline','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
- <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.27</div></aside>
+ <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.28</div></aside>
  <div class="workspace"><header class="topbar"><a class="mobile-logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="mini-m" aria-hidden="true">M</span><span>مسیر مارول</span></a><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions"><button type="button" class="mp-search-launch" data-global-search aria-label="جستجوی سراسری" aria-keyshortcuts="Meta+K Control+K">${ico('search',18)}<span>جستجو</span><kbd class="mp-search-hint"></kbd></button>${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status" role="status" title="${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}" data-storage-ok="${storageReady}"><span class="local-dot" aria-hidden="true"></span><span class="storage-label">${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main>${pwaFooter()}</div>
  <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','timeline','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
@@ -818,6 +818,9 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
  if(location.protocol!=='https:'||location.hostname!=='marvel.imoein.com')return;
  const GA='G-DNZHB15PC5',CF='4c431cd96516423bbc26081118f421bf',KEY='marvel-path-analytics-consent';
  let choice=null,started=false,panel=null,opened=false;
+ // An absent preference is automatic measurement, not explicit cookie consent.
+ const consentRegions=['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'];
+ const consent=storage=>({analytics_storage:storage,ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
  try{choice=localStorage.getItem(KEY);}catch(_){}
  const readPage=()=>{
   const u=new URL(location.href),clean=new URL(u.origin+u.pathname);
@@ -829,12 +832,13 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
  };
  const referrer=()=>{try{const u=new URL(document.referrer);return u.origin+(u.origin===location.origin?u.pathname:'/');}catch(_){return '';}};
  function start(){
-  if(started||choice!=='yes')return;
+  if(started||choice==='no')return;
   started=true;
   window['ga-disable-'+GA]=false;
   window.dataLayer=window.dataLayer||[];
   window.gtag=window.gtag||function(){window.dataLayer.push(arguments);};
-  window.gtag('consent','default',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+  window.gtag('consent','default',consent('granted'));
+  if(choice!=='yes')window.gtag('consent','default',{...consent('denied'),region:consentRegions});
   window.gtag('js',new Date());
   window.gtag('config',GA,{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false,cookie_domain:location.hostname,cookie_prefix:'mp',page_location:readPage(),page_referrer:referrer()});
   window.gtag('event','page_view',{send_to:GA,page_location:readPage(),page_title:document.title,page_referrer:referrer()});
@@ -855,10 +859,10 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
   const wasStarted=started;choice=value;
   try{localStorage.setItem(KEY,value);}catch(_){}
   opened=false;sync();
-  if(value==='yes')start();
+  if(value==='yes'){if(wasStarted)window.gtag?.('consent','update',consent('granted'));else start();}
   else if(wasStarted){
    window['ga-disable-'+GA]=true;
-   window.gtag?.('consent','update',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+   window.gtag?.('consent','update',consent('denied'));
    clearCookies();location.reload();
   }
  }
@@ -868,16 +872,20 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
    const b=document.createElement('button');b.type='button';b.className='mp-analytics-settings';b.dataset.analyticsSettings='';b.textContent='تنظیمات حریم خصوصی';footer.append(b);
   }
   if(!panel){
-   panel=document.createElement('section');panel.className='mp-analytics-panel';panel.setAttribute('role','region');panel.setAttribute('aria-label','تنظیمات آمار بازدید');
-   panel.innerHTML='<div class="mp-analytics-copy"><strong>حریم خصوصی و آمار بازدید</strong><p>با اجازه تو، Google Analytics و Cloudflare Web Analytics برای سنجش بازدید و عملکرد سایت فعال می‌شوند. اطلاعات تماشای شخصی و یادداشت‌ها به عنوان رویداد ارسال نمی‌شوند.</p></div><div class="mp-analytics-actions"><button type="button" class="btn btn-outline" data-analytics-choice="no">رد کردن</button><button type="button" class="btn btn-primary" data-analytics-choice="yes">پذیرفتن</button></div>';
+   panel=document.createElement('section');panel.className='mp-analytics-panel';panel.setAttribute('role','region');panel.setAttribute('aria-label','تنظیمات آمار بازدید');panel.hidden=true;
+   panel.innerHTML='<div class="mp-analytics-copy"><div class="mp-analytics-heading"><strong>تنظیمات حریم خصوصی</strong><button type="button" class="mp-analytics-close" data-analytics-close aria-label="بستن">×</button></div><p>از Google Analytics و Cloudflare Web Analytics برای سنجش بازدید و عملکرد سایت استفاده می‌کنیم. اطلاعات تماشای شخصی و یادداشت‌ها به عنوان رویداد ارسال نمی‌شوند. در مناطق دارای محدودیت رضایت، گوگل به‌صورت پیش‌فرض از حالت بدون کوکی تحلیلی استفاده می‌کند.</p><p class="mp-analytics-status" role="status"></p></div><div class="mp-analytics-actions"><button type="button" class="btn btn-outline" data-analytics-choice="no">غیرفعال کردن</button><button type="button" class="btn btn-primary" data-analytics-choice="yes">فعال کردن</button></div>';
    document.body.append(panel);
   }
-  panel.hidden=!opened&&(choice==='yes'||choice==='no');
+  panel.querySelector('.mp-analytics-status').textContent=choice==='no'?'وضعیت: غیرفعال':choice==='yes'?'وضعیت: فعال با انتخاب شما':'وضعیت: فعال (پیش‌فرض)';
+  panel.hidden=!opened;
  }
  document.addEventListener('click',e=>{
   if(e.target.closest('[data-analytics-settings]')){opened=true;sync();return;}
+  if(e.target.closest('[data-analytics-close]')){opened=false;sync();return;}
   const b=e.target.closest('[data-analytics-choice]');if(b)setChoice(b.dataset.analyticsChoice);
  });
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&opened){opened=false;sync();}});
+ window.addEventListener('storage',e=>{if(e.key===KEY&&e.newValue!==choice){choice=e.newValue;if(choice==='no'&&started){window['ga-disable-'+GA]=true;clearCookies();location.reload();}else if(choice==='yes'&&started){window.gtag?.('consent','update',consent('granted'));sync();}else if(choice!=='no'&&!started){sync();start();}else sync();}});
  const app=document.getElementById('app');
  if(app)new MutationObserver(sync).observe(app,{childList:true});
  sync();start();

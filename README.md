@@ -185,9 +185,13 @@ node tests/doomsday_countdown_cdp.cjs
 
 ## Audience measurement and privacy
 
-The production viewer optionally uses Google Analytics 4 and Cloudflare Web
-Analytics. Both are loaded after the visitor accepts analytics; visitors can
-decline or change their choice via the footer. No private local watch-state
+The production viewer uses Google Analytics 4 and Cloudflare Web Analytics
+by default, without an initial popup. Visitors can disable or enable both
+using the privacy settings in the footer. An existing opt-out is preserved.
+Google Consent Mode defaults analytics cookie storage to denied in the EEA,
+UK and Switzerland unless explicitly enabled; this allows cookieless pings.
+Advertising storage and personalization remain disabled. Review applicable
+privacy and consent requirements before deployment. No private local watch-state
 fields are passed to the analytics integration. Advertising signals are
 disabled in the Google tag configuration. Local development and admin builds
 do not load analytics.
