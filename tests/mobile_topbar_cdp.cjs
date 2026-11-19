@@ -15,21 +15,21 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
  await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j;});ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=requests.get(m.id);requests.delete(m.id);if(m.error)p?.reject(Error(JSON.stringify(m.error)));else p?.resolve(m.result);}};
  await send('Page.enable');await send('Runtime.enable');await send('Network.enable');await send('Network.setBypassServiceWorker',{bypass:true});
  const assert=(x,m)=>{if(!x)throw Error(m);};
- for(const width of [320,360,375,390,430,1440]){
+ for(const width of [320,360,375,390,430,768,1024,1440]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:width<=700});
   await send('Page.navigate',{url:base+'/?header-test='+Date.now()});
   for(let i=0;i<150;i++){await sleep(100);try{if(await ev('document.documentElement.dataset.boot==="ready"&&!!document.querySelector("[data-global-search]")'))break;}catch(_){}if(i===149)throw Error('boot timeout');}
   const result=await ev(`(()=>{
    const root=document.documentElement,bar=document.querySelector('.topbar'),search=bar.querySelector('.mp-search-launch'),status=bar.querySelector('.top-status'),logo=bar.querySelector('.mobile-logo');
    const mobile=innerWidth<=700;root.style.setProperty('--mp-safe-top',mobile?'59px':'0px','important');
-   const measure=()=>{const b=bar.getBoundingClientRect(),s=search.getBoundingClientRect(),l=logo.getBoundingClientRect(),t=status.getBoundingClientRect(),cs=getComputedStyle(bar);return {width:innerWidth,barHeight:b.height,barTop:b.top,searchWidth:s.width,searchHeight:s.height,searchTop:s.top,logoTop:l.top,statusWidth:t.width,blur:cs.backdropFilter,bg:cs.backgroundColor,overflow:bar.scrollWidth>bar.clientWidth+1,nonOverlap:!mobile||s.right<=l.left+1,visible:getComputedStyle(search.querySelector('span')).display!=='none'};};
+   const measure=()=>{const b=bar.getBoundingClientRect(),s=search.getBoundingClientRect(),l=logo.getBoundingClientRect(),t=status.getBoundingClientRect(),cs=getComputedStyle(bar);return {width:innerWidth,barHeight:b.height,barTop:b.top,searchWidth:s.width,searchHeight:s.height,searchTop:s.top,logoTop:l.top,statusWidth:t.width,blur:cs.backdropFilter,bg:cs.backgroundColor,overflow:bar.scrollWidth>bar.clientWidth+1,nonOverlap:!mobile||s.right<=l.left+1,visible:getComputedStyle(search.querySelector('span')).display!=='none',shortcutVisible:getComputedStyle(search.querySelector('kbd')).display!=='none',unusedWidth:Math.abs(s.width-[...search.children].reduce((n,e)=>n+e.getBoundingClientRect().width,0)-parseFloat(getComputedStyle(search).columnGap)*2-parseFloat(getComputedStyle(search).paddingLeft)-parseFloat(getComputedStyle(search).paddingRight)-parseFloat(getComputedStyle(search).borderLeftWidth)-parseFloat(getComputedStyle(search).borderRightWidth))};};
    const first=measure();window.scrollTo(0,500);const after=measure();window.scrollTo(0,0);
    return {first,after};
   })()`);
   const x=result.first;
   assert(!x.overflow&&x.nonOverlap&&x.visible,JSON.stringify(result));
   if(width<=700){assert(x.barHeight===133&&x.searchHeight>=44&&x.searchWidth>=100&&x.searchTop>=69&&x.statusWidth<=20&&x.blur==='none',JSON.stringify(result));assert(result.after.barTop>=-1,JSON.stringify(result));}
-  else assert(x.searchWidth>=160&&x.statusWidth<=22,JSON.stringify(result));
+  else assert(x.searchWidth<160&&x.shortcutVisible&&x.unusedWidth<2&&x.statusWidth<=22,JSON.stringify(result));
   await ev('save()');assert(await ev('document.querySelector(".top-status").dataset.storageOk==="true"'),'storage status');
   console.log('PASS '+width+' '+JSON.stringify(x));
  }

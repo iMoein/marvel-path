@@ -699,12 +699,9 @@ html.mp-gs-open{overflow:hidden}
 .app-shell:not(.admin-app) .top-status .local-dot{width:8px;height:8px;animation:none}
 .app-shell:not(.admin-app) .top-status[data-storage-ok=false] .local-dot{background:var(--red);box-shadow:0 0 9px var(--red-shadow)}
 .app-shell:not(.admin-app) .top-status .storage-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.app-shell:not(.admin-app) .mp-search-launch{min-width:160px;justify-content:flex-start;font-size:13px;gap:9px;min-height:40px}
+.app-shell:not(.admin-app) .mp-search-launch{min-width:0;width:max-content;justify-content:flex-start;font-size:13px;gap:9px;min-height:40px}
 .app-shell:not(.admin-app) .mp-search-launch svg{flex:none}
-.app-shell:not(.admin-app) .mp-search-launch .mp-search-hint{margin-inline-start:auto}
-@media(max-width:900px) and (min-width:701px){
- .app-shell:not(.admin-app) .mp-search-launch{min-width:130px}
-}
+.app-shell:not(.admin-app) .mp-search-launch .mp-search-hint{margin-inline-start:0;flex:none}
 @media(max-width:700px){
  :root{
   --mp-bar-height:64px;
