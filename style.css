@@ -957,3 +957,9 @@ html.mp-gs-open{overflow:hidden}
 .untranslated-source{font-size:12px;color:var(--muted);min-width:0}
 .untranslated-source summary{cursor:pointer;line-height:1.8}
 .untranslated-source p[lang=en]{direction:ltr;text-align:left;white-space:pre-line;overflow-wrap:anywhere}
+
+/* Empty results occupy the whole grid, not a single poster slot. */
+.empty{grid-column:1/-1;min-width:0;min-height:260px;justify-content:center;padding:36px 20px}
+.empty p{line-height:1.8;max-width:34rem}
+.listing-actions[hidden],.pagination[hidden]{display:none}
+@media(max-width:700px){.empty{min-height:220px;padding:28px 16px}}

@@ -69,7 +69,7 @@ function peopleCards(items,term=''){
  const pages=Math.max(1,Math.ceil(chosen.length/60));
  publicPeoplePage=Math.max(0,Math.min(publicPeoplePage,pages-1));
  const cards=chosen.slice(publicPeoplePage*60,(publicPeoplePage+1)*60).map(p=>`<a class="people-card" href="/person/${encodeURIComponent(p.id)}/">${picture(p.photo,p.name)}<strong dir="auto">${esc(actorName(p))}</strong>${p.nameFa?`<span class="actor-name-en" dir="ltr">${esc(p.name)}</span>`:''}<span>${num((p.credits||[]).length)} حضور در آرشیو</span></a>`).join('');
- if(!cards)return '<div class="metadata-empty">بازیگری با این نام پیدا نشد.</div>';
+ if(!cards)return empty('نام بازیگر یا شخصیت دیگری را جست‌وجو کن.','بازیگری پیدا نشد');
  return cards+(pages>1?`<div class="public-people-pager"><button class="btn btn-outline" data-people-page="-1" ${publicPeoplePage===0?'disabled':''}>قبلی</button><span>صفحه ${num(publicPeoplePage+1)} از ${num(pages)} · ${num(chosen.length)} بازیگر</span><button class="btn btn-outline" data-people-page="1" ${publicPeoplePage===pages-1?'disabled':''}>بعدی</button></div>`:'');
 }
 """+s[end:]
