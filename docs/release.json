@@ -1,12 +1,12 @@
 {
-  "version": "3.5.20",
+  "version": "3.5.21",
   "assets": {
-    "style.css": "/style.v3.5.20.93881bb76c46.css",
-    "data.js": "/data.v3.5.20.e439df7c2fdd.js",
-    "meta.js": "/meta.v3.5.20.6da6e853a2a3.js",
-    "posters.js": "/posters.v3.5.20.c3d5c6ad86fd.js",
-    "admin.js": "/admin.v3.5.20.3f5f93a72d83.js",
-    "enrichment.js": "/enrichment.v3.5.20.b121a78b6f54.js",
-    "app.js": "/app.v3.5.20.848a9c937967.js"
+    "style.css": "/style.v3.5.21.a225e654f484.css",
+    "data.js": "/data.v3.5.21.e439df7c2fdd.js",
+    "meta.js": "/meta.v3.5.21.6da6e853a2a3.js",
+    "posters.js": "/posters.v3.5.21.c3d5c6ad86fd.js",
+    "admin.js": "/admin.v3.5.21.3f5f93a72d83.js",
+    "enrichment.js": "/enrichment.v3.5.21.b8913267d184.js",
+    "app.js": "/app.v3.5.21.f514c4678acf.js"
   }
 }
