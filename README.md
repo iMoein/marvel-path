@@ -183,6 +183,20 @@ node tests/release_timeline_cdp.cjs
 node tests/doomsday_countdown_cdp.cjs
 ```
 
+## Audience measurement and privacy
+
+The production viewer optionally uses Google Analytics 4 and Cloudflare Web
+Analytics. Both are loaded after the visitor accepts analytics; visitors can
+decline or change their choice via the footer. No private local watch-state
+fields are passed to the analytics integration. Advertising signals are
+disabled in the Google tag configuration. Local development and admin builds
+do not load analytics.
+
+The public build includes the analytics integration from `analytics.js`.
+Configure Cloudflare Web Analytics in manual JS snippet mode to avoid duplicate
+edge injection. The Google tag is installed directly, not through a second
+Google Tag Manager container.
+
 ## Data quality and localization
 
 The archive retains original metadata alongside Persian translations. Some

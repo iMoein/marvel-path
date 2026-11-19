@@ -1103,6 +1103,17 @@ html.mp-gs-open{overflow:hidden}
 }
 @media(max-width:350px){.footer-install{flex-direction:column;align-items:stretch}.pwa-install-button{justify-content:center}}
 
+/* Optional audience measurement — separate from personal watch data. */
+.mp-analytics-panel{position:fixed;z-index:180;inset-inline-start:max(18px,var(--mp-safe-right));inset-block-end:calc(18px + var(--mp-safe-bottom));width:min(510px,calc(100% - 36px));display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border2);border-radius:14px;background:var(--surface);color:var(--text);box-shadow:0 12px 40px #0005;direction:rtl}
+.mp-analytics-panel[hidden]{display:none!important}
+.mp-analytics-copy{min-width:0;flex:1}
+.mp-analytics-copy strong{font-size:13px;font-weight:800}
+.mp-analytics-copy p{font-size:11px;line-height:1.8;color:var(--muted);margin:3px 0 0}
+.mp-analytics-actions{display:flex;gap:7px;flex:none}
+.mp-analytics-actions .btn{min-height:44px;justify-content:center;font-size:11px;padding-inline:10px;white-space:nowrap}
+.mp-analytics-settings{border:0;background:none;color:var(--muted);font:inherit;text-decoration:underline;text-underline-offset:3px;min-height:32px;padding:2px 6px}
+@media(max-width:700px){.mp-analytics-panel{inset-inline: max(12px,var(--mp-safe-right)) max(12px,var(--mp-safe-left));inset-block-end:calc(76px + var(--mp-safe-bottom));width:auto;flex-direction:column;align-items:stretch;gap:10px;padding:12px}.mp-analytics-actions .btn{flex:1}}
+
 .public-people-pager{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;color:var(--muted);font-size:12px}.public-people-pager button:disabled{opacity:.4;cursor:not-allowed}
 
 .seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}

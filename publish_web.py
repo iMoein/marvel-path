@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.5.26'; SITE='https://marvel.imoein.com'
+VERSION='3.5.27'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -32,6 +32,10 @@ def main():
     films={f['id']:f for f in data['films']}; meta=data['meta']; actors=get(P/'people.json')['items']; people={a['id']:a for a in actors}; poster=get(P/'poster-urls.json'); images=get(P/'image-cache.json')
     head=(OUT/'index.html').read_text()
     head=head.replace("base-uri 'none'","base-uri 'self'; manifest-src 'self'; worker-src 'self'")
+    # Analytics is opt-in and production-only. Preserve the strict script policy;
+    # boot_shell later adds the hash for its existing inline bootstrap.
+    head=head.replace("img-src 'self' data:;", "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com;")
+    head=head.replace("connect-src 'self';", "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com https://cloudflareinsights.com;")
     head=head.replace('<head>','<head>\n<base href="/"/>')
     head=re.sub(r'<link rel="canonical"[^>]+>\s*','',head)
     head=re.sub(r'<meta name="description"[^>]+>\s*','',head)
@@ -64,6 +68,7 @@ def main():
             tags.append('<script type="application/ld+json">'+jscript(schema)+'</script>')
         code=head.replace('<!--PAGE-META-->','\n'.join(tags)).replace('<!--PAGE-CONTENT-->',body).replace('<!--PAGE-DATA-->','<script type="application/json" id="page-data">'+jscript(record)+'</script>' if record is not None else '')
         code=boot_shell.insert_shell(boot_shell.prepare_head(code),path,title)
+        code=code.replace("script-src 'self' ", "script-src 'self' https://www.googletagmanager.com https://static.cloudflareinsights.com/beacon.min.js ",1)
         dest=OUT/path.strip('/')/'index.html';dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(code,encoding='utf-8')
         if index:urls.append(canonical)
     def list_titles(ids):return '<ul class="seo-catalog">'+''.join('<li>'+link('/title/'+fid+'/',films[fid]['fa']+' — '+films[fid]['title'])+'</li>' for fid in ids if fid in films)+'</ul>'
@@ -156,6 +161,7 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
     s=s[:seed_start]+s[seed_end:]
     e.write_text(s)
     app.write_text(app.read_text().replace('if(location.hash){const path=seoPath(location.hash.slice(1));if(path&&path!==location.pathname){location.replace(path);}',seed+'\nif(location.hash){const path=seoPath(location.hash.slice(1));if(path&&path!==location.pathname){location.replace(path);}',1))
+    with app.open('a',encoding='utf-8') as f:f.write('\n'+(ROOT/'analytics.js').read_text(encoding='utf-8'))
     css=OUT/'style.css'
     with css.open('a') as f:f.write('\n.seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}\n')
     worker="""'use strict';
