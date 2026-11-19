@@ -855,3 +855,21 @@ html.mp-gs-open{overflow:hidden}
 .cinema-episode-grid .ep-rich-head .ep-number{flex:0 0 34px;white-space:nowrap}
 .cinema-episode-grid .ep-rich-head h4,.cinema-episode-grid .ep-rich-head small,.cinema-episode-grid .ep-synopsis{overflow-wrap:anywhere;white-space:normal}
 .cinema-episode-grid .episode-watch-button{white-space:normal;min-width:0;overflow-wrap:anywhere}
+
+
+/* Detail navigation stays below the main safe-area-aware header. */
+.film-detail-page{animation:none;min-width:0}
+.cinema-section-nav{
+ position:sticky;top:calc(var(--mp-bar-height) + var(--mp-safe-top));z-index:24;
+ background:var(--bg);isolation:isolate;overflow-x:auto;overflow-y:hidden;
+ overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+ box-shadow:0 8px 14px -12px #0009;scrollbar-width:thin;
+}
+.cinema-section-nav button{flex:0 0 auto;min-height:46px}
+.cinema-section-nav button:focus-visible{outline:2px solid var(--red);outline-offset:-3px;border-radius:5px}
+#watch-progress,#story-info,#my-notes,#title-cast,#related-titles{scroll-margin-top:50px}
+@media(max-width:700px){
+ .cinema-section-nav{top:calc(var(--mp-bar-height) + var(--mp-header-safe));scrollbar-width:none}
+ .cinema-section-nav::-webkit-scrollbar{display:none}
+ .cinema-section-nav button{min-height:44px}
+}

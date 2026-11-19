@@ -253,8 +253,8 @@ function detailPage(id){
  const next=f.episodes?ep.find(n=>!getEpisodes(f).includes(n)):null;
  return `<div class="film-detail-page">
    ${cinemaHero(f,inDoom,inMcu)}
-   <nav class="cinema-section-nav" aria-label="بخش‌های صفحه اثر">
-     <button type="button" class="active" data-action="detail-jump" data-value="watch-progress">${ico('play',15)} پیگیری تماشا <span>${num(pct)}٪</span></button>
+   <nav class="cinema-section-nav" data-title-nav="${esc(id)}" aria-label="بخش‌های صفحه اثر">
+     <button type="button" class="active" aria-current="true" data-action="detail-jump" data-value="watch-progress">${ico('play',15)} پیگیری تماشا <span>${num(pct)}٪</span></button>
      <button type="button" data-action="detail-jump" data-value="story-info">${ico('info',15)} داستان و اطلاعات</button>
      <button type="button" data-action="detail-jump" data-value="my-notes">${ico('bookmark',15)} یادداشت‌های من</button>
      <button type="button" data-action="detail-jump" data-value="title-cast">${ico('grid',15)} بازیگران</button>
@@ -310,8 +310,29 @@ function activePage(){
  if(h.startsWith('person/'))return {name:'person',id:h.slice(7)};
  return {name:['doomsday','mcu','watchlist','people','settings'].includes(h)?h:'doomsday'};
 }
+function selectDetailSection(nav,value){
+ if(!nav)return;
+ for(const b of nav.querySelectorAll('button[data-action="detail-jump"]')){
+  const active=b.dataset.value===value;b.classList.toggle('active',active);
+  if(active)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');
+ }
+}
+function jumpToDetailSection(value){
+ const target=document.getElementById(value),nav=document.querySelector('.cinema-section-nav');if(!target||!nav)return;
+ selectDetailSection(nav,value);
+ const selected=nav.querySelector('button.active');
+ if(selected){
+  const r=selected.getBoundingClientRect(),n=nav.getBoundingClientRect();
+  if(r.left<n.left)nav.scrollBy({left:r.left-n.left-8,behavior:'instant'});
+  else if(r.right>n.right)nav.scrollBy({left:r.right-n.right+8,behavior:'instant'});
+ }
+ const header=document.querySelector('.topbar'),offset=(header?.getBoundingClientRect().height||0)+nav.getBoundingClientRect().height+12;
+ window.scrollTo({top:Math.max(0,window.scrollY+target.getBoundingClientRect().top-offset),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+}
 function render(){
  const p=activePage();document.documentElement.dataset.theme=state.theme;
+ const oldNav=document.querySelector('.cinema-section-nav');
+ const previous=oldNav&&p.name==='title'&&oldNav.dataset.titleNav===p.id?{value:oldNav.querySelector('.active')?.dataset.value,scroll:oldNav.scrollLeft}:null;
  let body,title;
  if(ADMIN_MODE){
    if(!posterAdmin.authorized){body=adminAccessPage();title='ورود مدیر'}
@@ -330,6 +351,7 @@ function render(){
    else{body=doomsdayPage();title='مسیر Doomsday'}
  }
  document.getElementById('app').innerHTML=ADMIN_MODE?adminShell(body,title):shell(body,title);
+ if(previous){const nav=document.querySelector('.cinema-section-nav');if(nav){if(previous.value)selectDetailSection(nav,previous.value);nav.scrollLeft=previous.scroll;}}
  document.title=`${title} | مسیر مارول`;
  document.querySelectorAll('.poster-image').forEach(img=>{if(img.complete&&!img.naturalWidth)img.classList.add('broken')});
  if(typeof loadInfoForPage==='function')setTimeout(()=>loadInfoForPage(p),0);
@@ -342,7 +364,7 @@ function toggleSave(f,scope){if(!['mcu','doomsday'].includes(scope))return;const
 function exportState(){const data={version:2,exportedAt:new Date().toISOString(),...state};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});const href=URL.createObjectURL(blob),a=document.createElement('a');a.href=href;a.download='marvel-path-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),2000);toast('فایل پشتیبان دریافت شد.')}
 async function importState(file){try{const data=JSON.parse(await file.text());if(!data||!data.progress||typeof data.progress!=='object'||![1,2].includes(data.version))throw Error('invalid');if(!confirm('اطلاعات تماشای فعلی با فایل انتخاب‌شده جایگزین بشه؟'))return;state=data.version===1?upgrade(data):normalize(data);save();render();toast('پشتیبان با موفقیت بازیابی شد.')}catch(e){toast('فایل پشتیبان معتبر نیست.','error')}}
 document.addEventListener('click',e=>{const a=e.target.closest('[data-action]');if(!a)return;const action=a.dataset.action,id=a.dataset.id,f=BY_ID[id],v=a.dataset.value,scope=a.dataset.scope;
-if(action==='detail-jump'){const target=document.getElementById(v);if(target){document.querySelectorAll('.cinema-section-nav button').forEach(b=>b.classList.toggle('active',b.dataset.value===v));target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}return;}
+if(action==='detail-jump'){jumpToDetailSection(v);return;}
 if(action==='route-mode'&&['all','disney'].includes(v)){state.routeMode=v;state.routeStatus='all';save();render();toast(v==='disney'?'مسیر منتخب دیزنی+ فعال شد.':'مسیر پیشنهادی کامل فعال شد.');}
 if(action==='filter'){if(scope==='route-status'){state.routeStatus=v}else{state.mcuFilter=v;state.mcuPage=0}save();render()}
 if(action==='order'&&['story','release','arc'].includes(v)){state.order=v;state.mcuPage=0;save();render();toast(state.order==='arc'?'مسیر پیوستگی شخصیت‌ها فعال شد.':state.order==='story'?'ترتیب خط زمانی فعال شد.':'ترتیب تاریخ انتشار فعال شد.')}
