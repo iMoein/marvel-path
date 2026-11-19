@@ -699,12 +699,9 @@ html.mp-gs-open{overflow:hidden}
 .app-shell:not(.admin-app) .top-status .local-dot{width:8px;height:8px;animation:none}
 .app-shell:not(.admin-app) .top-status[data-storage-ok=false] .local-dot{background:var(--red);box-shadow:0 0 9px var(--red-shadow)}
 .app-shell:not(.admin-app) .top-status .storage-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.app-shell:not(.admin-app) .mp-search-launch{min-width:160px;justify-content:flex-start;font-size:13px;gap:9px;min-height:40px}
+.app-shell:not(.admin-app) .mp-search-launch{min-width:0;width:max-content;justify-content:flex-start;font-size:13px;gap:9px;min-height:40px}
 .app-shell:not(.admin-app) .mp-search-launch svg{flex:none}
-.app-shell:not(.admin-app) .mp-search-launch .mp-search-hint{margin-inline-start:auto}
-@media(max-width:900px) and (min-width:701px){
- .app-shell:not(.admin-app) .mp-search-launch{min-width:130px}
-}
+.app-shell:not(.admin-app) .mp-search-launch .mp-search-hint{margin-inline-start:0;flex:none}
 @media(max-width:700px){
  :root{
   --mp-bar-height:64px;
@@ -950,6 +947,16 @@ html.mp-gs-open{overflow:hidden}
  background:rgba(56,180,113,.14);border-color:rgba(56,180,113,.35);color:#59d999;
 }
 :root[data-theme=light] .cinema-episode-grid .episode-rich.episode-checked .ep-rich-head .ep-number{color:#197244}
+
+/* Persian editorial text, original names and explicit untranslated-source fallbacks. */
+.ep-synopsis[lang=fa],.original-plot[lang=fa],.person-bio-fa p{direction:rtl;text-align:right;line-height:1.95;white-space:normal}
+.episode-original-name,.actor-name-en{color:var(--muted);font-size:10px;line-height:1.5;overflow-wrap:anywhere}
+.person-intro .person-name-original{direction:ltr;text-align:right;color:var(--muted);font-size:14px}
+.person-bio-fa p{margin:0 0 12px}
+.translation-credit{display:block;text-align:left;color:var(--muted);font-size:10px;line-height:1.6;overflow-wrap:anywhere}
+.untranslated-source{font-size:12px;color:var(--muted);min-width:0}
+.untranslated-source summary{cursor:pointer;line-height:1.8}
+.untranslated-source p[lang=en]{direction:ltr;text-align:left;white-space:pre-line;overflow-wrap:anywhere}
 
 .public-people-pager{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;color:var(--muted);font-size:12px}.public-people-pager button:disabled{opacity:.4;cursor:not-allowed}
 

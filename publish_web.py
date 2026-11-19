@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.5.11'; SITE='https://marvel.imoein.com'
+VERSION='3.5.12'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -79,13 +79,13 @@ def main():
         page('/'+private+'/',label+' | مسیر مارول','فضای شخصی ثبت و مدیریت اطلاعات تماشا.',static(label,'<p>این بخش اطلاعات شخصی را فقط در مرورگر شما ذخیره می‌کند.</p>'),index=False)
     for fid,f in films.items():
         raw=get(P/'titles'/(fid+'.json')); d=raw.get('data') or {}
-        name=f['fa']+' — '+f['title']; desc=meta.get(fid,{}).get('summary') or d.get('overview') or 'اطلاعات و نقش‌های ثبت‌شده این اثر در مسیر مارول.'
+        name=f['fa']+' — '+f['title']; desc=d.get('overviewFa') or meta.get(fid,{}).get('summary') or 'اطلاعات و نقش‌های ثبت‌شده این اثر در مسیر مارول.'
         path='/title/'+fid+'/'
         typ='Movie' if f['type'] in ('movie','special') else 'TVSeason'
         body='<div class="seo-hero">'+pic(absimg(poster.get(fid)),f['fa'])+'<div><p>'+esc(desc)+'</p><p>سال: '+esc(f['year'])+' · '+esc(f.get('episodes') or f.get('minutes'))+(' قسمت' if f.get('episodes') else ' دقیقه')+'</p></div></div>'
-        cast=[c for c in d.get('cast',[]) if c.get('personId') in people]
-        if cast:body+='<h2>بازیگران و نقش‌ها</h2><ul class="seo-catalog">'+''.join('<li>'+link('/person/'+c['personId']+'/',c['name'])+(' — '+esc(c['character']) if c.get('character') else '')+'</li>' for c in cast)+'</ul>'
-        if d.get('episodes'):body+='<h2>قسمت‌ها</h2><ol>'+''.join('<li>'+esc(e.get('name') or 'قسمت '+str(e.get('number','')))+' — '+esc(e.get('overview') or '')+'</li>' for e in d['episodes'])+'</ol>'
+        cast=[] if d.get('sourceMismatch') else [c for c in d.get('cast',[]) if c.get('personId') in people]
+        if cast:body+='<h2>بازیگران و نقش‌ها</h2><ul class="seo-catalog">'+''.join('<li>'+link('/person/'+c['personId']+'/',c.get('nameFa') or c['name'])+(' — '+esc(c.get('characterFa') or c['character']) if c.get('character') else '')+'</li>' for c in cast)+'</ul>'
+        if d.get('episodes') and not d.get('sourceMismatch'):body+='<h2>قسمت‌ها</h2><ol>'+''.join('<li>'+esc(e.get('nameFa') or e.get('name') or 'قسمت '+str(e.get('number','')))+' — '+esc(e.get('overviewFa') or '')+'</li>' for e in d['episodes'])+'</ol>'
         schema={'@context':'https://schema.org','@type':typ,'name':f['title'],'alternateName':f['fa'],'url':SITE+path,'description':desc}
         if typ=='Movie':schema['datePublished']=f['release'];schema['duration']='PT'+str(f['minutes'])+'M'
         elif f.get('episodes'):schema['numberOfEpisodes']=f['episodes']
@@ -95,18 +95,19 @@ def main():
     for a in actors:
         aid=a['id'];raw=get(P/'people'/(aid+'.json'));d=raw.get('data') or a
         credits=[c for c in d.get('credits',a.get('credits',[])) if c.get('id') in films]
-        desc=a['name']+'؛ بازیگر مرتبط با '+('، '.join(films[c['id']]['fa'] for c in credits[:4]) if credits else 'آثار ثبت‌شده در آرشیو مارول')+'. مشاهده نقش‌ها و فیلموگرافی در مسیر مارول.'
+        desc=(a.get('nameFa') or a['name'])+'؛ بازیگر مرتبط با '+('، '.join(films[c['id']]['fa'] for c in credits[:4]) if credits else 'آثار ثبت‌شده در آرشیو مارول')+'. مشاهده نقش‌ها و فیلموگرافی در مسیر مارول.'
         ph=absimg(d.get('photo')) or absimg(images.get(d.get('photo')))
-        body='<div class="seo-hero">'+pic(ph,a['name'])+'<div><p>'+esc(desc)+'</p>'+('<p>'+esc(d['bio'])+'</p>' if d.get('bio') else '')+'</div></div>'
-        if credits:body+='<h2>حضور در آثار مارول</h2><ul class="seo-catalog">'+''.join('<li>'+link('/title/'+c['id']+'/',films[c['id']]['title'])+(' — '+esc(c['character']) if c.get('character') else '')+'</li>' for c in credits)+'</ul>'
+        body='<div class="seo-hero">'+pic(ph,a['name'])+'<div><p>'+esc(desc)+'</p>'+('<p lang="fa" dir="rtl">'+esc(d['bioFa'])+'</p>' if d.get('bioFa') else '')+'</div></div>'
+        if credits:body+='<h2>حضور در آثار مارول</h2><ul class="seo-catalog">'+''.join('<li>'+link('/title/'+c['id']+'/',films[c['id']]['title'])+(' — '+esc(c.get('characterFa') or c['character']) if c.get('character') else '')+'</li>' for c in credits)+'</ul>'
         if d.get('filmography'):body+='<h2>فیلموگرافی ثبت‌شده</h2><ul class="seo-catalog">'+''.join('<li>'+esc(c.get('name',''))+(' ('+esc(c.get('year'))+')' if c.get('year') else '')+'</li>' for c in d['filmography'] if c.get('name'))+'</ul>'
         path='/person/'+aid+'/'
         schema={'@context':'https://schema.org','@type':'Person','name':a['name'],'url':SITE+path}
         if ph:schema['image']=SITE+ph
-        if d.get('bio'):schema['description']=d['bio']
+        if d.get('bioFa'):schema['description']=d['bioFa']
+        if a.get('nameFa'):schema['alternateName']=a['nameFa']
         if d.get('birthDate') and re.fullmatch(r'\d{4}-\d{2}-\d{2}',d['birthDate']):schema['birthDate']=d['birthDate']
         # Avoid indexing empty profiles, but keep all actual pages reachable.
-        page(path,a['name']+' | بازیگران مارول | مسیر مارول',desc,static(a['name'],body),schema,{'kind':'person','id':aid,'record':raw},index=bool(credits or d.get('bio')))
+        page(path,(a.get('nameFa') or a['name'])+' | بازیگران مارول | مسیر مارول',desc,static(a.get('nameFa') or a['name'],body),schema,{'kind':'person','id':aid,'record':raw},index=bool(credits or d.get('bio')))
     root=Element('urlset',xmlns='http://www.sitemaps.org/schemas/sitemap/0.9')
     for u in urls:SubElement(SubElement(root,'url'),'loc').text=u
     ElementTree(root).write(OUT/'sitemap.xml',encoding='utf-8',xml_declaration=True)
@@ -155,8 +156,8 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
     css=OUT/'style.css'
     with css.open('a') as f:f.write('\n.seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}\n')
     worker="""'use strict';
-const CORE='marvel-path-v3511-core', DATA='marvel-path-v340-data';
-const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.11','/data.js?v=3.5.11','/meta.js?v=3.5.11','/posters.js?v=3.5.11','/admin.js?v=3.5.11','/enrichment.js?v=3.5.11','/app.js?v=3.5.11','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
+const CORE='marvel-path-v3512-core', DATA='marvel-path-v340-data';
+const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.12','/data.js?v=3.5.12','/meta.js?v=3.5.12','/posters.js?v=3.5.12','/admin.js?v=3.5.12','/enrichment.js?v=3.5.12','/app.js?v=3.5.12','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{

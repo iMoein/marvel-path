@@ -24,6 +24,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import metadata_service as metadata
+import localize_catalog
 
 ROOT = Path(__file__).resolve().parent
 POSTER_DIR = ROOT / 'assets' / 'posters'
@@ -251,18 +252,18 @@ class AppHandler(SimpleHTTPRequestHandler):
             self._send_json(200,metadata.status());return
         if path == '/api/metadata/people':
             people=metadata.read_index().get('people',{})
-            self._send_json(200,{'items':sorted(people.values(), key=lambda p:len(p.get('credits',[])),reverse=True)});return
+            self._send_json(200,localize_catalog.directory({'items':sorted(people.values(), key=lambda p:len(p.get('credits',[])),reverse=True)}));return
         if path == '/api/metadata/title':
             raw=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
             id_=(raw.get('id') or [''])[0]
             if id_ not in CATALOG:self._send_json(404,{'error':'عنوان یافت نشد.'});return
-            record=metadata.title_record(id_)
+            record=localize_catalog.title(metadata.title_record(id_),id_)
             self._send_json(200,{'ready':bool(record),'data':record});return
         if path == '/api/metadata/person':
             raw=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
             pid=(raw.get('id') or [''])[0]
             if not re.fullmatch(r'[a-z0-9-]{1,110}',pid):self._send_json(400,{'error':'شناسه نامعتبر'});return
-            record=metadata.person_info(pid)
+            record=localize_catalog.person(metadata.person_info(pid),pid)
             self._send_json(200 if record else 404,{'ready':bool(record),'data':record});return
         if path == '/api/admin/metadata/job':
             if not self._authorized():self._send_json(401,{'error':'دسترسی مدیریت نیاز به کد دارد.'});return

@@ -64,7 +64,7 @@ async function loadInfoForPage(page){
 document.addEventListener('click',e=>{const b=e.target.closest('[data-retry-info]');if(!b)return;const page=activePage();if(page.name==='title'){information.requested.delete(page.id);delete information.titles[page.id];}else if(page.name==='person'){information.personRequested.delete(page.id);delete information.people[page.id];}else return;render();});
 """+s[end:]
         s=replace_once(s,"if(!p)return ","if(data?.failed)return '<div class=\"metadata-empty\"><p>دریافت اطلاعات ممکن نشد. اتصال اینترنت را بررسی کنید.</p><button class=\"btn btn-outline\" data-retry-info>تلاش دوباره</button></div>';\\n if(!p)return ".replace('\\n','\n'))
-        s=replace_once(s,"const meta=titleMetadata(f.id), cast=meta?.cast||[];","const meta=titleMetadata(f.id), cast=meta?.cast||[];if(information.titles[f.id]?.failed)return '<section class=\"cinema-panel metadata-empty\"><p>دریافت اطلاعات اثر ناموفق بود.</p><button class=\"btn btn-outline\" data-retry-info>تلاش دوباره</button></section>';")
+        s=replace_once(s,"const meta=titleMetadata(f.id), cast=meta?.sourceMismatch?[]:meta?.cast||[];","const meta=titleMetadata(f.id), cast=meta?.sourceMismatch?[]:meta?.cast||[];if(information.titles[f.id]?.failed)return '<section class=\"cinema-panel metadata-empty\"><p>دریافت اطلاعات اثر ناموفق بود.</p><button class=\"btn btn-outline\" data-retry-info>تلاش دوباره</button></section>';")
         return s
     edit('enrichment.js',enrichment)
     def css(s):
