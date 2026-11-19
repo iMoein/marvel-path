@@ -1,0 +1,12 @@
+{
+  "version": "3.5.1",
+  "assets": {
+    "style.css": "/style.v3.5.1.c00b48935b5e.css",
+    "data.js": "/data.v3.5.1.8c5e6bbf1ed6.js",
+    "meta.js": "/meta.v3.5.1.575b4e436227.js",
+    "posters.js": "/posters.v3.5.1.c3d5c6ad86fd.js",
+    "admin.js": "/admin.v3.5.1.e5a5048109fc.js",
+    "enrichment.js": "/enrichment.v3.5.1.79dbc6c782b3.js",
+    "app.js": "/app.v3.5.1.70b7d9b012df.js"
+  }
+}

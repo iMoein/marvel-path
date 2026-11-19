@@ -49,3 +49,14 @@ URLs, Open Graph/Twitter cards, sitemap, robots, an installable web app manifest
 and same-origin icons/assets. The original social graphics can be regenerated
 with `python3 generate_brand_assets.py` on macOS with Chrome and Pillow.
 Progress continues to reside in localStorage; no API key is published.
+
+### Public cache policy (3.5.1)
+The public build uses release- and SHA-256-addressed JS/CSS filenames, a stable
+/sw.js registration with updateViaCache:none, and network-first HTML requests.
+The worker never hides a newer HTML release behind the previous offline copy.
+Older runtime files are retained across the next two builds. Personal
+localStorage and artwork caches are not cleared during updates.
+For Cloudflare, bypass cache for HTML navigations, /sw.js (all query strings),
+and /release.json. Long-lived caching remains appropriate for fingerprinted
+runtime assets. Existing pre-3.5.1 clients may need a one-time Service Worker
+unregister and reload; do not clear all site data.

@@ -4,7 +4,16 @@ import json,re,shutil
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'
-if OUT.exists():shutil.rmtree(OUT)
+# Retain the most recent immutable runtime sets for clients with earlier HTML.
+old_assets={}
+if OUT.exists():
+    versions={}
+    for f in OUT.iterdir():
+        m=re.fullmatch(r'(?:app|admin|data|meta|posters|enrichment|style)\.v(\d+\.\d+\.\d+)\.[0-9a-f]{12}\.(?:js|css)',f.name)
+        if m and f.is_file():versions.setdefault(tuple(map(int,m.group(1).split('.'))),[]).append(f)
+    for v in sorted(versions,reverse=True)[:2]:
+        for f in versions[v]:old_assets[f.name]=f.read_bytes()
+    shutil.rmtree(OUT)
 OUT.mkdir()
 for name in ['index.html','app.js','data.js','meta.js','posters.js','enrichment.js','style.css','sw.js']:
     shutil.copy2(ROOT/name,OUT/name)
@@ -104,3 +113,6 @@ harden_public.main()
 
 import publish_web
 publish_web.main()
+
+for name,data in old_assets.items():
+    if not (OUT/name).exists():(OUT/name).write_bytes(data)
