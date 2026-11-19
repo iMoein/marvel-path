@@ -87,8 +87,8 @@ function shell(body,active){const s=stats(routeIds());return `<div class="app-sh
  <aside class="sidebar"><a class="logo" href="#doomsday"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
  <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
- <div class="sidebar-end">MARVEL PATH <span> / </span> v3.4.3</div></aside>
- <div class="workspace"><header class="topbar"><div class="mobile-logo"><span class="mini-m">M</span><span>مسیر مارول</span></div><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions">${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status"><span class="local-dot" title="داده‌ها فقط در مرورگر ذخیره می‌شوند"></span><span class="storage-label">ذخیره خودکار روشن است</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer"><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer></div>
+ <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.0</div></aside>
+ <div class="workspace"><header class="topbar"><div class="mobile-logo"><span class="mini-m">M</span><span>مسیر مارول</span></div><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions"><button type="button" class="mp-search-launch" data-global-search aria-label="جستجوی سراسری" aria-keyshortcuts="Meta+K Control+K">${ico('search',18)}<span>جستجو</span><kbd class="mp-search-hint"></kbd></button>${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status"><span class="local-dot" title="داده‌ها فقط در مرورگر ذخیره می‌شوند"></span><span class="storage-label">ذخیره خودکار روشن است</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer"><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer></div>
  <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
 function feature(f,section){if(!f)return `<section class="feature feature-finished"><div class="feature-content"><span class="eyebrow">MISSION COMPLETE</span><h1>تمام مسیر رو دیدی!</h1><p>همه عنوان‌های این مسیر رو به پایان رسوندی.</p></div></section>`;return `<section class="feature">${artBackdrop(f)}<div class="feature-content"><div class="eyebrow with-dot"><i></i>${section==='doomsday'?'توقف بعدی در مسیر Doomsday':'ادامه داستان MCU'}</div><div class="feature-index"><span class="feature-kicker-en">UP NEXT</span><span class="feature-separator"></span><span>${f.year} / ${f.universe==='fox'?'FOX':'MCU'}</span></div><h1 dir="ltr" lang="en">${esc(f.title)}</h1><p>${esc(META[f.id]?.summary||'')}</p><div class="feature-tags">${pill(f)}<span>${duration(f.minutes)}</span><span>${f.episodes?`${num(f.episodes)} قسمت`:'نسخه سینمایی'}</span></div><div class="feature-ctas">${buttonOpen(f,watching(f)?'ادامه ثبت پیشرفت':'مشاهده و شروع تماشا')}<button class="btn btn-glass" data-action="toggle-save" data-id="${f.id}" data-scope="${section}">${ico('bookmark',16)} ${state.saved[section==='doomsday'?'doomsday':'mcu'].includes(f.id)?'حذف از لیست':'ذخیره در واچ‌لیست'}</button></div></div><div class="feature-poster">${poster(f,'feature-poster-frame')}</div><div class="feature-corner">THE MARVEL PATH COLLECTION / 001</div></section>`}
@@ -133,7 +133,7 @@ function mcuPage(){const s=stats(MCU.map(f=>f.id)),visible=filterMCU(),{page,pag
  ${nextShelf(orderedMCU().map(f=>f.id),'mcu','ادامه تماشا و پیشنهادهای بعدی','بر اساس ترتیب انتخابی تو؛ تغییر ترتیب، تیک‌ها رو تغییر نمی‌ده.')}
  <div class="catalog-bar"><div class="order-selector"><span>چیدمان بر اساس</span><div class="segmented"><button data-action="order" data-value="story" class="${state.order==='story'?'selected':''}">خط زمانی وقوع</button><button data-action="order" data-value="release" class="${state.order==='release'?'selected':''}">تاریخ انتشار</button><button data-action="order" data-value="arc" class="${state.order==='arc'?'selected':''}">پیوستگی روایی</button></div></div><div class="layout-switch"><button data-action="view" data-value="grid" title="نمای پوسترها" class="${state.mcuView==='grid'?'selected':''}">${ico('grid',18)}</button><button data-action="view" data-value="list" title="نمای فهرست" class="${state.mcuView==='list'?'selected':''}">${ico('list',18)}</button></div></div>
  ${state.order==='arc'?`<div class="arc-picker-wrap"><label class="arc-picker-label" for="arc-pick">${ico('layers',17)} مسیر کدوم شخصیت / گروه رو دنبال می‌کنی؟</label><select id="arc-pick" class="arc-picker">${Object.entries(STORY_ARCS).map(([key,arc])=>`<option value="${esc(key)}" ${state.arc===key?'selected':''}>${esc(arc.name)} (${num(arc.items.length)} اثر)</option>`).join('')}</select></div>${arcSpotlight()}`:''}
- <div class="catalog-controls"><div class="search-field">${ico('search',18)}<input id="search" type="search" placeholder="جست‌وجوی فیلم، سریال یا شخصیت..." value="${esc(searchTerm)}" autocomplete="off"/><kbd>⌘ K</kbd></div><div class="select-wrap"><span id="status-filter-label">وضعیت</span><select id="status-filter" aria-labelledby="status-filter-label"><option value="all" ${state.mcuStatus==='all'?'selected':''}>همه وضعیت‌ها</option><option value="remaining" ${state.mcuStatus==='remaining'?'selected':''}>دیده‌نشده</option><option value="inprogress" ${state.mcuStatus==='inprogress'?'selected':''}>در حال تماشا</option><option value="watched" ${state.mcuStatus==='watched'?'selected':''}>دیده‌شده</option></select></div></div>
+ <div class="catalog-controls"><div class="search-field">${ico('search',18)}<input id="search" type="search" aria-label="فیلتر عناوین آرشیو" placeholder="جست‌وجو در عناوین این آرشیو..." value="${esc(searchTerm)}" autocomplete="off"/></div><div class="select-wrap"><span id="status-filter-label">وضعیت</span><select id="status-filter" aria-labelledby="status-filter-label"><option value="all" ${state.mcuStatus==='all'?'selected':''}>همه وضعیت‌ها</option><option value="remaining" ${state.mcuStatus==='remaining'?'selected':''}>دیده‌نشده</option><option value="inprogress" ${state.mcuStatus==='inprogress'?'selected':''}>در حال تماشا</option><option value="watched" ${state.mcuStatus==='watched'?'selected':''}>دیده‌شده</option></select></div></div>
  ${filterButtons('mcu',[['all','همه'],['movie','فیلم‌ها'],['series','سریال‌ها'],['animation','انیمیشن‌ها'],['special','ویژه‌برنامه‌ها']],state.mcuFilter)}
  <div class="listing-top"><div><strong>${num(visible.length)} عنوان</strong><span> · ${state.order==='story'?'بر اساس خط زمانی وقوع':state.order==='release'?'بر اساس تاریخ انتشار':'پیوستگی روایی · '+esc(arcInfo().name)}</span></div><div class="listing-actions"><div class="page-size-picker"><span>تعداد در صفحه</span><select id="page-size" aria-label="تعداد عناوین هر صفحه">${[10,20,50,'all'].map(sz=>`<option value="${sz}" ${state.mcuPageSize===sz?'selected':''}>${sz==='all'?'همه':num(sz)}</option>`).join('')}</select></div><span class="page-total">${state.mcuPageSize==='all'?'همه عناوین':num(page+1)+' از '+num(pages)+' صفحه'}</span></div></div>
  <div class="${state.mcuView==='grid'?'poster-grid':'compact-list'}">${mcuResultCards(paged,page,size)}</div>
@@ -232,7 +232,7 @@ function adminAccessPage(){
  if(!posterAdmin.available)return `<div class="admin-login-screen"><div class="admin-login-mark">${ico('layers',32)}</div><h1>ورود به مدیریت مارول</h1><p>در حال بررسی اتصال به سرور محلی…</p><div class="admin-login-hint">برای مدیریت، برنامه را با <code>START-MAC.command</code> یا <code>START-WINDOWS.bat</code> اجرا کن.</div></div>`;
  return `<div class="admin-login-screen"><div class="admin-login-mark">${ico('settings',32)}</div><span class="page-kicker">ADMINISTRATION / LOCAL ONLY</span><h1>مدیریت Marvel Path</h1><p>این بخش از پنل تماشای کاربر جداست. کد مدیر را از پنجره ترمینالی که سرور را اجرا کردی بردار.</p><form id="vault-login-form" class="vault-login-row admin-login-form"><label class="sr-only" for="vault-admin-token">کد دسترسی مدیر</label><input id="vault-admin-token" type="password" autocomplete="off" spellcheck="false" placeholder="کد دسترسی مدیر" required><button class="btn btn-primary" type="submit">ورود مدیر</button></form>${posterAdmin.loginError?`<p class="vault-error">${esc(posterAdmin.loginError)}</p>`:''}<div class="admin-login-hint">کد مدیریت در مرورگر نمایش داده نمی‌شود. آدرس این صفحه فقط روی رایانه محلی قابل دسترسی است.</div><a href="/" class="small-btn">${ico('back',15)} بازگشت به پنل تماشا</a></div>`;
 }
-function adminShell(body,title){const nav=[['dashboard','داشبورد مدیریت','grid'],['posters','مدیریت کاورها','film'],['metadata','اطلاعات آثار','layers'],['people','بازیگران','users']];const current=activePage().name;return `<div class="app-shell admin-app"><aside class="sidebar"><a class="logo" href="#dashboard"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مدیریت مارول</b><small>ADMIN CONSOLE</small></span></a><div class="nav-caption">${posterAdmin.authorized?'ابزارهای مدیر':'ورود مدیر'}</div>${posterAdmin.authorized?`<nav class="nav-column" aria-label="منوی مدیریت">${nav.map(([k,name,ic])=>`<a class="nav-link ${current===k?'active':''}" href="#${k}">${ico(ic,19)}<span>${name}</span></a>`).join('')}</nav>`:''}<div class="sidebar-spacer"></div><a class="admin-viewer-link" href="/">${ico('external',18)} <span>مشاهده پنل کاربری</span></a><div class="sidebar-end">MARVEL PATH <span> / </span> ADMIN</div></aside><div class="workspace"><header class="topbar"><div class="mobile-logo"><span class="mini-m">M</span>مدیریت مارول</div><div class="breadcrumb">SYSTEM / <b>${esc(title)}</b></div><div class="top-actions"><span class="local-dot"></span><span class="storage-label">سرور محلی</span>${posterAdmin.authorized?`<button type="button" class="admin-signout" data-admin-action="logout">خروج مدیر</button>`:''}</div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer">پنل مدیریت محلی · فقط برای مدیریت رسانه‌ها و اطلاعات آثار · فایل‌های شخصی تماشا مستقل باقی می‌مانند</footer></div>${posterAdmin.authorized?`<nav class="mobile-nav" aria-label="ناوبری مدیریت">${nav.map(([k,name,ic])=>`<a class="nav-link ${current===k?'active':''}" href="#${k}">${ico(ic,19)}<span>${name}</span></a>`).join('')}</nav>`:''}</div>`}
+function adminShell(body,title){const nav=[['dashboard','داشبورد مدیریت','grid'],['posters','مدیریت کاورها','film'],['metadata','اطلاعات آثار','layers'],['people','بازیگران','users']];const current=activePage().name;return `<div class="app-shell admin-app"><aside class="sidebar"><a class="logo" href="#dashboard"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مدیریت مارول</b><small>ADMIN CONSOLE</small></span></a><div class="nav-caption">${posterAdmin.authorized?'ابزارهای مدیر':'ورود مدیر'}</div>${posterAdmin.authorized?`<nav class="nav-column" aria-label="منوی مدیریت">${nav.map(([k,name,ic])=>`<a class="nav-link ${current===k?'active':''}" href="#${k}">${ico(ic,19)}<span>${name}</span></a>`).join('')}</nav>`:''}<div class="sidebar-spacer"></div><a class="admin-viewer-link" href="/">${ico('external',18)} <span>مشاهده پنل کاربری</span></a><div class="sidebar-end">MARVEL PATH <span> / </span> ADMIN</div></aside><div class="workspace"><header class="topbar"><div class="mobile-logo"><span class="mini-m">M</span>مدیریت مارول</div><div class="breadcrumb">SYSTEM / <b>${esc(title)}</b></div><div class="top-actions"><button type="button" class="mp-search-launch" data-global-search aria-label="جستجوی سراسری" aria-keyshortcuts="Meta+K Control+K">${ico('search',18)}<span>جستجو</span><kbd class="mp-search-hint"></kbd></button><span class="local-dot"></span><span class="storage-label">سرور محلی</span>${posterAdmin.authorized?`<button type="button" class="admin-signout" data-admin-action="logout">خروج مدیر</button>`:''}</div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer">پنل مدیریت محلی · فقط برای مدیریت رسانه‌ها و اطلاعات آثار · فایل‌های شخصی تماشا مستقل باقی می‌مانند</footer></div>${posterAdmin.authorized?`<nav class="mobile-nav" aria-label="ناوبری مدیریت">${nav.map(([k,name,ic])=>`<a class="nav-link ${current===k?'active':''}" href="#${k}">${ico(ic,19)}<span>${name}</span></a>`).join('')}</nav>`:''}</div>`}
 function seoRoute(){const path=location.pathname.replace(/^\/|\/$/g,'');if(!path||path==='index.html')return 'doomsday';if(path==='archive')return 'mcu';if(path==='actors')return 'people';if(/^(title|person)\/[a-z0-9-]+$/.test(path))return path;if(['settings','watchlist'].includes(path))return path;return 'doomsday';}
 function seoPath(route){if(route==='doomsday')return '/';if(route==='mcu')return '/archive/';if(route==='people')return '/actors/';if(/^(title|person)\/[a-z0-9-]+$/.test(route)||['settings','watchlist'].includes(route))return '/'+route+'/';return null;}
 function seoLinks(){document.querySelectorAll('a[href^="#"]').forEach(a=>{const href=seoPath(a.getAttribute('href').slice(1));if(href)a.setAttribute('href',href);});}
@@ -308,14 +308,14 @@ document.addEventListener('error',e=>{
  else img.classList.add('broken');
 },true);
 document.addEventListener('load',e=>{if(e.target.matches?.('.poster-image')&&e.target.naturalWidth)e.target.classList.remove('broken')},true);
-document.addEventListener('keydown',e=>{if(ADMIN_MODE)return;if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(activePage().name!=='mcu'){location.assign('/archive/');return;}requestAnimationFrame(()=>document.getElementById('search')?.focus())}});
+
 try{const p=JSON.parse(document.getElementById('page-data')?.textContent||'null');if(p?.kind==='title'&&p.record){information.titles[p.id]=p.record;information.requested.add(p.id);}else if(p?.kind==='person'&&p.record){information.people[p.id]=p.record;information.personRequested.add(p.id);}}catch(_){}
 if(location.hash){const path=seoPath(location.hash.slice(1));if(path&&path!==location.pathname){location.replace(path);}else{history.replaceState(null,'',location.pathname+location.search);goHash();}}else goHash();
 new MutationObserver(seoLinks).observe(document.getElementById('app'),{childList:true,subtree:true});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a)return;const href=a.getAttribute('href');if(href==='/archive/'||href==='/actors/'||href==='/'){try{sessionStorage.setItem('marvel-path-origin',href==='/'?'doomsday':href==='/archive/'?'mcu':'people');}catch(_){}}});
 
 
-if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost','127.0.0.1'].includes(location.hostname))){navigator.serviceWorker.register('/sw.js?v=3.4.3',{updateViaCache:'none'}).catch(()=>{});}
+if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost','127.0.0.1'].includes(location.hostname))){navigator.serviceWorker.register('/sw.js?v=3.5.0',{updateViaCache:'none'}).catch(()=>{});}
 
 /* Shared accessible select enhancement. The native select remains the source
    of truth, so existing change handlers and admin requests stay unchanged. */
@@ -475,6 +475,128 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost'
  window.visualViewport?.addEventListener('resize',()=>{if(current)place(current);});
  window.visualViewport?.addEventListener('scroll',()=>{if(current)place(current);});
  scan();
+})();
+
+/* Same-origin global catalogue search. Independent of archive filters and route. */
+(()=>{
+ const app=document.getElementById('app');
+ if(!app)return;
+ const shortcut=/Mac|iPhone|iPad|iPod/i.test(navigator.platform||navigator.userAgent)?'⌘ K':'Ctrl K';
+ let dialog=null,input=null,results=null,status=null,selected=-1,currentRows=[],filter='all',limit=8,previousFocus=null,localPeople=null,pending=null,peopleError=false,personIndex=null,lastPeople=null;
+ const normalize=value=>String(value??'').normalize('NFKD').toLowerCase().replace(/[\u0300-\u036f\u064b-\u065f\u0670]/g,'').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[\u06f0-\u06f9]/g,c=>String(c.charCodeAt(0)-0x6f0)).replace(/[\u0660-\u0669]/g,c=>String(c.charCodeAt(0)-0x660)).replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+ const score=(text,query)=>{if(!text)return 0;if(text===query)return 150;if(text.startsWith(query))return 100;if(text.includes(query))return 70;return query.split(' ').every(word=>text.includes(word))?40:0;};
+ const titleIndex=FILMS.map(f=>({f,name:normalize(f.title),fa:normalize(f.fa),key:normalize(f.id),year:String(f.year||'')}));
+ const actorDirectory=()=>Array.isArray(information.directory?.items)?information.directory.items:localPeople||[];
+ function getPeopleIndex(){
+  const items=actorDirectory();
+  if(items===lastPeople&&personIndex)return personIndex;
+  lastPeople=items;
+  personIndex=items.filter(p=>p&&typeof p.name==='string'&&/^[a-z0-9-]{1,110}$/.test(p.id)).map(p=>({p,name:normalize(p.name),id:normalize(p.id),roles:normalize((p.credits||[]).map(c=>c.character||'').join(' '))}));
+  return personIndex;
+ }
+ const isPublic=()=>typeof seoPath==='function';
+ function href(type,id){
+  const route=type+'/'+encodeURIComponent(id);
+  return isPublic()?seoPath(route):ADMIN_MODE?'/#'+route:'#'+route;
+ }
+ function safeImage(value){
+  if(typeof value!=='string')return '';
+  if(/^\.?\/?(?:public-data\/images\/(?:posters|people|remote)|assets\/(?:posters|people))\/[a-z0-9-]+\.(?:webp|jpg|jpeg|png)$/i.test(value))return value;
+  return '';
+ }
+ function image(url,name,type){
+  const src=safeImage(url);
+  return '<span class="mp-gs-thumb '+(type==='person'?'is-person':'')+'">'+(src?'<img src="'+esc(src)+'" alt="" decoding="async" loading="lazy">':'')+'<span>'+esc(String(name||'?').trim().charAt(0).toUpperCase())+'</span></span>';
+ }
+ function resultRow(type,id,name,sub,url){
+  return '<a class="mp-gs-result" href="'+esc(href(type,id))+'" data-gs-result data-kind="'+type+'" data-id="'+esc(id)+'">'+image(url,name,type)+'<span class="mp-gs-copy"><strong dir="auto">'+esc(name)+'</strong><small dir="auto">'+esc(sub)+'</small></span><span class="mp-gs-arrow" aria-hidden="true">'+ico('arrow',15)+'</span></a>';
+ }
+ function setActive(i,scroll=false){
+  currentRows.forEach((row,n)=>row.classList.toggle('is-active',n===i));selected=i;
+  if(i>=0&&currentRows[i]&&scroll){currentRows[i].focus({preventScroll:true});currentRows[i].scrollIntoView({block:'nearest',behavior:'instant'});}
+ }
+ function renderSearch(reset=true){
+  if(!dialog?.open)return;
+  const q=normalize(input.value);
+  if(reset)selected=-1;
+  const people=getPeopleIndex();
+  let actors=q?people.map(x=>({p:x.p,s:Math.max(score(x.name,q),score(x.id,q),score(x.roles,q)*.75)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s||((b.p.credits||[]).length-(a.p.credits||[]).length)):[];
+  const related=new Map();
+  if(q)for(const {p,s} of actors)for(const c of p.credits||[])if(BY_ID[c.id])related.set(c.id,Math.max(related.get(c.id)||0,s*.49));
+  let titles=q?titleIndex.map(x=>({f:x.f,s:Math.max(score(x.name,q),score(x.fa,q),score(x.key,q),score(x.name+' '+x.year,q),score(x.fa+' '+x.year,q),related.get(x.f.id)||0)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s):[];
+  if(filter==='titles')actors=[];
+  if(filter==='people')titles=[];
+  const total=titles.length+actors.length;
+  if(!q){
+   results.innerHTML='<div class="mp-gs-empty">'+ico('search',28)+'<strong>دنبال چه اثری یا بازیگری هستی؟</strong><span>نام فیلم، سریال، بازیگر یا شخصیت رو فارسی یا انگلیسی وارد کن.</span><div class="mp-gs-suggestions"><button type="button" data-gs-suggest="Iron Man">Iron Man</button><button type="button" data-gs-suggest="Loki">Loki</button><button type="button" data-gs-suggest="Chris Hemsworth">Chris Hemsworth</button></div></div>';
+   status.textContent=peopleError?'فهرست بازیگران فعلا در دسترس نیست.':'جستجو در '+num(FILMS.length)+' اثر و '+num(people.length)+' بازیگر'+(pending?' · در حال دریافت فهرست':'');
+  }else{
+   const group=(label,rows,count)=>rows.length?'<section class="mp-gs-group"><h3>'+label+' <span>'+num(count)+'</span></h3>'+rows.join('')+'</section>':'';
+   const titleRows=titles.slice(0,limit).map(({f})=>resultRow('title',f.id,f.title,f.fa+' · '+kind(f)+' · '+String(f.year||''),localCover(f)));
+   const actorRows=actors.slice(0,limit).map(({p})=>resultRow('person',p.id,p.name,(p.credits||[]).slice(0,2).map(c=>c.character).filter(Boolean).join(' / ')||num((p.credits||[]).length)+' حضور در آرشیو',safePhoto(p.photo)));
+   const tg=group('فیلم‌ها و سریال‌ها',titleRows,titles.length),ag=group('بازیگران',actorRows,actors.length);
+   results.innerHTML=((actors[0]?.s||0)>(titles[0]?.s||0)?ag+tg:tg+ag)+(total?'':'<div class="mp-gs-empty"><strong>نتیجه‌ای پیدا نشد</strong><span>نام یا املای دیگری امتحان کن.</span></div>')+((titles.length>limit||actors.length>limit)?'<button class="mp-gs-more" type="button" data-gs-more>نمایش نتایج بیشتر</button>':'');
+   status.textContent=num(total)+' نتیجه'+(pending?' · در حال دریافت فهرست بازیگران':peopleError?' · فهرست بازیگران در دسترس نیست':'');
+  }
+  if(peopleError){const retry=document.createElement('button');retry.type='button';retry.className='mp-gs-more';retry.dataset.gsRetry='';retry.textContent='تلاش دوباره برای دریافت بازیگران';results.append(retry);}
+  currentRows=Array.from(results.querySelectorAll('[data-gs-result]'));
+  currentRows.forEach((r,i)=>{r.id='mp-gs-result-'+i;});
+  setActive(selected>=0&&selected<currentRows.length?selected:-1);
+  if(reset)results.scrollTop=0;
+ }
+ function loadPeople(){
+  if(isPublic()||actorDirectory().length||pending)return;
+  peopleError=false;
+  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),10000);
+  pending=fetch('/api/metadata/people',{cache:'no-store',signal:ctrl.signal}).then(async r=>{if(!r.ok)throw Error('HTTP');const d=await r.json();if(!Array.isArray(d.items))throw Error('invalid directory');localPeople=d.items;if(!information.directory?.items?.length)information.directory=d;}).catch(()=>{peopleError=true;}).finally(()=>{clearTimeout(timer);pending=null;if(dialog?.open)renderSearch();});
+ }
+ function closeSearch(){if(dialog?.open)dialog.close();}
+ function init(){
+  if(dialog)return;
+  dialog=document.createElement('dialog');dialog.className='mp-gs-dialog';dialog.id='mp-global-search';dialog.dir='rtl';dialog.setAttribute('aria-labelledby','mp-gs-title');
+  dialog.innerHTML='<div class="mp-gs-header"><div class="mp-gs-heading"><h2 id="mp-gs-title">جستجوی سراسری</h2><button type="button" class="mp-gs-close" data-gs-close aria-label="بستن جستجو">×</button></div><div class="mp-gs-field">'+ico('search',21)+'<input id="mp-gs-query" type="search" aria-controls="mp-gs-results" aria-label="نام فیلم، سریال یا بازیگر" placeholder="نام فیلم، سریال یا بازیگر..." autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="mp-gs-clear" data-gs-clear aria-label="پاک کردن جستجو">×</button></div><div class="mp-gs-filters" role="group" aria-label="نوع نتیجه"><button type="button" data-gs-filter="all" aria-pressed="true">همه</button><button type="button" data-gs-filter="titles" aria-pressed="false">فیلم و سریال</button><button type="button" data-gs-filter="people" aria-pressed="false">بازیگران</button></div></div><div class="mp-gs-results" id="mp-gs-results" role="region" aria-label="نتایج جستجو"></div><footer class="mp-gs-footer"><span id="mp-gs-status" role="status" aria-live="polite"></span><span class="mp-gs-keys"><kbd>↑ ↓</kbd> پیمایش <kbd>Enter</kbd> انتخاب <kbd>Esc</kbd> بستن</span></footer>';
+  document.body.append(dialog);
+  input=dialog.querySelector('#mp-gs-query');results=dialog.querySelector('.mp-gs-results');status=dialog.querySelector('#mp-gs-status');
+  // Result links remain native links, reachable via Tab as well as arrow keys.
+  input.addEventListener('input',()=>{limit=8;renderSearch();});
+  dialog.addEventListener('keydown',e=>{
+   if(e.isComposing||e.metaKey||e.ctrlKey||e.altKey)return;
+   const activeRow=currentRows.indexOf(e.target);
+   if(e.target!==input&&activeRow<0)return;
+   if(['ArrowDown','ArrowUp'].includes(e.key)&&currentRows.length){e.preventDefault();if(activeRow===0&&e.key==='ArrowUp'){setActive(-1);input.focus();return;}setActive(activeRow<0?(e.key==='ArrowDown'?0:currentRows.length-1):Math.max(0,Math.min(currentRows.length-1,activeRow+(e.key==='ArrowDown'?1:-1))),true);}
+   if(e.target===input&&e.key==='Enter'&&currentRows.length){e.preventDefault();currentRows[0].click();}
+  });
+  dialog.addEventListener('click',e=>{
+   if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeSearch();return;}
+   if(e.target.closest('[data-gs-close]')){closeSearch();return;}
+   if(e.target.closest('[data-gs-clear]')){input.value='';limit=8;renderSearch();input.focus();return;}
+   const f=e.target.closest('[data-gs-filter]');
+   if(f){filter=f.dataset.gsFilter;dialog.querySelectorAll('[data-gs-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===f)));limit=8;renderSearch();input.focus();return;}
+   const s=e.target.closest('[data-gs-suggest]');if(s){input.value=s.dataset.gsSuggest;renderSearch();input.focus();return;}
+   if(e.target.closest('[data-gs-more]')){limit+=20;renderSearch(false);return;}
+   if(e.target.closest('[data-gs-retry]')){loadPeople();renderSearch();return;}
+   const a=e.target.closest('[data-gs-result]');
+   if(a&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey)closeSearch();
+  });
+  results.addEventListener('error',e=>{if(e.target.tagName==='IMG')e.target.remove();},true);
+  dialog.addEventListener('focusin',e=>{const n=currentRows.indexOf(e.target);setActive(n);});
+  dialog.addEventListener('close',()=>{document.documentElement.classList.remove('mp-gs-open');if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});});
+ }
+ function openSearch(){
+  init();
+  if(dialog.open){input.focus();return;}
+  previousFocus=document.activeElement;
+  input.value='';selected=-1;limit=8;filter='all';dialog.querySelectorAll('[data-gs-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gsFilter==='all')));
+  dialog.showModal();fitViewport();document.documentElement.classList.add('mp-gs-open');loadPeople();renderSearch();input.focus({preventScroll:true});
+ }
+ function fitViewport(){if(dialog?.open){dialog.style.setProperty('--mp-gs-vh',(window.visualViewport?.height||innerHeight)+'px');}}
+ window.visualViewport?.addEventListener('resize',fitViewport);window.addEventListener('resize',fitViewport);
+ function updateLaunchers(){app.querySelectorAll('.mp-search-hint').forEach(k=>{if(k.textContent!==shortcut)k.textContent=shortcut;});}
+ new MutationObserver(updateLaunchers).observe(app,{childList:true,subtree:true});
+ updateLaunchers();
+ document.addEventListener('click',e=>{if(e.target.closest('[data-global-search]'))openSearch();});
+ document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&!e.altKey&&e.key.toLowerCase()==='k'){e.preventDefault();if(!e.repeat)openSearch();}});
+ window.addEventListener('hashchange',closeSearch);
 })();
 
 document.addEventListener('error',e=>{const img=e.target;if(img.matches?.('.actor-img img,.person-portrait img'))img.remove();else if(img.matches?.('.episode-still img'))img.parentNode.remove();},true);

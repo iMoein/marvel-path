@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.4.3'; SITE='https://marvel.imoein.com'
+VERSION='3.5.0'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -130,7 +130,6 @@ function seoLinks(){document.querySelectorAll('a[href^="#"]').forEach(a=>{const 
 new MutationObserver(seoLinks).observe(document.getElementById('app'),{childList:true,subtree:true});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a)return;const href=a.getAttribute('href');if(href==='/archive/'||href==='/actors/'||href==='/'){try{sessionStorage.setItem('marvel-path-origin',href==='/'?'doomsday':href==='/archive/'?'mcu':'people');}catch(_){}}});
 """)
-    s=s.replace("if(activePage().name!=='mcu')location.hash='#mcu';","if(activePage().name!=='mcu'){location.assign('/archive/');return;}")
     s=s.replace("function goHash(){const p=activePage();","function goHash(){const p=activePage();if(location.hash){const path=seoPath(location.hash.slice(1));if(path&&path!==location.pathname){location.assign(path);return;}}if(p.name==='title'){try{detailOrigin=sessionStorage.getItem('marvel-path-origin')||'mcu';}catch(_){}}")
     # Add an install/help setting without creating an inert button.
     s=s.replace('<div class="setting-footnote slim">','''<article class="setting-tile pwa-install"><span>↧</span><h3>نصب مسیر مارول</h3><p>برنامه را به صفحه اصلی گوشی یا منوی برنامه‌های رایانه اضافه کن.</p><button class="btn btn-outline" data-install-app>نصب برنامه</button><p id="install-hint" aria-live="polite"></p></article><div class="setting-footnote slim">''',1)
@@ -154,8 +153,8 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
     css=OUT/'style.css'
     with css.open('a') as f:f.write('\n.seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}\n')
     worker="""'use strict';
-const CORE='marvel-path-v343-core', DATA='marvel-path-v340-data';
-const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.4.3','/data.js?v=3.4.3','/meta.js?v=3.4.3','/posters.js?v=3.4.3','/admin.js?v=3.4.3','/enrichment.js?v=3.4.3','/app.js?v=3.4.3','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
+const CORE='marvel-path-v350-core', DATA='marvel-path-v340-data';
+const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.0','/data.js?v=3.5.0','/meta.js?v=3.5.0','/posters.js?v=3.5.0','/admin.js?v=3.5.0','/enrichment.js?v=3.5.0','/app.js?v=3.5.0','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{
