@@ -1,6 +1,6 @@
 'use strict';
-const RELEASE="3.5.6", CORE="marvel-path-v356-core", DATA='marvel-path-v340-data';
-const RUNTIME=["/style.v3.5.6.cffd509ee8b8.css", "/data.v3.5.6.bac5ab27793d.js", "/meta.v3.5.6.575b4e436227.js", "/posters.v3.5.6.c3d5c6ad86fd.js", "/admin.v3.5.6.e5a5048109fc.js", "/enrichment.v3.5.6.76cf2f0ba79e.js", "/app.v3.5.6.9a1ef32b1945.js"];
+const RELEASE="3.5.7", CORE="marvel-path-v357-core", DATA='marvel-path-v340-data';
+const RUNTIME=["/style.v3.5.7.e7176cecd5a4.css", "/data.v3.5.7.bac5ab27793d.js", "/meta.v3.5.7.575b4e436227.js", "/posters.v3.5.7.c3d5c6ad86fd.js", "/admin.v3.5.7.e5a5048109fc.js", "/enrichment.v3.5.7.a63684bdf806.js", "/app.v3.5.7.978be00ea4aa.js"];
 const EXTRAS=['/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 const PAGES=['/','/archive/','/actors/','/settings/','/watchlist/'];
 const pageRelease=async r=>r.ok&&(r.headers.get('content-type')||'').includes('text/html')?((await r.clone().text()).match(/<meta name="marvel-release" content="(\d+\.\d+\.\d+)"\s*\/?>/)||[])[1]||'':'';

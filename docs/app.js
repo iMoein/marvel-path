@@ -98,7 +98,7 @@ function toast(message,type='ok'){
 document.addEventListener('visibilitychange',()=>{if(document.hidden)dismissToast();});
 window.addEventListener('pagehide',dismissToast);
 const arc=pct=>`<div class="progress-circle" style="--pct:${pct}%"><div><strong>${num(pct)}٪</strong><span>تکمیل</span></div></div>`;
-function poster(f,cls=''){const url=posterUrl(f);return `<div class="poster-art p-${esc(f.palette)} ${cls}" aria-label="پوستر ${esc(f.title)}">${url?`<img class="poster-image" data-poster-id="${esc(f.id)}" src="${esc(url)}" alt="پوستر ${esc(f.title)}" loading="lazy" referrerpolicy="no-referrer"/>`:''}<div class="poster-fallback"><div class="poster-mark">M<span>PATH</span></div><span class="poster-symbol">${esc(f.sigil)}</span><span class="poster-fallback-name" dir="ltr" lang="en">${esc(f.title)}</span></div></div>`}
+function poster(f,cls=''){const url=posterUrl(f);return `<div class="poster-art p-${esc(f.palette)} ${cls}" aria-label="پوستر ${esc(f.title)}">${url?`<img class="poster-image" data-poster-id="${esc(f.id)}" src="${esc(url)}" alt="پوستر ${esc(f.title)}" loading="${cls==='cinema-cover'?'eager':'lazy'}" referrerpolicy="no-referrer"/>`:''}<div class="poster-fallback"><div class="poster-mark">M<span>PATH</span></div><span class="poster-symbol">${esc(f.sigil)}</span><span class="poster-fallback-name" dir="ltr" lang="en">${esc(f.title)}</span></div></div>`}
 function artBackdrop(f){const url=posterUrl(f);return `<div class="feature-background p-${esc(f.palette)}" aria-hidden="true">${url?`<img class="poster-image" data-poster-id="${esc(f.id)}" src="${esc(url)}" alt="" referrerpolicy="no-referrer"/>`:''}<span class="feature-glow"></span></div>`}
 function pill(f,extra=''){return `<span class="pill ${extra}">${isAnimation(f)?ico('spark',13):f.type==='movie'?ico('film',13):ico('monitor',13)}${kind(f)}</span>`}
 function navIcon(id){return id==='doomsday'?'target':id==='mcu'?'layers':id==='watchlist'?'bookmark':id==='posters'?'film':id==='people'?'grid':id==='metadata'?'info':'settings'}
@@ -109,7 +109,7 @@ function shell(body,active){const s=stats(routeIds());return `<div class="app-sh
  <aside class="sidebar"><a class="logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
  <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
- <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.6</div></aside>
+ <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.7</div></aside>
  <div class="workspace"><header class="topbar"><a class="mobile-logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="mini-m" aria-hidden="true">M</span><span>مسیر مارول</span></a><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions"><button type="button" class="mp-search-launch" data-global-search aria-label="جستجوی سراسری" aria-keyshortcuts="Meta+K Control+K">${ico('search',18)}<span>جستجو</span><kbd class="mp-search-hint"></kbd></button>${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status" role="status" title="${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}" data-storage-ok="${storageReady}"><span class="local-dot" aria-hidden="true"></span><span class="storage-label">${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer"><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer></div>
  <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
@@ -179,8 +179,10 @@ function titleExternalLinks(f){
  const google='https://www.google.com/search?q='+encodeURIComponent(query);
  const marvelSearch='https://www.marvel.com/search?query='+encodeURIComponent(f.title.split(' — Season')[0]);
  const source=OFFICIAL_TITLE_LINKS[f.id];
- const a=(url,label,icon)=>'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" class="title-external-link">'+ico(icon,15)+'<span>'+esc(label)+'</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>';
- return '<div class="title-external-links" aria-label="لینک‌های رسمی و جستجو">'+a(google,'جستجو در گوگل','search')+(source?a(source.url,source.label==='Marvel'?'صفحه رسمی مارول':'صفحه رسمی '+source.label,'film'):'')+(source?.label==='Marvel'?'':a(marvelSearch,'جستجو در مارول','search'))+'</div>';
+ const disneyPress={falcon:'https://press.disneyplus.com/media-kits/the-falcon-and-the-winter-soldier',wandavision:'https://press.disneyplus.com/media-kits/wandavision'};
+ const disneySource=source?.label.startsWith('Disney')?source.url:disneyPress[f.id];
+ const a=(url,label,icon)=>'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" class="title-external-link">'+ico(icon,16)+'<span>'+esc(label)+'</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>';
+ return '<nav class="title-external-links" aria-label="لینک‌های رسمی و جستجو">'+a(google,'جستجو در گوگل','search')+a(source?.label==='Marvel'?source.url:marvelSearch,source?.label==='Marvel'?'صفحه رسمی مارول':'جستجو در مارول','film')+a(disneySource||'https://www.disneyplus.com/',disneySource?'صفحه رسمی دیزنی':'وب‌سایت دیزنی+','film')+(source&&!source.label.startsWith('Disney')&&source.label!=='Marvel'?a(source.url,'صفحه رسمی '+source.label,'film'):'')+'</nav>';
 }
 function cinemaBackdropUrl(f){return posterUrl(f);}
 function cinemaHero(f,inDoom,inMcu){
@@ -210,7 +212,6 @@ function cinemaHero(f,inDoom,inMcu){
           <button type="button" class="cinema-primary-action" data-action="detail-jump" data-value="watch-progress">${ico('play',17)} ${watched?'مشاهده پیشرفت':'ادامه تماشا و ثبت پیشرفت'}</button>
           <button type="button" class="cinema-ghost-action ${isSaved?'cinema-ghost-selected':''}" data-action="toggle-save" data-id="${esc(f.id)}" data-scope="${savedScope}">${ico('bookmark',18)} ${isSaved?'در واچ‌لیست':'افزودن به واچ‌لیست'}</button>
         </div>
-        ${titleExternalLinks(f)}
       </div>
       <div class="cinema-watch-metrics"><div><span>پیشرفت تو</span><strong>${num(pct)}<small>٪</small></strong></div><div><span>${f.episodes?'قسمت بعدی':'زمان باقی‌مانده'}</span><strong class="cinema-small-metric">${f.episodes?(next?'قسمت '+num(next):'تمام شده'):watched?'تمام شده':remaining}</strong></div></div>
     </div>
@@ -247,7 +248,9 @@ function detailPage(id){
      </main>
      <aside class="cinema-aside-column">
        <section class="cinema-panel cinema-notes-panel" id="my-notes"><span class="cinema-kicker">MY WATCH JOURNAL</span><h3>یادداشت‌های من</h3><p>نکته‌های داستان و شخصیت‌ها را برای مراجعه بعدی یادداشت کن.</p><textarea id="detail-notes" data-id="${esc(id)}" rows="6" maxlength="2500" placeholder="اینجا بنویس...">${esc(state.notes[id]||'')}</textarea><button class="btn btn-outline" data-action="save-note" data-id="${esc(id)}">${ico('check',15)} ذخیره یادداشت</button></section>
-       <section class="cinema-panel cinema-facts-panel"><span class="cinema-kicker">FILM INFORMATION</span><h3>شناسنامه اثر</h3><dl><div><dt>سال انتشار</dt><dd>${num(f.year)}</dd></div><div><dt>نوع اثر</dt><dd>${kind(f)}</dd></div><div><dt>مدت</dt><dd>${duration(f.minutes)}</dd></div><div><dt>جهان</dt><dd>${f.universe==='mcu'?'MCU':f.universe==='fox'?'FOX / X-Men':'Marvel'}</dd></div></dl></section>
+       <div class="cinema-facts-group"><section class="cinema-panel cinema-facts-panel"><span class="cinema-kicker">FILM INFORMATION</span><h3>شناسنامه اثر</h3><dl><div><dt>سال انتشار</dt><dd>${num(f.year)}</dd></div><div><dt>نوع اثر</dt><dd>${kind(f)}</dd></div><div><dt>مدت</dt><dd>${duration(f.minutes)}</dd></div><div><dt>جهان</dt><dd>${f.universe==='mcu'?'MCU':f.universe==='fox'?'FOX / X-Men':'Marvel'}</dd></div></dl></section>
+       ${titleExternalLinks(f)}
+       </div>
      </aside>
    </div>
    ${castSection(f)}

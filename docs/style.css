@@ -823,6 +823,39 @@ html.mp-gs-open{overflow:hidden}
 /* Two supplementary titles side by side on desktop; stacked on smaller screens. */
 @media(min-width:1024px){.bonus-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
 
+
+/* Detail source actions are independent of the cinematic hero. */
+.cinema-facts-group{display:grid;align-content:start;gap:10px;min-width:0}
+.cinema-facts-group .title-external-links{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin:0}
+.cinema-facts-group .title-external-link{min-height:39px;min-width:0;padding:9px 12px;border-color:var(--border2);background:var(--surface);color:var(--muted);font-size:12px}
+.cinema-facts-group .title-external-link span{flex:1;min-width:0;overflow-wrap:anywhere}
+.cinema-facts-group .title-external-link:hover{color:var(--text);border-color:var(--red);background:var(--tint)}
+/* Keep three cards per row on desktop, with a comfortable single column on phones. */
+@media(min-width:1024px){
+ .cinema-episode-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .cinema-episode-grid .episode-rich{min-width:0}
+ .cinema-episode-grid .ep-rich-head>div{min-width:0}
+ .cinema-episode-grid .episode-watch-button{white-space:normal;min-width:0}
+}
+@media(max-width:700px){
+ .cinema-cover-pane{height:auto;display:grid;place-items:center;padding:20px 16px;background:radial-gradient(ellipse at 50% 35%,#3b2937 0%,#191922 58%,#111217 100%);border-bottom:1px solid #ffffff14}
+ .cinema-cover-pane .poster-art{position:relative;inset:auto;display:block;width:min(70%,240px);height:auto;aspect-ratio:2/3;max-width:100%;border-radius:12px;box-shadow:0 12px 34px #0007;overflow:hidden}
+ .cinema-cover-pane .poster-image{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;box-shadow:none;transform:none}
+ .cinema-cover-pane .poster-art:hover .poster-image{transform:none}
+ .cinema-cover-pane .poster-fallback{position:absolute;inset:0;gap:14px;overflow:hidden}
+ .cinema-cover-pane .poster-fallback-name{font-size:17px;max-width:100%;overflow-wrap:anywhere}
+ .cinema-cover-pane .poster-symbol{font-size:70px}
+ .cinema-cover-edge{display:none}
+ .cinema-aside-column{grid-template-columns:minmax(0,1fr)}
+ .cinema-facts-group .title-external-link{min-height:44px}
+}
+/* Long episode names should wrap rather than push the card beyond its column. */
+.cinema-episode-grid .ep-rich-body,.cinema-episode-grid .ep-rich-head,.cinema-episode-grid .ep-rich-head>div{min-width:0}
+.cinema-episode-grid .ep-rich-head>div{flex:1}
+.cinema-episode-grid .ep-rich-head .ep-number{flex:0 0 34px;white-space:nowrap}
+.cinema-episode-grid .ep-rich-head h4,.cinema-episode-grid .ep-rich-head small,.cinema-episode-grid .ep-synopsis{overflow-wrap:anywhere;white-space:normal}
+.cinema-episode-grid .episode-watch-button{white-space:normal;min-width:0;overflow-wrap:anywhere}
+
 .public-people-pager{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;color:var(--muted);font-size:12px}.public-people-pager button:disabled{opacity:.4;cursor:not-allowed}
 
 .seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}
