@@ -689,3 +689,53 @@ html.mp-gs-open{overflow:hidden}
 }
 @media(max-width:380px){.top-actions .storage-label{font-size:9px}.top-actions .top-status{padding:6px 7px}.mobile-logo{gap:6px;font-size:13px}}
 @media(prefers-reduced-motion:reduce){.mp-gs-dialog[open]{animation:none}}
+
+
+/* Stable, opaque mobile header; the notch is reserved separately from controls. */
+.app-shell:not(.admin-app) .top-status{
+ position:relative;flex:0 0 22px;width:22px;height:38px;min-width:0;
+ display:grid;place-items:center;padding:0;border:0;border-radius:0;background:none;box-shadow:none;
+}
+.app-shell:not(.admin-app) .top-status .local-dot{width:8px;height:8px;animation:none}
+.app-shell:not(.admin-app) .top-status[data-storage-ok=false] .local-dot{background:var(--red);box-shadow:0 0 9px var(--red-shadow)}
+.app-shell:not(.admin-app) .top-status .storage-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.app-shell:not(.admin-app) .mp-search-launch{min-width:160px;justify-content:flex-start;font-size:13px;gap:9px;min-height:40px}
+.app-shell:not(.admin-app) .mp-search-launch svg{flex:none}
+.app-shell:not(.admin-app) .mp-search-launch .mp-search-hint{margin-inline-start:auto}
+@media(max-width:900px) and (min-width:701px){
+ .app-shell:not(.admin-app) .mp-search-launch{min-width:130px}
+}
+@media(max-width:700px){
+ :root{
+  --mp-bar-height:64px;
+  --mp-header-safe:calc(var(--mp-safe-top) + min(10px,var(--mp-safe-top)));
+  scroll-padding-top:calc(var(--mp-bar-height) + var(--mp-header-safe) + 12px);
+ }
+ .topbar {
+  top:0;
+  height:calc(var(--mp-bar-height) + var(--mp-header-safe));
+  min-height:calc(var(--mp-bar-height) + var(--mp-header-safe));
+  padding-top:var(--mp-header-safe);
+  padding-bottom:0;
+  background:var(--sidebar);
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+  gap:14px;
+ }
+ .admin-app .topbar{background:var(--sidebar)}
+ .app-shell:not(.admin-app) .mobile-logo{flex:0 0 auto;white-space:nowrap;gap:8px;font-size:14px;line-height:1.5}
+ .app-shell:not(.admin-app) .mobile-logo .mini-m{width:29px;height:29px;flex:0 0 29px}
+ .app-shell:not(.admin-app) .top-actions{flex:1 1 0;min-width:0;justify-content:flex-end;gap:7px;flex-wrap:nowrap}
+ .app-shell:not(.admin-app) .mp-search-launch{
+  flex:1 1 0;width:auto;min-width:0;height:44px;min-height:44px;
+  justify-content:flex-start;padding:0 11px;gap:8px;border-radius:11px;background:var(--surface2);
+ }
+ .app-shell:not(.admin-app) .mp-search-launch span{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis}
+ .app-shell:not(.admin-app) .mp-search-launch .mp-search-hint{display:none}
+ .app-shell:not(.admin-app) .top-status{flex-basis:16px;width:16px;height:44px}
+}
+@media(max-width:360px){
+ .topbar{gap:10px}
+ .app-shell:not(.admin-app) .mobile-logo{font-size:13px;gap:6px}
+ .app-shell:not(.admin-app) .mp-search-launch{padding-inline:8px;gap:6px;font-size:12px}
+}

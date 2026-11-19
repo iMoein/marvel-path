@@ -43,6 +43,17 @@ html:not([data-boot]) .seo-content{padding-top:calc(28px + var(--mp-safe-top))}
  .bs-main{padding-left:max(16px,var(--mp-safe-left,env(safe-area-inset-left,0px)));padding-right:max(16px,var(--mp-safe-right));padding-bottom:calc(105px + var(--mp-safe-bottom))}
  .bs-bottom{padding:13px max(8px,var(--mp-safe-right)) calc(13px + var(--mp-safe-bottom)) max(8px,var(--mp-safe-left,env(safe-area-inset-left,0px)))}
 }
+
+.bs-search-placeholder{display:none}
+@media(max-width:700px){
+ :root{--bs-height:64px;--mp-header-safe:calc(var(--mp-safe-top) + min(10px,var(--mp-safe-top)))}
+ .bs-top{height:calc(var(--bs-height) + var(--mp-header-safe));padding-top:var(--mp-header-safe);gap:14px;box-sizing:border-box}
+ .bs-mobile{flex:0 0 auto;font-size:14px;gap:8px}
+ .bs-mobile .bs-mark{width:29px;height:29px;font-size:23px}
+ .bs-search-placeholder{display:block;flex:1 1 0;height:44px;min-width:0;border:1px solid #ffffff12;background:#202129;border-radius:11px}
+ .bs-state{flex:0 0 16px;font-size:0;gap:0;justify-content:center}
+}
+@media(max-width:360px){.bs-top{gap:10px}.bs-mobile{font-size:13px;gap:6px}}
 @media(prefers-reduced-motion:reduce){#boot-shell *{animation:none!important}#boot-shell *:after{animation:none!important}}
 """
 def shell(path,title):
@@ -54,7 +65,7 @@ def shell(path,title):
     hero='<div class="bs-hero"><div>'+line+'<div class="bs-line"></div><div class="bs-line short"></div></div><div class="bs-tile"></div></div>'
     contents=(block+grid) if path=='/actors/' else (hero+block+grid) if kind=='bs-detail' else (block+'<div class="bs-metrics">'+block*3+'</div>'+grid) if path!="/" else (block+hero+'<div class="bs-metrics">'+block*3+'</div>'+grid)
     brand='<span class="bs-mark">M</span><span class="bs-name">مسیر مارول</span>'
-    return '<div id="boot-shell" aria-label="در حال آماده‌سازی صفحه" role="status"><aside class="bs-side" aria-hidden="true"><div class="bs-brand">'+brand+'</div><div class="bs-menu">'+('<i></i>'*5)+'</div></aside><div class="bs-work"><header class="bs-top"><div class="bs-brand bs-mobile" aria-hidden="true">'+brand+'</div><span class="bs-desktop" aria-hidden="true">WATCH HUB</span><span class="bs-state"><i aria-hidden="true"></i>در حال آماده‌سازی</span></header><div class="bs-main '+kind+'"><div class="bs-head"><div class="bs-eyebrow">MARVEL PATH / EARTH-616</div><div class="bs-title">'+title+'</div><div class="bs-line" aria-hidden="true"></div></div><div aria-hidden="true">'+contents+'</div></div></div><div class="bs-bottom" aria-hidden="true">'+('<i></i>'*5)+'</div></div>'
+    return '<div id="boot-shell" aria-label="در حال آماده‌سازی صفحه" role="status"><aside class="bs-side" aria-hidden="true"><div class="bs-brand">'+brand+'</div><div class="bs-menu">'+('<i></i>'*5)+'</div></aside><div class="bs-work"><header class="bs-top"><div class="bs-brand bs-mobile" aria-hidden="true">'+brand+'</div><span class="bs-desktop" aria-hidden="true">WATCH HUB</span><span class="bs-search-placeholder" aria-hidden="true"></span><span class="bs-state"><i aria-hidden="true"></i>در حال آماده‌سازی</span></header><div class="bs-main '+kind+'"><div class="bs-head"><div class="bs-eyebrow">MARVEL PATH / EARTH-616</div><div class="bs-title">'+title+'</div><div class="bs-line" aria-hidden="true"></div></div><div aria-hidden="true">'+contents+'</div></div></div><div class="bs-bottom" aria-hidden="true">'+('<i></i>'*5)+'</div></div>'
 def prepare_head(head):
     marker="script-src 'self';"
     assert marker in head
