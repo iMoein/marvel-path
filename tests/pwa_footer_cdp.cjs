@@ -40,7 +40,13 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
  assert(await ev("window.__promptCount===0"),'not automatic');
  await ev("document.querySelector('[data-pwa-install]').click()");
  assert(await ev("window.__promptCount===1"),'native prompt on explicit click');
- await ev("window.dispatchEvent(new Event('appinstalled'));render()");
- assert(await ev("document.querySelector('[data-pwa-install]').disabled&&document.querySelector('[data-pwa-install]').textContent.includes('نصب شده')"),'installed state survives rerender');
+ await ev("window.dispatchEvent(new Event('appinstalled'))");
+ assert(await ev("document.querySelector('.footer-install').hidden&&document.querySelector('.footer-install').getBoundingClientRect().height===0"),'installation hides whole invitation immediately');
+ await ev("render()");
+ assert(await ev("document.querySelector('.footer-install').hidden&&document.querySelector('.footer-install').getBoundingClientRect().height===0&&!!document.querySelector('.footer-tagline')"),'installed state survives rerender');
+ await ev("pwaInstallConfirmed=false;Object.defineProperty(navigator,'standalone',{configurable:true,value:true});render()");
+ assert(await ev("document.querySelector('.footer-install').hidden&&document.querySelector('.footer-install').getBoundingClientRect().height===0"),'iOS standalone hides installation');
+ await ev("Object.defineProperty(navigator,'standalone',{configurable:true,value:false});render()");
+ assert(await ev("!document.querySelector('.footer-install').hidden"),'ordinary browser still offers installation');
  console.log('PASS platform detection, prompt, installed state');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>{ws?.close();chrome?.kill();srv.close();setTimeout(()=>{try{fs.rmSync(tmp,{recursive:true,force:true})}catch(_){}},300);});

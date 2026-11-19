@@ -34,7 +34,9 @@ records and biographies are unavailable or incomplete.
 
 Visit [marvel.imoein.com](https://marvel.imoein.com/) and select **نصب برنامه**
 (Install app) in the footer. Compatible browsers can open a native installation
-prompt. Otherwise, the footer provides platform-specific instructions.
+prompt. Otherwise, the footer provides platform-specific instructions. The
+installation invitation is hidden when the app is launched in installed mode
+or the browser reports a successful installation.
 
 | Platform | Installation |
 | --- | --- |

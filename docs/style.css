@@ -1080,7 +1080,7 @@ html.mp-gs-open{overflow:hidden}
 .footer-install-copy strong{display:block;font-size:13px;color:var(--text);font-weight:800}
 .footer-install-copy p{margin:4px 0 0;font-size:11px;color:var(--muted);line-height:1.7}
 .pwa-install-button{min-height:44px;flex:none;white-space:nowrap;font-size:12px}
-.pwa-install-button:disabled{opacity:.75;cursor:default}
+.footer-install[hidden]{display:none!important}
 .viewer-footer .footer-tagline{margin:0}
 .pwa-install-dialog{width:min(440px,calc(100% - 28px));max-height:calc(100dvh - 36px - var(--mp-safe-top) - var(--mp-safe-bottom));padding:0;border:1px solid var(--border2);border-radius:16px;background:var(--surface);color:var(--text);box-shadow:0 18px 70px #0008;direction:rtl;overflow:auto}
 .pwa-install-dialog::backdrop{background:#08090bc9}

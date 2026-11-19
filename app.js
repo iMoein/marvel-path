@@ -139,17 +139,16 @@ function pwaPlatform(ua=navigator.userAgent,touch=navigator.maxTouchPoints){
  return 'desktop';
 }
 function pwaFooter(){
- return `<footer class="main-footer viewer-footer"><div class="footer-install"><div class="footer-install-copy"><strong>مسیر مارول همیشه همراهت</strong><p>برنامه را نصب کن تا دفعه بعد سریع‌تر به ماراتن و آرشیو دسترسی داشته باشی.</p></div><button type="button" class="btn btn-outline pwa-install-button" data-pwa-install ${pwaStandalone()?'disabled':''}>${ico(pwaStandalone()?'check':'download',17)} ${pwaStandalone()?'برنامه نصب شده':'نصب برنامه'}</button></div><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer>`;
+ return `<footer class="main-footer viewer-footer"><div class="footer-install" ${pwaStandalone()?'hidden':''}><div class="footer-install-copy"><strong>مسیر مارول همیشه همراهت</strong><p>برنامه را نصب کن تا دفعه بعد سریع‌تر به ماراتن و آرشیو دسترسی داشته باشی.</p></div><button type="button" class="btn btn-outline pwa-install-button" data-pwa-install>${ico('download',17)} نصب برنامه</button></div><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer>`;
 }
 function syncPwaFooter(){
- const b=document.querySelector('[data-pwa-install]');
- if(!b)return;
- const installed=pwaStandalone();b.disabled=installed;
- b.innerHTML=ico(installed?'check':'download',17)+' '+(installed?'برنامه نصب شده':'نصب برنامه');
+ const box=document.querySelector('.footer-install');
+ if(box)box.hidden=pwaStandalone();
 }
 window.addEventListener('beforeinstallprompt',e=>{if(ADMIN_MODE)return;e.preventDefault();pwaInstallPrompt=e;syncPwaFooter();});
 window.addEventListener('appinstalled',()=>{pwaInstallConfirmed=true;pwaInstallPrompt=null;document.querySelector('#pwa-install-dialog')?.close();syncPwaFooter();});
-matchMedia('(display-mode: standalone)').addEventListener?.('change',syncPwaFooter);
+for(const mode of ['standalone','window-controls-overlay'])matchMedia('(display-mode: '+mode+')').addEventListener?.('change',syncPwaFooter);
+window.addEventListener('pageshow',syncPwaFooter);
 function showPwaInstallGuide(){
  let dialog=document.getElementById('pwa-install-dialog');
  if(!dialog){dialog=document.createElement('dialog');dialog.id='pwa-install-dialog';dialog.className='pwa-install-dialog';dialog.setAttribute('aria-labelledby','pwa-install-heading');document.body.append(dialog);dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});}

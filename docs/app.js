@@ -118,17 +118,16 @@ function pwaPlatform(ua=navigator.userAgent,touch=navigator.maxTouchPoints){
  return 'desktop';
 }
 function pwaFooter(){
- return `<footer class="main-footer viewer-footer"><div class="footer-install"><div class="footer-install-copy"><strong>مسیر مارول همیشه همراهت</strong><p>برنامه را نصب کن تا دفعه بعد سریع‌تر به ماراتن و آرشیو دسترسی داشته باشی.</p></div><button type="button" class="btn btn-outline pwa-install-button" data-pwa-install ${pwaStandalone()?'disabled':''}>${ico(pwaStandalone()?'check':'download',17)} ${pwaStandalone()?'برنامه نصب شده':'نصب برنامه'}</button></div><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer>`;
+ return `<footer class="main-footer viewer-footer"><div class="footer-install" ${pwaStandalone()?'hidden':''}><div class="footer-install-copy"><strong>مسیر مارول همیشه همراهت</strong><p>برنامه را نصب کن تا دفعه بعد سریع‌تر به ماراتن و آرشیو دسترسی داشته باشی.</p></div><button type="button" class="btn btn-outline pwa-install-button" data-pwa-install>${ico('download',17)} نصب برنامه</button></div><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer>`;
 }
 function syncPwaFooter(){
- const b=document.querySelector('[data-pwa-install]');
- if(!b)return;
- const installed=pwaStandalone();b.disabled=installed;
- b.innerHTML=ico(installed?'check':'download',17)+' '+(installed?'برنامه نصب شده':'نصب برنامه');
+ const box=document.querySelector('.footer-install');
+ if(box)box.hidden=pwaStandalone();
 }
 window.addEventListener('beforeinstallprompt',e=>{if(ADMIN_MODE)return;e.preventDefault();pwaInstallPrompt=e;syncPwaFooter();});
 window.addEventListener('appinstalled',()=>{pwaInstallConfirmed=true;pwaInstallPrompt=null;document.querySelector('#pwa-install-dialog')?.close();syncPwaFooter();});
-matchMedia('(display-mode: standalone)').addEventListener?.('change',syncPwaFooter);
+for(const mode of ['standalone','window-controls-overlay'])matchMedia('(display-mode: '+mode+')').addEventListener?.('change',syncPwaFooter);
+window.addEventListener('pageshow',syncPwaFooter);
 function showPwaInstallGuide(){
  let dialog=document.getElementById('pwa-install-dialog');
  if(!dialog){dialog=document.createElement('dialog');dialog.id='pwa-install-dialog';dialog.className='pwa-install-dialog';dialog.setAttribute('aria-labelledby','pwa-install-heading');document.body.append(dialog);dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});}
@@ -153,7 +152,7 @@ function shell(body,active){const s=stats(routeIds());return `<div class="app-sh
  <aside class="sidebar"><a class="logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
  <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','timeline','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
- <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.25</div></aside>
+ <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.26</div></aside>
  <div class="workspace"><header class="topbar"><a class="mobile-logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="mini-m" aria-hidden="true">M</span><span>مسیر مارول</span></a><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions"><button type="button" class="mp-search-launch" data-global-search aria-label="جستجوی سراسری" aria-keyshortcuts="Meta+K Control+K">${ico('search',18)}<span>جستجو</span><kbd class="mp-search-hint"></kbd></button>${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status" role="status" title="${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}" data-storage-ok="${storageReady}"><span class="local-dot" aria-hidden="true"></span><span class="storage-label">${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main>${pwaFooter()}</div>
  <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','timeline','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
