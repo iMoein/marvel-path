@@ -233,3 +233,15 @@ respective rights holders. Public availability of this repository does not grant
 permission to redistribute third-party content.
 
 Created and maintained by [iMoein](https://github.com/iMoein).
+
+## License
+
+The original software in this repository is source-available under the
+[PolyForm Noncommercial License 1.0.0](LICENSE).
+
+Required Notice: Copyright 2026 Moein Ghezelbash (https://imoein.com/)
+
+Commercial use not permitted by the license requires separate permission from
+the copyright holder. Third-party assets, dependencies, metadata and trademarks
+remain subject to their respective rights and license terms. Previously granted
+licenses are not revoked by this change.
