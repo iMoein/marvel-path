@@ -20,11 +20,20 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
 
  const click=(action,value)=>ev(`document.querySelector('[data-action="${action}"][data-value="${value}"]').click()`);
  const select=(id,value)=>ev(`(()=>{const el=document.getElementById(${JSON.stringify(id)});el.value=${JSON.stringify(value)};el.dispatchEvent(new Event('change',{bubbles:true}));})()`);
- for(const width of [320,390,768,1024,1440,1577]){
+ for(const width of [320,360,390,430,700,701,768,850,1024,1099,1100,1440,1577,1787]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:width<=700});
   await go('/timeline/?test='+Date.now());
   let r=await ev(`(()=>{const cards=[...document.querySelectorAll('.release-entry')],planned=cards.filter(x=>x.classList.contains('release-planned')),nav=document.querySelector(widthTest());function widthTest(){return innerWidth<=700?'.mobile-nav':'.nav-column'}return {total:cards.length,future:planned.length,source:planned.every(x=>x.querySelector('.release-source')?.href.startsWith('https://')),noProgress:planned.every(x=>!x.querySelector('[data-action=toggle-done]')),unique:new Set(cards.map(x=>x.dataset.releaseId)).size,fit:document.documentElement.scrollWidth<=innerWidth+2&&cards.every(x=>x.scrollWidth<=x.clientWidth+2),nav:nav.querySelector('a[href="/timeline/"]')?.getAttribute('aria-current'),navFit:nav.scrollWidth<=nav.clientWidth+2,core:MCU.length}})()`);
   assert(r.total===97&&r.future===13&&r.unique===r.total&&r.core===83&&r.source&&r.noProgress&&r.fit&&r.nav==='page'&&r.navFit,JSON.stringify({width,...r}));
+  for(const theme of ['dark','light']){
+   await ev('document.documentElement.dataset.theme='+JSON.stringify(theme));
+   const layout=await ev(`(()=>{const c=document.querySelector('.release-controls'),t=c.querySelector('.filter-tabs'),buttons=[...t.querySelectorAll('button')].map(x=>x.getBoundingClientRect()),fields=[...c.querySelectorAll('.release-field')],triggers=fields.map(x=>x.querySelector('.mp-dd-trigger').getBoundingClientRect()),labels=fields.map(x=>x.querySelector('label').getBoundingClientRect()),r=c.getBoundingClientRect(),tab=t.getBoundingClientRect(),within=b=>b.left>=r.left-1&&b.right<=r.right+1;return {equal:Math.abs(buttons[0].width-buttons[1].width)<1&&Math.abs(buttons[1].width-buttons[2].width)<1&&Math.abs(triggers[0].width-triggers[1].width)<1,sameRows:buttons.every(b=>Math.abs(b.top-buttons[0].top)<1)&&Math.abs(triggers[0].top-triggers[1].top)<1,fit:[...buttons,...triggers,...labels].every(within)&&c.scrollWidth<=c.clientWidth+1,labels:labels.every((b,i)=>b.bottom<triggers[i].top),row:innerWidth<1100?tab.bottom<=labels[0].top&&Math.abs(tab.width-r.width)<1:Math.abs(tab.bottom-triggers[0].bottom)<1,touch:triggers.every(b=>b.height>=44)&&buttons.every(b=>b.height>=36),noTruncation:fields.every(x=>{const v=x.querySelector('.mp-dd-value');return v.scrollWidth<=v.clientWidth+1}),accessible:fields.every(x=>x.querySelector('.mp-dd-trigger').getAttribute('aria-labelledby').includes(x.querySelector('label').id))}})()`);
+   assert(Object.values(layout).every(Boolean),JSON.stringify({width,theme,layout}));
+  }
+  await ev("document.querySelector('.release-controls').scrollIntoView({block:'center',behavior:'instant'});document.querySelector('#release-type-custom').click()");
+  assert(await ev("!!document.querySelector('.mp-dd-menu')&&document.querySelector('#release-type-custom').getAttribute('aria-expanded')==='true'"),'custom dropdown opens');
+  await ev("document.querySelector('#release-type-custom').dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))");
+  assert(await ev("!document.querySelector('.mp-dd-menu')"),'custom dropdown closes');
   await click('release-filter','planned');
   assert(await ev('document.querySelectorAll(".release-entry").length===13&&!document.querySelector(".release-entry:not(.release-planned)")'),'future filter');
   await select('release-type','movie');
