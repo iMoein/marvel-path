@@ -751,3 +751,22 @@ html.mp-gs-open{overflow:hidden}
  #toasts .toast{max-width:100%;padding:10px 15px;font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){#toasts .toast,#toasts .toast.fade{animation:none;transition:none}}
+
+/* Next-up title, label and cover are independent native links. */
+.feature .feature-next-label{direction:rtl;justify-content:flex-start;text-align:right;align-self:flex-start;width:100%;letter-spacing:0;gap:10px}
+.feature .feature-next-label i{flex:none;margin-inline-start:5px}
+.feature h1{margin-inline-start:auto;margin-inline-end:0}
+.feature-title-link{color:inherit;text-decoration:none;display:inline;transition:color .16s}
+.feature-title-link:hover{color:#f4b9bc}
+.feature a.feature-poster{display:block;position:relative;z-index:1;cursor:pointer;border-radius:10px}
+.feature-title-link:focus-visible,.feature a.feature-poster:focus-visible,.title-external-link:focus-visible{outline:2px solid var(--red);outline-offset:4px}
+.title-external-links{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:14px}
+.title-external-link{display:inline-flex;align-items:center;gap:7px;min-height:34px;border:1px solid #ffffff29;background:#ffffff08;color:#d0cbd2;padding:6px 10px;border-radius:8px;text-decoration:none;font-size:11px;line-height:1.6;transition:background .16s,border-color .16s}
+.title-external-link:hover{border-color:#ef3340;color:white;background:#ef33401c}
+.title-external-link svg{flex:none}
+@media(max-width:700px){
+ .feature .feature-next-label{font-size:11px;gap:8px}
+ .title-external-link{min-height:40px;font-size:11px;padding:7px 10px}
+ .title-external-links{gap:6px}
+}
+@media(max-width:350px){.feature a.feature-poster{display:none}}

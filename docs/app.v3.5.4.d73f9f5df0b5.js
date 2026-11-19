@@ -64,7 +64,8 @@ function normalize(data){const out=blank();if(!data||typeof data!=='object')retu
 }
 function upgrade(old){const out=blank();if(!old||typeof old!=='object')return out;out.order=old.order||'story';out.theme=old.theme||'dark';out.mcuPageSize=[10,20,50,'all'].includes(old.mcuPageSize)?old.mcuPageSize:10;out.notes=old.notes||{};out.watching=old.watching||{};out.saved={doomsday:safeIds(old.bookmarks||[]),mcu:safeIds((old.bookmarks||[]).filter(id=>BY_ID[id]?.universe==='mcu'))};for(const [id,val] of Object.entries(old.progress||{})){const f=BY_ID[id];if(!f)continue;if(f.episodes)out.episodes[id]=Array.from({length:clamp(Math.floor(Number(val)||0),0,f.episodes)},(_,i)=>i+1);else out.progress[id]=val}return normalize(out)}
 let state;let storageReady=true;try{const v2=localStorage.getItem(KEY),v1=localStorage.getItem(OLD_KEY);state=v2?normalize(JSON.parse(v2)):v1?upgrade(JSON.parse(v1)):blank();if(!v2&&v1)localStorage.setItem(KEY,JSON.stringify(state))}catch(e){state=blank();storageReady=false}
-let searchTerm='',detailOrigin='doomsday',statusTimeout;
+let searchTerm='',detailOrigin='doomsday';
+let activeToast=null;
 const getEpisodes=f=>state.episodes[f.id]||[];
 const fraction=f=>f.episodes?getEpisodes(f).length/f.episodes:clamp(Number(state.progress[f.id]||0)/maxVal(f),0,1);
 const done=f=>fraction(f)>=1;
@@ -75,7 +76,27 @@ function stats(ids){let watched=0,seenMinutes=0,totalMinutes=0,known=0;for(const
 const nextOf=ids=>ids.map(id=>BY_ID[id]).find(f=>f&&!done(f));
 function syncStorageIndicator(){const el=document.querySelector('.top-status[data-storage-ok]');if(!el)return;const message=storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات';el.dataset.storageOk=String(storageReady);el.title=message;const label=el.querySelector('.storage-label');if(label&&label.textContent!==message)label.textContent=message;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));storageReady=true}catch(e){storageReady=false;toast('ذخیره اطلاعات ممکن نشد. خروجی پشتیبان بگیر.','error')}finally{syncStorageIndicator()}}
-function toast(message,type='ok'){const el=document.createElement('div');el.className='toast '+type;el.textContent=message;document.getElementById('toasts').append(el);clearTimeout(statusTimeout);statusTimeout=setTimeout(()=>{el.classList.add('fade');setTimeout(()=>el.remove(),240)},2800)}
+function dismissToast(){
+ const current=activeToast;if(!current)return;
+ clearTimeout(current.fadeTimer);clearTimeout(current.removeTimer);
+ current.el.remove();activeToast=null;
+}
+function toast(message,type='ok'){
+ const host=document.getElementById('toasts');if(!host)return;
+ // Never hide a storage or request error behind a subsequent success message.
+ if(activeToast?.type==='error'&&type!=='error'&&!activeToast.el.classList.contains('fade'))return;
+ dismissToast();
+ const el=document.createElement('div');el.className='toast '+(type==='error'?'error':'ok');el.textContent=String(message);
+ host.replaceChildren(el);
+ const current={el,type,fadeTimer:null,removeTimer:null};activeToast=current;
+ current.fadeTimer=setTimeout(()=>{
+  if(activeToast!==current)return;
+  el.classList.add('fade');
+  current.removeTimer=setTimeout(()=>{if(activeToast===current)dismissToast();},240);
+ },type==='error'?4200:2000);
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)dismissToast();});
+window.addEventListener('pagehide',dismissToast);
 const arc=pct=>`<div class="progress-circle" style="--pct:${pct}%"><div><strong>${num(pct)}٪</strong><span>تکمیل</span></div></div>`;
 function poster(f,cls=''){const url=posterUrl(f);return `<div class="poster-art p-${esc(f.palette)} ${cls}" aria-label="پوستر ${esc(f.title)}">${url?`<img class="poster-image" data-poster-id="${esc(f.id)}" src="${esc(url)}" alt="پوستر ${esc(f.title)}" loading="lazy" referrerpolicy="no-referrer"/>`:''}<div class="poster-fallback"><div class="poster-mark">M<span>PATH</span></div><span class="poster-symbol">${esc(f.sigil)}</span><span class="poster-fallback-name" dir="ltr" lang="en">${esc(f.title)}</span></div></div>`}
 function artBackdrop(f){const url=posterUrl(f);return `<div class="feature-background p-${esc(f.palette)}" aria-hidden="true">${url?`<img class="poster-image" data-poster-id="${esc(f.id)}" src="${esc(url)}" alt="" referrerpolicy="no-referrer"/>`:''}<span class="feature-glow"></span></div>`}
@@ -88,11 +109,11 @@ function shell(body,active){const s=stats(routeIds());return `<div class="app-sh
  <aside class="sidebar"><a class="logo" href="#doomsday"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
  <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
- <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.2</div></aside>
+ <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.4</div></aside>
  <div class="workspace"><header class="topbar"><div class="mobile-logo"><span class="mini-m">M</span><span>مسیر مارول</span></div><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions"><button type="button" class="mp-search-launch" data-global-search aria-label="جستجوی سراسری" aria-keyshortcuts="Meta+K Control+K">${ico('search',18)}<span>جستجو</span><kbd class="mp-search-hint"></kbd></button>${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status" role="status" title="${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}" data-storage-ok="${storageReady}"><span class="local-dot" aria-hidden="true"></span><span class="storage-label">${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer"><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer></div>
  <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
-function feature(f,section){if(!f)return `<section class="feature feature-finished"><div class="feature-content"><span class="eyebrow">MISSION COMPLETE</span><h1>تمام مسیر رو دیدی!</h1><p>همه عنوان‌های این مسیر رو به پایان رسوندی.</p></div></section>`;return `<section class="feature">${artBackdrop(f)}<div class="feature-content"><div class="eyebrow with-dot"><i></i>${section==='doomsday'?'توقف بعدی در مسیر Doomsday':'ادامه داستان MCU'}</div><div class="feature-index"><span class="feature-kicker-en">UP NEXT</span><span class="feature-separator"></span><span>${f.year} / ${f.universe==='fox'?'FOX':'MCU'}</span></div><h1 dir="ltr" lang="en">${esc(f.title)}</h1><p>${esc(META[f.id]?.summary||'')}</p><div class="feature-tags">${pill(f)}<span>${duration(f.minutes)}</span><span>${f.episodes?`${num(f.episodes)} قسمت`:'نسخه سینمایی'}</span></div><div class="feature-ctas">${buttonOpen(f,watching(f)?'ادامه ثبت پیشرفت':'مشاهده و شروع تماشا')}<button class="btn btn-glass" data-action="toggle-save" data-id="${f.id}" data-scope="${section}">${ico('bookmark',16)} ${state.saved[section==='doomsday'?'doomsday':'mcu'].includes(f.id)?'حذف از لیست':'ذخیره در واچ‌لیست'}</button></div></div><div class="feature-poster">${poster(f,'feature-poster-frame')}</div><div class="feature-corner">THE MARVEL PATH COLLECTION / 001</div></section>`}
+function feature(f,section){if(!f)return `<section class="feature feature-finished"><div class="feature-content"><span class="eyebrow">MISSION COMPLETE</span><h1>تمام مسیر رو دیدی!</h1><p>همه عنوان‌های این مسیر رو به پایان رسوندی.</p></div></section>`;return `<section class="feature">${artBackdrop(f)}<div class="feature-content"><div class="eyebrow with-dot feature-next-label" dir="rtl"><i aria-hidden="true"></i><span>${section==='doomsday'?'توقف بعدی در مسیر Doomsday':'ادامه داستان MCU'}</span></div><div class="feature-index"><span class="feature-kicker-en">UP NEXT</span><span class="feature-separator"></span><span>${f.year} / ${f.universe==='fox'?'FOX':'MCU'}</span></div><h1 dir="ltr" lang="en"><a class="feature-title-link" href="#title/${encodeURIComponent(f.id)}">${esc(f.title)}</a></h1><p>${esc(META[f.id]?.summary||'')}</p><div class="feature-tags">${pill(f)}<span>${duration(f.minutes)}</span><span>${f.episodes?`${num(f.episodes)} قسمت`:'نسخه سینمایی'}</span></div><div class="feature-ctas">${buttonOpen(f,watching(f)?'ادامه ثبت پیشرفت':'مشاهده و شروع تماشا')}<button class="btn btn-glass" data-action="toggle-save" data-id="${f.id}" data-scope="${section}">${ico('bookmark',16)} ${state.saved[section==='doomsday'?'doomsday':'mcu'].includes(f.id)?'حذف از لیست':'ذخیره در واچ‌لیست'}</button></div></div><a class="feature-poster" href="#title/${encodeURIComponent(f.id)}" aria-label="مشاهده جزئیات ${esc(f.fa)}">${poster(f,'feature-poster-frame')}</a><div class="feature-corner">THE MARVEL PATH COLLECTION / 001</div></section>`}
 function metric(icon,label,value,sub){return `<div class="metric"><div class="metric-icon">${ico(icon,19)}</div><div><span>${label}</span><strong>${value}</strong><small>${sub}</small></div></div>`}
 function sectionTitle(title,description,link=''){return `<div class="section-head"><div><h2>${title}</h2><p>${description}</p></div>${link}</div>`}
 function filterButtons(scope,options,current){return `<div class="filter-tabs" aria-label="فیلترها">${options.map(([id,label])=>`<button type="button" class="filter-tab ${current===id?'selected':''}" data-action="filter" data-scope="${scope}" data-value="${id}">${label}</button>`).join('')}</div>`}
@@ -171,6 +192,7 @@ function cinemaHero(f,inDoom,inMcu){
           <button type="button" class="cinema-primary-action" data-action="detail-jump" data-value="watch-progress">${ico('play',17)} ${watched?'مشاهده پیشرفت':'ادامه تماشا و ثبت پیشرفت'}</button>
           <button type="button" class="cinema-ghost-action ${isSaved?'cinema-ghost-selected':''}" data-action="toggle-save" data-id="${esc(f.id)}" data-scope="${savedScope}">${ico('bookmark',18)} ${isSaved?'در واچ‌لیست':'افزودن به واچ‌لیست'}</button>
         </div>
+        ${titleExternalLinks(f)}
       </div>
       <div class="cinema-watch-metrics"><div><span>پیشرفت تو</span><strong>${num(pct)}<small>٪</small></strong></div><div><span>${f.episodes?'قسمت بعدی':'زمان باقی‌مانده'}</span><strong class="cinema-small-metric">${f.episodes?(next?'قسمت '+num(next):'تمام شده'):watched?'تمام شده':remaining}</strong></div></div>
     </div>

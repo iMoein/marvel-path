@@ -60,3 +60,13 @@ For Cloudflare, bypass cache for HTML navigations, /sw.js (all query strings),
 and /release.json. Long-lived caching remains appropriate for fingerprinted
 runtime assets. Existing pre-3.5.1 clients may need a one-time Service Worker
 unregister and reload; do not clear all site data.
+
+### Title source links (3.5.4)
+The catalogue has a same-origin embedded map of official title destinations in
+data.js. Marvel pages are used where their URLs are sourced; Disney Movies,
+Disney+ / Disney+ Press, Sony Pictures and 20th Century Studios provide
+alternative official title pages. Marvel's site returned HTTP 403 for automated
+requests in this environment. The Marvel search link is explicitly labelled
+as a search where a direct Marvel page has not been established. Season entries
+may use the parent series page. No external source is fetched by the viewer
+until the user opens an external link.
