@@ -1,6 +1,6 @@
 'use strict';
-const CORE='marvel-path-v33-core', DATA='marvel-path-v33-data';
-const SHELL=['./','./index.html','./style.css?v=3.3','./data.js?v=3.3','./meta.js?v=3.3','./posters.js?v=3.3','./admin.js?v=3.3','./enrichment.js?v=3.3','./app.js?v=3.3','./assets/favicon.svg','./assets/fonts/Vazirmatn-wght.woff2?v=33.003'];
+const CORE='marvel-path-v331-core', DATA='marvel-path-v331-data';
+const SHELL=['./','./index.html','./style.css?v=3.3.1','./data.js?v=3.3.1','./meta.js?v=3.3.1','./posters.js?v=3.3.1','./admin.js?v=3.3.1','./enrichment.js?v=3.3.1','./app.js?v=3.3.1','./assets/favicon.svg','./assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',event=>{self.skipWaiting();event.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).catch(()=>{}));});
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',event=>{

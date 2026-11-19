@@ -5,7 +5,7 @@ import json,re,hashlib
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'
 P=OUT/'public-data'
-VERSION='3.3'
+VERSION='3.3.1'
 def load(name,default=None):
     path=P/name
     return json.loads(path.read_text()) if path.exists() else default
@@ -35,8 +35,8 @@ def main():
         s=s[:start]+"const posterCandidates=f=>{const local=localCover(f);return local?[local]:[];};\n"+s[end:]
         start=s.index('function cinemaBackdropUrl(f){');end=s.index('function cinemaHero(',start)
         s=s[:start]+"function cinemaBackdropUrl(f){return posterUrl(f);}\n"+s[end:]
-        s=replace_once(s,"window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));","navigator.serviceWorker.register('./sw.js?v=3.3',{updateViaCache:'none'}).catch(()=>{});")
-        return s.replace("v3.0</div></aside>","v3.3</div></aside>")
+        s=replace_once(s,"window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));","navigator.serviceWorker.register('./sw.js?v=3.3.1',{updateViaCache:'none'}).catch(()=>{});")
+        return s.replace("v3.0</div></aside>","v3.3.1</div></aside>")
     edit('app.js',app)
     def enrichment(s):
         s=replace_once(s,'directory:null','directory:publicPeopleDirectory')
@@ -47,7 +47,7 @@ def main():
         start=s.index('let metadataTimer=null;');end=s.index("document.addEventListener('input'",start)
         s=s[:start]+"""async function publicJson(path){
  const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),12000);
- try{const r=await fetch(path+'?v=3.3',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
+ try{const r=await fetch(path+'?v=3.3.1',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
 }
 async function loadInfoForPage(page){
  if(page.name==='title'&&BY_ID[page.id]&&!information.requested.has(page.id)){
@@ -71,13 +71,13 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-retry-info
         font=OUT/'assets/fonts'/'Vazirmatn-wght.woff2'
         if not font.is_file() or not (font.parent/'OFL.txt').is_file():
             raise ValueError('The licensed local font is required')
-        if "url('./assets/fonts/Vazirmatn-wght.woff2?v=33.003')" not in s:
+        if "url('./assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2')" not in s:
             raise ValueError('Missing same-origin font declaration')
         return s
     edit('style.css',css)
     worker="""'use strict';
-const CORE='marvel-path-v33-core', DATA='marvel-path-v33-data';
-const SHELL=['./','./index.html','./style.css?v=3.3','./data.js?v=3.3','./meta.js?v=3.3','./posters.js?v=3.3','./admin.js?v=3.3','./enrichment.js?v=3.3','./app.js?v=3.3','./assets/favicon.svg','./assets/fonts/Vazirmatn-wght.woff2?v=33.003'];
+const CORE='marvel-path-v331-core', DATA='marvel-path-v331-data';
+const SHELL=['./','./index.html','./style.css?v=3.3.1','./data.js?v=3.3.1','./meta.js?v=3.3.1','./posters.js?v=3.3.1','./admin.js?v=3.3.1','./enrichment.js?v=3.3.1','./app.js?v=3.3.1','./assets/favicon.svg','./assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',event=>{self.skipWaiting();event.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).catch(()=>{}));});
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',event=>{
@@ -95,7 +95,7 @@ self.addEventListener('fetch',event=>{
         s=re.sub(r'<meta http-equiv="Content-Security-Policy"[^>]*>', '''<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests"/>''',s)
         s=re.sub(r'^\s*<link[^>]+href="https://(?:fonts\.|cdn\.jsdelivr)[^>]*>\s*','\n',s,flags=re.M)
         s=re.sub(r'<!-- Vazirmatn.*?-->','<!-- Public viewer uses only same-origin assets. -->',s)
-        s=re.sub(r'(src="(?:data|meta|posters|admin|enrichment|app)\.js|href="style\.css)(")',r'\1?v=3.3\2',s)
+        s=re.sub(r'(src="(?:data|meta|posters|admin|enrichment|app)\.js|href="style\.css)(")',r'\1?v=3.3.1\2',s)
         return s
     edit('index.html',html)
     print('Same-origin viewer:',len(posters),'posters;',len(directory['items']),'actors;',len(cache),'localized additional image URLs')
