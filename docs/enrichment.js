@@ -1,3 +1,4 @@
+let selectedMetadataTitle = "";
 'use strict';
 /* Metadata UX. Title progress stays exclusively in the v2 localStorage schema. */
 const information={titles:Object.create(null),people:Object.create(null),directory:publicPeopleDirectory,status:null,requested:new Set(),personRequested:new Set(),busy:false};
@@ -38,7 +39,7 @@ function personPage(id){const data=information.people[id],p=data?.data;
 }
 async function publicJson(path){
  const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),12000);
- try{const r=await fetch(path+'?v=3.4.2',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
+ try{const r=await fetch(path+'?v=3.4.3',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
 }
 async function loadInfoForPage(page){
  if(page.name==='title'&&BY_ID[page.id]&&!information.requested.has(page.id)){

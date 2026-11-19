@@ -87,7 +87,7 @@ function shell(body,active){const s=stats(routeIds());return `<div class="app-sh
  <aside class="sidebar"><a class="logo" href="#doomsday"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
  <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
- <div class="sidebar-end">MARVEL PATH <span> / </span> v3.4.2</div></aside>
+ <div class="sidebar-end">MARVEL PATH <span> / </span> v3.4.3</div></aside>
  <div class="workspace"><header class="topbar"><div class="mobile-logo"><span class="mini-m">M</span><span>مسیر مارول</span></div><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions">${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status"><span class="local-dot" title="داده‌ها فقط در مرورگر ذخیره می‌شوند"></span><span class="storage-label">ذخیره خودکار روشن است</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer"><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer></div>
  <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
@@ -133,9 +133,9 @@ function mcuPage(){const s=stats(MCU.map(f=>f.id)),visible=filterMCU(),{page,pag
  ${nextShelf(orderedMCU().map(f=>f.id),'mcu','ادامه تماشا و پیشنهادهای بعدی','بر اساس ترتیب انتخابی تو؛ تغییر ترتیب، تیک‌ها رو تغییر نمی‌ده.')}
  <div class="catalog-bar"><div class="order-selector"><span>چیدمان بر اساس</span><div class="segmented"><button data-action="order" data-value="story" class="${state.order==='story'?'selected':''}">خط زمانی وقوع</button><button data-action="order" data-value="release" class="${state.order==='release'?'selected':''}">تاریخ انتشار</button><button data-action="order" data-value="arc" class="${state.order==='arc'?'selected':''}">پیوستگی روایی</button></div></div><div class="layout-switch"><button data-action="view" data-value="grid" title="نمای پوسترها" class="${state.mcuView==='grid'?'selected':''}">${ico('grid',18)}</button><button data-action="view" data-value="list" title="نمای فهرست" class="${state.mcuView==='list'?'selected':''}">${ico('list',18)}</button></div></div>
  ${state.order==='arc'?`<div class="arc-picker-wrap"><label class="arc-picker-label" for="arc-pick">${ico('layers',17)} مسیر کدوم شخصیت / گروه رو دنبال می‌کنی؟</label><select id="arc-pick" class="arc-picker">${Object.entries(STORY_ARCS).map(([key,arc])=>`<option value="${esc(key)}" ${state.arc===key?'selected':''}>${esc(arc.name)} (${num(arc.items.length)} اثر)</option>`).join('')}</select></div>${arcSpotlight()}`:''}
- <div class="catalog-controls"><div class="search-field">${ico('search',18)}<input id="search" type="search" placeholder="جست‌وجوی فیلم، سریال یا شخصیت..." value="${esc(searchTerm)}" autocomplete="off"/><kbd>⌘ K</kbd></div><label class="select-wrap"><span>وضعیت</span><select id="status-filter"><option value="all" ${state.mcuStatus==='all'?'selected':''}>همه وضعیت‌ها</option><option value="remaining" ${state.mcuStatus==='remaining'?'selected':''}>دیده‌نشده</option><option value="inprogress" ${state.mcuStatus==='inprogress'?'selected':''}>در حال تماشا</option><option value="watched" ${state.mcuStatus==='watched'?'selected':''}>دیده‌شده</option></select></label></div>
+ <div class="catalog-controls"><div class="search-field">${ico('search',18)}<input id="search" type="search" placeholder="جست‌وجوی فیلم، سریال یا شخصیت..." value="${esc(searchTerm)}" autocomplete="off"/><kbd>⌘ K</kbd></div><div class="select-wrap"><span id="status-filter-label">وضعیت</span><select id="status-filter" aria-labelledby="status-filter-label"><option value="all" ${state.mcuStatus==='all'?'selected':''}>همه وضعیت‌ها</option><option value="remaining" ${state.mcuStatus==='remaining'?'selected':''}>دیده‌نشده</option><option value="inprogress" ${state.mcuStatus==='inprogress'?'selected':''}>در حال تماشا</option><option value="watched" ${state.mcuStatus==='watched'?'selected':''}>دیده‌شده</option></select></div></div>
  ${filterButtons('mcu',[['all','همه'],['movie','فیلم‌ها'],['series','سریال‌ها'],['animation','انیمیشن‌ها'],['special','ویژه‌برنامه‌ها']],state.mcuFilter)}
- <div class="listing-top"><div><strong>${num(visible.length)} عنوان</strong><span> · ${state.order==='story'?'بر اساس خط زمانی وقوع':state.order==='release'?'بر اساس تاریخ انتشار':'پیوستگی روایی · '+esc(arcInfo().name)}</span></div><div class="listing-actions"><label class="page-size-picker" for="page-size"><span>تعداد در صفحه</span><select id="page-size" aria-label="تعداد عناوین هر صفحه">${[10,20,50,'all'].map(sz=>`<option value="${sz}" ${state.mcuPageSize===sz?'selected':''}>${sz==='all'?'همه':num(sz)}</option>`).join('')}</select></label><span class="page-total">${state.mcuPageSize==='all'?'همه عناوین':num(page+1)+' از '+num(pages)+' صفحه'}</span></div></div>
+ <div class="listing-top"><div><strong>${num(visible.length)} عنوان</strong><span> · ${state.order==='story'?'بر اساس خط زمانی وقوع':state.order==='release'?'بر اساس تاریخ انتشار':'پیوستگی روایی · '+esc(arcInfo().name)}</span></div><div class="listing-actions"><div class="page-size-picker"><span>تعداد در صفحه</span><select id="page-size" aria-label="تعداد عناوین هر صفحه">${[10,20,50,'all'].map(sz=>`<option value="${sz}" ${state.mcuPageSize===sz?'selected':''}>${sz==='all'?'همه':num(sz)}</option>`).join('')}</select></div><span class="page-total">${state.mcuPageSize==='all'?'همه عناوین':num(page+1)+' از '+num(pages)+' صفحه'}</span></div></div>
  <div class="${state.mcuView==='grid'?'poster-grid':'compact-list'}">${mcuResultCards(paged,page,size)}</div>
  <div class="pagination"><button data-action="page" data-value="-1" ${page===0?'disabled':''}>${ico('chevron',16)} قبلی</button><span>صفحه ${num(page+1)} از ${num(pages)}</span><button data-action="page" data-value="1" ${page>=pages-1?'disabled':''}>بعدی ${ico('arrow',16)}</button></div>
  <p class="footnote">خط زمانی، ترتیب تقریبی وقوع رویدادهاست؛ مسیرهای پیوستگی روایی انتخاب سردبیری‌اند و لزوماً فهرست رسمی مارول نیستند. تیک‌ها بین هر سه حالت مشترک‌اند. زمان سریال‌ها تقریبی است.</p>`}
@@ -315,7 +315,167 @@ new MutationObserver(seoLinks).observe(document.getElementById('app'),{childList
 document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a)return;const href=a.getAttribute('href');if(href==='/archive/'||href==='/actors/'||href==='/'){try{sessionStorage.setItem('marvel-path-origin',href==='/'?'doomsday':href==='/archive/'?'mcu':'people');}catch(_){}}});
 
 
-if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost','127.0.0.1'].includes(location.hostname))){navigator.serviceWorker.register('/sw.js?v=3.4.2',{updateViaCache:'none'}).catch(()=>{});}
+if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost','127.0.0.1'].includes(location.hostname))){navigator.serviceWorker.register('/sw.js?v=3.4.3',{updateViaCache:'none'}).catch(()=>{});}
+
+/* Shared accessible select enhancement. The native select remains the source
+   of truth, so existing change handlers and admin requests stay unchanged. */
+(()=>{
+ const app=document.getElementById('app');
+ if(!app)return;
+ const entries=new WeakMap();
+ let current=null, serial=0, typeBuffer='', typeTimer=0;
+ const paths={
+  chevron:'m6 9 6 6 6-6', check:'m5 12 4 4L19 6',
+  layers:'m12 3 9 5-9 5-9-5 9-5M3 12l9 5 9-5M3 16l9 5 9-5',
+  play:'M9 5v14l11-7z', circle:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18',
+  grid:'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h6v6h-6z',
+  film:'M4 4h16v16H4z M8 4v16M16 4v16M4 9h4M4 15h4M16 9h4M16 15h4'
+ };
+ function icon(name,cls){
+  const ns='http://www.w3.org/2000/svg', svg=document.createElementNS(ns,'svg'), path=document.createElementNS(ns,'path');
+  svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');svg.setAttribute('class',cls||'');
+  path.setAttribute('d',paths[name]||paths.circle);path.setAttribute('fill','none');path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.8');path.setAttribute('stroke-linecap','round');path.setAttribute('stroke-linejoin','round');svg.append(path);return svg;
+ }
+ function optionIcon(select,option){
+  if(select.id==='status-filter')return ({all:'layers',remaining:'circle',inprogress:'play',watched:'check'})[option.value]||'circle';
+  if(select.id==='page-size')return 'grid';
+  if(select.id==='metadata-title-picker')return 'film';
+  return 'layers';
+ }
+ function close(restore=false){
+  if(!current)return;
+  const e=current;current=null;clearTimeout(typeTimer);typeBuffer='';
+  e.trigger.setAttribute('aria-expanded','false');e.trigger.removeAttribute('aria-activedescendant');
+  e.menu?.remove();e.menu=null;e.active=-1;
+  if(restore&&e.trigger.isConnected)e.trigger.focus({preventScroll:true});
+ }
+ function update(e){
+  const o=e.select.options[e.select.selectedIndex];
+  const value=o?.textContent.trim()||'انتخاب گزینه';
+  if(e.label.textContent!==value)e.label.textContent=value;
+  if(e.trigger.disabled!==e.select.disabled)e.trigger.disabled=e.select.disabled;
+  e.trigger.setAttribute('aria-disabled',String(e.select.disabled));
+ }
+ function place(e){
+  if(current!==e||!e.trigger.isConnected){close();return;}
+  const r=e.trigger.getBoundingClientRect(),v=window.visualViewport;
+  const left=v?.offsetLeft||0,top=v?.offsetTop||0,w=v?.width||document.documentElement.clientWidth,h=v?.height||innerHeight;
+  const padding=8, gap=6;
+  const probe=document.createElement('div');probe.className='mp-dd-safe-probe';document.body.append(probe);
+  const computed=getComputedStyle(probe),pt=parseFloat(computed.paddingTop)||0,pb=parseFloat(computed.paddingBottom)||0,pl=parseFloat(computed.paddingLeft)||0,pr=parseFloat(computed.paddingRight)||0;probe.remove();
+  let minY=top+pt+padding,maxY=top+h-pb-padding;
+  const header=app.querySelector('.topbar')?.getBoundingClientRect();
+  const nav=app.querySelector('.mobile-nav');
+  if(header&&header.height&&header.top<=minY+10)minY=Math.max(minY,header.bottom+padding);
+  if(nav&&getComputedStyle(nav).display!=='none'){const n=nav.getBoundingClientRect();if(n.height)maxY=Math.min(maxY,n.top-padding);}
+  if(r.bottom<=minY||r.top>=maxY){close();return;}
+  const minX=left+pl+padding,maxX=left+w-pr-padding;
+  const width=Math.min(Math.max(r.width, e.select.id==='metadata-title-picker'?300:180),Math.max(1,maxX-minX));
+  e.menu.style.width=width+'px';
+  const down=maxY-r.bottom-gap,up=r.top-minY-gap;
+  const desired=Math.min(e.menu.scrollHeight+2,320);
+  const above=down<desired&&up>down;
+  const available=Math.max(0,above?up:down);
+  if(available<36){close();return;}
+  e.menu.style.maxHeight=Math.min(320,available)+'px';
+  e.menu.dataset.side=above?'up':'down';
+  e.menu.style.left=Math.max(minX,Math.min(r.right-width,maxX-width))+'px';
+  e.menu.style.top=(above?Math.max(minY,r.top-gap-e.menu.offsetHeight):r.bottom+gap)+'px';
+  e.menu.style.visibility='visible';
+ }
+ function focusOption(e,index){
+  if(current!==e||!e.rows[index]||e.rows[index].getAttribute('aria-disabled')==='true')return;
+  e.active=index;e.rows.forEach((row,i)=>row.classList.toggle('is-active',i===index));
+  e.trigger.setAttribute('aria-activedescendant',e.rows[index].id);
+  const row=e.rows[index],menu=e.menu;
+  if(row.offsetTop<menu.scrollTop)menu.scrollTop=row.offsetTop;
+  else if(row.offsetTop+row.offsetHeight>menu.scrollTop+menu.clientHeight)menu.scrollTop=row.offsetTop+row.offsetHeight-menu.clientHeight;
+ }
+ function enabled(e){return Array.from(e.select.options).map((o,i)=>o.disabled||o.hidden||o.parentElement?.disabled?-1:i).filter(i=>i>=0);}
+ function open(e,first=null){
+  if(e.select.disabled)return;
+  if(current===e){close(true);return;}
+  close();e.trigger.focus({preventScroll:true});current=e;e.active=-1;
+  const menu=document.createElement('div');menu.className='mp-dd-menu';menu.id=e.menuId;menu.setAttribute('role','listbox');menu.setAttribute('aria-labelledby',e.trigger.id);menu.dir='rtl';menu.style.visibility='hidden';e.menu=menu;e.rows=[];
+  Array.from(e.select.options).forEach((opt,i)=>{
+   const row=document.createElement('div'),label=document.createElement('span');
+   row.id=e.menuId+'-opt-'+i;row.className='mp-dd-option';row.setAttribute('role','option');row.dataset.index=String(i);row.setAttribute('aria-selected',String(opt.selected));row.setAttribute('aria-disabled',String(!!(opt.disabled||opt.parentElement?.disabled)));row.hidden=opt.hidden;
+   label.className='mp-dd-option-label';label.textContent=opt.textContent.trim();label.dir='auto';
+   row.append(icon(optionIcon(e.select,opt),'mp-dd-option-icon'),label,icon('check','mp-dd-check'));
+   e.rows.push(row);menu.append(row);
+  });
+  menu.addEventListener('pointerdown',ev=>{if(ev.pointerType==='mouse')ev.preventDefault();});
+  menu.addEventListener('click',ev=>{const row=ev.target.closest('[role="option"]');if(row&&row.getAttribute('aria-disabled')!=='true')choose(e,Number(row.dataset.index));});
+  document.body.append(menu);e.trigger.setAttribute('aria-expanded','true');place(e);
+  if(current!==e)return;
+  const items=enabled(e);focusOption(e,first??(items.includes(e.select.selectedIndex)?e.select.selectedIndex:items[0]));
+ }
+ function choose(e,index){
+  if(!enabled(e).includes(index))return;
+  const old=e.select.selectedIndex, id=e.select.id;
+  close(true);
+  if(old!==index){e.select.selectedIndex=index;update(e);e.select.dispatchEvent(new Event('input',{bubbles:true}));e.select.dispatchEvent(new Event('change',{bubbles:true}));}
+  // A filter change may rebuild the entire page.
+  scan();const next=id?document.getElementById(id):e.select;
+  entries.get(next)?.trigger.focus({preventScroll:true});
+ }
+ function key(e,ev){
+  if(ev.ctrlKey||ev.metaKey||ev.altKey)return;
+  const k=ev.key, opened=current===e, items=enabled(e);
+  if(k==='Escape'&&opened){ev.preventDefault();ev.stopPropagation();close(true);return;}
+  if(k==='Tab'){if(opened)close();return;}
+  if(!items.length)return;
+  if(k==='Enter'||k===' '){ev.preventDefault();if(opened)choose(e,e.active);else open(e);return;}
+  if(['ArrowDown','ArrowUp','Home','End'].includes(k)){
+   ev.preventDefault();
+   const active=opened?e.active:e.select.selectedIndex;
+   const i=items.indexOf(active);
+   const idx=k==='Home'?items[0]:k==='End'?items.at(-1):items[Math.max(0,Math.min(items.length-1,i+(k==='ArrowDown'?1:-1)))];
+   if(!opened)open(e,idx);else focusOption(e,idx);return;
+  }
+  if(k.length===1){
+   clearTimeout(typeTimer);typeBuffer+=k.toLocaleLowerCase();typeTimer=setTimeout(()=>typeBuffer='',550);
+   const query=typeBuffer.normalize('NFKC'),start=items.indexOf(opened?e.active:e.select.selectedIndex);
+   const ordered=items.slice(start+1).concat(items.slice(0,start+1));
+   const match=ordered.find(i=>e.select.options[i].textContent.trim().toLocaleLowerCase().normalize('NFKC').startsWith(query));
+   if(match!==undefined){ev.preventDefault();if(!opened)open(e,match);else focusOption(e,match);}
+  }
+ }
+ function enhance(select){
+  if(entries.has(select)||select.multiple||select.size>1)return;
+  const trigger=document.createElement('button'),label=document.createElement('span');
+  const id=select.id||'mp-select-'+(++serial);
+  trigger.id=id+'-custom';trigger.type='button';trigger.className='mp-dd-trigger';trigger.setAttribute('role','combobox');trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');
+  const menuId=id+'-options';trigger.setAttribute('aria-controls',menuId);
+  label.className='mp-dd-value';label.id=id+'-value';label.dir='auto';
+  const external=Array.from(select.labels||[]).find(l=>l.htmlFor===select.id);
+  const labelled=select.getAttribute('aria-labelledby');
+  if(external){if(!external.id)external.id=id+'-label';external.htmlFor=trigger.id;}
+  if(labelled||external)trigger.setAttribute('aria-labelledby',(labelled||external.id)+' '+label.id);
+  else{const name=document.createElement('span');name.className='mp-dd-sr';name.id=id+'-label';name.textContent=select.getAttribute('aria-label')||'انتخاب گزینه';trigger.append(name);trigger.setAttribute('aria-labelledby',name.id+' '+label.id);}
+  trigger.append(label,icon('chevron','mp-dd-chevron'));
+  const e={select,trigger,label,menuId,menu:null,rows:[],active:-1};
+  entries.set(select,e);
+  select.insertAdjacentElement('afterend',trigger);
+  select.classList.add('mp-dd-native');select.tabIndex=-1;select.setAttribute('aria-hidden','true');
+  update(e);
+  trigger.addEventListener('click',()=>open(e));
+  trigger.addEventListener('keydown',ev=>key(e,ev));
+  select.addEventListener('change',()=>update(e));
+ }
+ function scan(){
+  if(current&&!current.trigger.isConnected)close();
+  app.querySelectorAll('select').forEach(s=>{enhance(s);const e=entries.get(s);if(e)update(e);});
+ }
+ new MutationObserver(scan).observe(app,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','selected']});
+ document.addEventListener('pointerdown',ev=>{if(current&&!current.trigger.contains(ev.target)&&!current.menu?.contains(ev.target))close();},true);
+ document.addEventListener('focusin',ev=>{if(current&&!current.trigger.contains(ev.target)&&!current.menu?.contains(ev.target))close();});
+ window.addEventListener('resize',()=>{if(current)place(current);});
+ window.addEventListener('scroll',ev=>{if(current&&!(ev.target instanceof Node&&current.menu?.contains(ev.target)))place(current);},true);
+ window.visualViewport?.addEventListener('resize',()=>{if(current)place(current);});
+ window.visualViewport?.addEventListener('scroll',()=>{if(current)place(current);});
+ scan();
+})();
 
 document.addEventListener('error',e=>{const img=e.target;if(img.matches?.('.actor-img img,.person-portrait img'))img.remove();else if(img.matches?.('.episode-still img'))img.parentNode.remove();},true);
 

@@ -1,6 +1,6 @@
 'use strict';
-const CORE='marvel-path-v342-core', DATA='marvel-path-v340-data';
-const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.4.2','/data.js?v=3.4.2','/meta.js?v=3.4.2','/posters.js?v=3.4.2','/admin.js?v=3.4.2','/enrichment.js?v=3.4.2','/app.js?v=3.4.2','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
+const CORE='marvel-path-v343-core', DATA='marvel-path-v340-data';
+const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.4.3','/data.js?v=3.4.3','/meta.js?v=3.4.3','/posters.js?v=3.4.3','/admin.js?v=3.4.3','/enrichment.js?v=3.4.3','/app.js?v=3.4.3','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{
