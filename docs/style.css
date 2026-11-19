@@ -974,6 +974,14 @@ html.mp-gs-open{overflow:hidden}
 .episode-meta>span{min-width:0;max-width:100%;overflow-wrap:anywhere}
 .episode-meta .episode-meta-date{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
 
+/* Keep both route choices available throughout the Doomsday marathon. */
+.route-mode-switch{position:sticky;top:calc(var(--mp-bar-height) + var(--mp-safe-top));z-index:24;isolation:isolate;animation:none;box-shadow:0 8px 20px -14px #000a}
+@media(max-width:850px){.route-mode-segments{min-width:0;width:100%}}
+@media(max-width:700px){
+ .route-mode-switch{top:calc(var(--mp-bar-height) + var(--mp-header-safe));gap:8px;padding:10px 12px}
+ .route-mode-segments button{min-height:36px}
+}
+
 .public-people-pager{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;color:var(--muted);font-size:12px}.public-people-pager button:disabled{opacity:.4;cursor:not-allowed}
 
 .seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}

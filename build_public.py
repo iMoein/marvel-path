@@ -58,7 +58,7 @@ s=s.replace("if(typeof url!=='string')return '';", "if(typeof url!=='string')ret
 # Keep all stored filmography records accessible, rather than truncating after 48.
 s=s.replace('external.slice(0,48).map','external.map')
 # Escape years too, even for data originating from a trusted source.
-s=s.replace("$"+"{x.year||'—'}","$"+"{esc(x.year||'—')}")
+
 s=s.replace('در حال خواندن فهرست بازیگران از دیسک…','در حال بارگذاری فهرست بازیگران…')
 # Page the full actor directory in the public viewer to avoid rendering thousands of cards.
 start=s.index('function peopleCards('); end=s.index('function personPage(',start)

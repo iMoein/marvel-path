@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.5.15'; SITE='https://marvel.imoein.com'
+VERSION='3.5.16'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -157,7 +157,7 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
     with css.open('a') as f:f.write('\n.seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}\n')
     worker="""'use strict';
 const CORE='marvel-path-v3512-core', DATA='marvel-path-v340-data';
-const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.15','/data.js?v=3.5.15','/meta.js?v=3.5.15','/posters.js?v=3.5.15','/admin.js?v=3.5.15','/enrichment.js?v=3.5.15','/app.js?v=3.5.15','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
+const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.16','/data.js?v=3.5.16','/meta.js?v=3.5.16','/posters.js?v=3.5.16','/admin.js?v=3.5.16','/enrichment.js?v=3.5.16','/app.js?v=3.5.16','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{
