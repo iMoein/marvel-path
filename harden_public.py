@@ -43,7 +43,8 @@ def main():
         start=s.index('const safePhoto=');end=s.index('const picture=',start)
         s=s[:start]+r"""const safePhoto=url=>{if(typeof url!=='string')return '';if(/^\.\/public-data\/images\/(?:people|remote)\/[a-z0-9-]+\.webp$/.test(url))return url;return Object.hasOwn(publicImageMap,url)?publicImageMap[url]:'';};
 """+s[end:]
-        s=re.sub(r' const image=safePhoto\(ep\?\.image\).*?;\n',' const image=safePhoto(ep?.image);\n',s,count=1)
+        s,n=re.subn(r'^ const image=.*?;\n',' const image=safePhoto(ep?.image);\n',s,count=1,flags=re.M)
+        if n!=1:raise ValueError('Missing episode image resolver')
         start=s.index('let metadataTimer=null;');end=s.index("document.addEventListener('input'",start)
         s=s[:start]+"""async function publicJson(path){
  const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),12000);
@@ -92,7 +93,7 @@ self.addEventListener('fetch',event=>{
 """
     (OUT/'sw.js').write_text(worker)
     def html(s):
-        s=re.sub(r'<meta http-equiv="Content-Security-Policy"[^>]*>', '''<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests"/>''',s)
+        s=re.sub(r'<meta http-equiv="Content-Security-Policy"[^>]*>', '''<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests"/>''',s)
         s=re.sub(r'^\s*<link[^>]+href="https://(?:fonts\.|cdn\.jsdelivr)[^>]*>\s*','\n',s,flags=re.M)
         s=re.sub(r'<!-- Vazirmatn.*?-->','<!-- Public viewer uses only same-origin assets. -->',s)
         s=re.sub(r'(src="(?:data|meta|posters|admin|enrichment|app)\.js|href="style\.css)(")',r'\1?v=3.3.1\2',s)

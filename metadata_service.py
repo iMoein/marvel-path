@@ -19,6 +19,8 @@ import urllib.parse
 import urllib.request
 import unicodedata
 from pathlib import Path
+import episode_cache
+import localize_catalog
 
 ROOT=Path(__file__).resolve().parent
 BASE=ROOT/'assets'/'metadata'
@@ -155,20 +157,70 @@ def tmdb_lookup(item):
     if score(match)<3:raise ValueError('تطبیق مطمئن برای این عنوان یافت نشد.')
     return match['id']
 
+POSTER_LOOKUPS=BASE/'poster-candidates'
+def cached_poster_candidates(id_):
+    if id_ not in CATALOG:return []
+    prev=get_json(TITLES/(id_+'.json')) or {}
+    saved=get_json(POSTER_LOOKUPS/(id_+'.json')) or {}
+    if id_ in localize_catalog.MISMATCH and prev.get('tmdbId')==localize_catalog.MISMATCH[id_]:prev={}
+    urls=[prev.get('poster'),prev.get('seriesPoster'),*saved.get('urls',[])]
+    return list(dict.fromkeys(u for u in urls if isinstance(u,str) and u.startswith('https://image.tmdb.org/t/p/') and episode_cache.allowed(u)))[:8]
+
+def tmdb_poster_candidates(id_):
+    """Resolve artwork server-side, using the season before the series."""
+    item=lookup.get(id_)
+    if not item or not token():return []
+    kind=item['kind']
+    prev=get_json(TITLES/(id_+'.json')) or {}
+    tmdb_id=prev.get('tmdbId')
+    if id_ in localize_catalog.MISMATCH and tmdb_id==localize_catalog.MISMATCH[id_]:tmdb_id=None
+    if not isinstance(tmdb_id,int) or isinstance(tmdb_id,bool) or tmdb_id<=0:
+        tmdb_id=tmdb_lookup(item)
+    path=f'/{kind}/{tmdb_id}'
+    obj=tmdb(path,{'language':'en-US'})
+    expected=norm(base_title(item['name']))
+    names=[obj.get(k) or '' for k in ('title','original_title','name','original_name')]
+    if not expected or not any(norm(n)==expected for n in names if n):
+        raise ValueError('عنوان پوستر با اثر انتخاب‌شده تطبیق ندارد.')
+    def paths(record):
+        return [safe_image(record.get('poster_path'),'w500')]
+    def image_list(endpoint):
+        try:
+            images=tmdb(endpoint+'/images',{'include_image_language':'en,null'})
+            return [safe_image(x.get('file_path'),'w500') for x in images.get('posters',[])[:4]]
+        except (ValueError,OSError,urllib.error.URLError,TimeoutError):
+            return []
+    candidates=[]
+    if kind=='tv':
+        season_path=path+'/season/'+str(item['season'])
+        season_obj=tmdb(season_path,{'language':'en-US'})
+        candidates.extend(paths(season_obj))
+        if not any(candidates):candidates.extend(image_list(season_path))
+    candidates.extend(paths(obj))
+    if not any(candidates):candidates.extend(image_list(path))
+    urls=list(dict.fromkeys(u for u in candidates if u))[:8]
+    if urls:atomic_json(POSTER_LOOKUPS/(id_+'.json'),{'urls':urls,'tmdbId':tmdb_id,'season':item['season']})
+    return urls
+
 def title_info_tmdb(id_, item):
     title=base_title(item['name']);kind=item['kind'];season=item['season']
     prev=title_record(id_)
     tmdb_id=(prev or {}).get('tmdbId')
+    if id_ in localize_catalog.MISMATCH and localize_catalog.MISMATCH[id_]==tmdb_id:tmdb_id=None
     if not isinstance(tmdb_id,int):tmdb_id=tmdb_lookup(item)
+    if id_ in localize_catalog.MISMATCH and localize_catalog.MISMATCH[id_]==tmdb_id:raise ValueError('شناسه منبع با این اثر تطبیق ندارد.')
     obj=tmdb('/'+kind+'/'+str(tmdb_id),{'append_to_response':'credits','language':'en-US'})
     credits=(obj.get('credits') or {}).get('cast') or []
     cast=[cast_item(x.get('name',''),x.get('character') or '',safe_image(x.get('profile_path')),x.get('id'),x.get('order',0)) for x in credits[:40] if x.get('id') and x.get('name')]
     director=', '.join(x['name'] for x in (obj.get('credits') or {}).get('crew',[]) if x.get('job')=='Director')[:150]
     episodic=[]
+    series_poster=safe_image(obj.get('poster_path'),'w500')
+    poster=series_poster
     if kind=='tv':
         season_obj=tmdb('/tv/'+str(tmdb_id)+'/season/'+str(season),{'language':'en-US'})
+        poster=safe_image(season_obj.get('poster_path'),'w500') or series_poster
         episodic=[{'number':int(e['episode_number']),'name':e.get('name') or '','overview':e.get('overview') or '', 'runtime':e.get('runtime'), 'airDate':e.get('air_date') or '', 'image':safe_image(e.get('still_path'),'w300')} for e in season_obj.get('episodes',[]) if isinstance(e.get('episode_number'),int) and e.get('episode_number')>0]
-    return {'id':id_,'title':item['name'],'overview':obj.get('overview') or '', 'tagline':obj.get('tagline') or '', 'genres':[x['name'] for x in obj.get('genres',[]) if x.get('name')], 'cast':cast,'episodes':episodic,'director':director,'tmdbId':tmdb_id,'type':kind,'season':season,'source':'TMDB','sourceUrl':f'https://www.themoviedb.org/{kind}/{tmdb_id}', 'fetchedAt':clock()}
+    return {'id':id_,'title':item['name'],'overview':obj.get('overview') or '', 'tagline':obj.get('tagline') or '', 'genres':[x['name'] for x in obj.get('genres',[]) if x.get('name')], 'cast':cast,'episodes':episodic,'director':director,'tmdbId':tmdb_id,'poster':poster,'seriesPoster':series_poster,'type':kind,'season':season,'source':'TMDB','sourceUrl':f'https://www.themoviedb.org/{kind}/{tmdb_id}', 'fetchedAt':clock()}
 
 def title_info_tvmaze(id_,item):
     title=base_title(item['name']);season=item['season']
@@ -196,7 +248,7 @@ def cache_cast_photos(cast):
         pid=p.get('personId','')
         url=p.get('photo','')
         if not pid or not re.fullmatch(r'[a-z0-9-]{1,110}',pid) or not url:continue
-        existing=next((HEADSHOTS/(pid+ext) for ext in ('.jpg','.png') if (HEADSHOTS/(pid+ext)).exists()),None)
+        existing=next((HEADSHOTS/(pid+ext) for ext in ('.webp','.jpg','.png') if (HEADSHOTS/(pid+ext)).exists()),None)
         if existing and existing.stat().st_size>100: p['photo']='./assets/people/'+existing.name;continue
         parts=urllib.parse.urlsplit(url)
         if parts.hostname not in {'image.tmdb.org','static.tvmaze.com','cdn.tvmaze.com'} or parts.scheme!='https':continue
@@ -377,9 +429,46 @@ def update_person(pid):
     return person_info(pid)
 
 
-def sync_one(id_,allow_cached=False):
+def title_missing(id_,record=None):
+    """Required metadata and referenced-but-not-cached artwork are separate."""
+    item=lookup[id_]
+    r=record if record is not None else get_json(TITLES/(id_+'.json'))
+    if not isinstance(r,dict) or not r:return ['record']
+    if r.get('sourceMismatch') or (id_ in localize_catalog.MISMATCH and r.get('tmdbId')==localize_catalog.MISMATCH[id_]):return ['source']
+    missing=[k for k in ('overview','cast') if not r.get(k)]
+    if item['episodes']:
+        episodes={e.get('number'):e for e in r.get('episodes',[]) if isinstance(e,dict)}
+        if any(not all(episodes.get(n,{}).get(k) for k in ('name','overview','airDate','runtime')) for n in range(1,item['episodes']+1)):
+            missing.append('episodes')
+    return missing
+
+def missing_episode_images(record):
+    return sum(1 for e in (record or {}).get('episodes',[]) if episode_cache.allowed(e.get('image')) and not episode_cache.cached_path(e['image']))
+
+def merge_title(old,new,force=False):
+    """Missing-only keeps existing fields and merges episode rows by number."""
+    def merge(a,b):
+        out=dict(a)
+        for k,v in b.items():
+            if v not in (None,'',[],{}) and (force or not out.get(k)):out[k]=v
+            elif k not in out:out[k]=v
+        return out
+    out=merge(old,new)
+    before={e['number']:e for e in old.get('episodes',[]) if isinstance(e,dict) and isinstance(e.get('number'),int)}
+    after={e['number']:e for e in new.get('episodes',[]) if isinstance(e,dict) and isinstance(e.get('number'),int)}
+    out['episodes']=[merge(before.get(n,{}),after.get(n,{})) for n in sorted(before.keys()|after.keys())]
+    out['lastSyncAt']=clock()
+    return out
+
+def sync_one(id_,allow_cached=False,force=False):
     if id_ not in CATALOG:raise ValueError('شناسه معتبر نیست.')
-    if allow_cached and title_record(id_):return title_record(id_)
+    old=get_json(TITLES/(id_+'.json')) or {}
+    missing=title_missing(id_,old)
+    if not force and not missing:
+        report=episode_cache.cache_record(old) if missing_episode_images(old) else {}
+        if report.get('failed'):raise ValueError('دریافت برخی تصاویر قسمت‌ها ناموفق بود.')
+        return old
+    if allow_cached and old and not force:return old
     item=lookup[id_]
     errors=[];result=None
     if token():
@@ -403,15 +492,23 @@ def sync_one(id_,allow_cached=False):
                 if not result.get('cast'):result['cast']=alt['cast']
             except Exception:pass
     result['seasonCountExpected']=item.get('episodes',0)
+    if old and 'source' not in missing:
+        # Do not mix data from different verified TMDB titles.
+        if old.get('tmdbId') and result.get('tmdbId') and old['tmdbId']!=result['tmdbId']:
+            raise ValueError('شناسه منبع جدید با اطلاعات موجود متفاوت است.')
+        result=merge_title(old,result,force=force)
     cache_cast_photos(result.get('cast',[]))
     atomic_json(TITLES/(id_+'.json'),result)
+    report=episode_cache.cache_record(result)
+    if report.get('failed'):raise ValueError('اطلاعات ذخیره شد؛ برخی تصاویر قسمت‌ها دریافت نشد.')
+    if title_missing(id_,result):raise ValueError('اطلاعات موجود حفظ شد؛ منبع هنوز همه اطلاعات لازم را ندارد.')
     return result
 
-def sync_job(ids):
+def sync_job(ids,force=False):
     global JOB
     for id_ in ids:
         try:
-            sync_one(id_)
+            sync_one(id_,force=force)
             with LOCK:JOB['success']+=1
         except Exception as ex:
             with LOCK:
@@ -422,14 +519,17 @@ def sync_job(ids):
     write_index_from_titles()
     with LOCK:JOB['running']=False
 
-def start_job(ids):
+def start_job(ids,force=False):
     global JOB
     ids=list(dict.fromkeys(i for i in ids if i in CATALOG))
     if not ids:raise ValueError('عنوان معتبری انتخاب نشده است.')
+    selected=ids
+    if not force:
+        ids=[id_ for id_ in selected if title_missing(id_) or missing_episode_images(get_json(TITLES/(id_+'.json')))]
     with LOCK:
         if JOB['running']:raise RuntimeError('همگام‌سازی دیگری در حال اجراست.')
-        JOB={'running':True,'done':0,'total':len(ids),'success':0,'failed':0,'current':'','errors':[],'mode':'titles','photosSaved':0}
-    threading.Thread(target=sync_job,args=(ids,),daemon=True).start()
+        JOB={'running':bool(ids),'done':0,'total':len(ids),'success':0,'failed':0,'skipped':len(selected)-len(ids),'current':'','errors':[],'mode':'titles','photosSaved':0}
+    if ids:threading.Thread(target=sync_job,args=(ids,force),daemon=True).start()
     return dict(JOB)
 
 def sync_people_job(ids):
@@ -463,11 +563,13 @@ def job_status():
     with LOCK:return {**JOB,'errors':list(JOB['errors'])}
 
 def status():
-    ready=sum(1 for id_ in CATALOG if (TITLES/(id_+'.json')).exists())
+    records={id_:get_json(TITLES/(id_+'.json')) for id_ in CATALOG}
+    incomplete=[id_ for id_,r in records.items() if title_missing(id_,r) or missing_episode_images(r)]
+    ready=len(CATALOG)-len(incomplete)
     idx=read_index()
     people=idx.get('people',{})
     images=sum(1 for p in people.values() if _is_local_photo(p.get('photo')) or _is_local_photo((get_json(PEOPLE/(p['id']+'.json')) or {}).get('photo')))
-    return {'ready':ready,'total':len(CATALOG),'people':len(people),'peopleWithPhotos':images,'peopleMissingPhotos':len(people)-images,'tmdbConfigured':bool(token()),'job':job_status()}
+    return {'ready':ready,'incomplete':len(incomplete),'incompleteIds':incomplete,'total':len(CATALOG),'people':len(people),'peopleWithPhotos':images,'peopleMissingPhotos':len(people)-images,'tmdbConfigured':bool(token()),'job':job_status()}
 
 def full_catalog():
     # Generated from the app's own local catalogue, not from remote untrusted content.

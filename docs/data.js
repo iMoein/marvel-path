@@ -480,6 +480,8 @@ const RELEASE_CALENDAR_EXTRA = [
     "fa": "انتقام‌جویان: روز رستاخیز",
     "date": "2026-12-18",
     "precision": "day",
+    "countdownUtcTime": "05:00:00",
+    "countdownSource": "https://avengerscountdown.com/",
     "type": "movie",
     "phase": 6,
     "status": "planned",

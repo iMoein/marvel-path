@@ -2,6 +2,7 @@
 """Fetch only already published, allowlisted episode and portrait image URLs; no API or credentials."""
 import concurrent.futures, hashlib, io, json, re, urllib.request, urllib.parse, pathlib
 from PIL import Image, ImageOps
+import episode_cache
 ROOT=pathlib.Path(__file__).resolve().parent
 P=ROOT/'public-data'
 HOSTS={'image.tmdb.org','static.tvmaze.com','cdn.tvmaze.com'}
@@ -19,10 +20,14 @@ def get(u):
     dest=P/'images'/'remote'/name
     try:
         if not dest.is_file():
-            opener=urllib.request.build_opener(Redirect())
-            with opener.open(urllib.request.Request(u,headers={'User-Agent':'MarvelPath/3.2 (public artwork cache)'}),timeout=6) as r:
-                if not allowed(r.geturl()):return None
-                b=r.read(MAX+1)
+            local=episode_cache.cached_path(u)
+            if local:
+                b=local.read_bytes()
+            else:
+                opener=urllib.request.build_opener(Redirect())
+                with opener.open(urllib.request.Request(u,headers={'User-Agent':'MarvelPath/3.2 (public artwork cache)'}),timeout=6) as r:
+                    if not allowed(r.geturl()):return None
+                    b=r.read(MAX+1)
             if len(b)>MAX: return None
             with Image.open(io.BytesIO(b)) as im:
                 if im.format not in ('JPEG','PNG','WEBP'):return None

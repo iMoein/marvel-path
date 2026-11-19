@@ -1,16 +1,1 @@
-{
-  "ready": true,
-  "data": {
-    "id": "xmen97-1",
-    "title": "X-Men ’97 — Season 1",
-    "type": "tv",
-    "season": 1,
-    "seasonCountExpected": 10,
-    "source": "Disney Press",
-    "sourceUrl": "https://thewaltdisneycompany.com/news/x-men-97-marvel-debut-disney/",
-    "fetchedAt": "2026-11-19",
-    "overviewFa": "گروه مردان ایکس در ادامه ماجراهای مجموعه انیمیشنی دهه ۹۰ با آینده‌ای تازه و دشوار روبه‌رو می‌شوند.",
-    "cast": [],
-    "episodes": []
-  }
-}
+{"ready":true,"data":{"id":"xmen97-1","title":"X-Men ’97 — Season 1","overview":"The X-Men, a band of mutants who use their uncanny gifts to protect a world that hates and fears them, are challenged like never before, forced to face a dangerous and unexpected new future.","tagline":"New episodes. New era.","director":"","season":1,"seasonCountExpected":10,"source":"TMDB","fetchedAt":"2026-11-19T17:26:56+00:00","tmdbId":138502,"type":"tv","sourceUrl":"https://www.themoviedb.org/tv/138502","genres":["Animation","Action & Adventure","Sci-Fi & Fantasy"],"cast":[],"episodes":[{"number":1,"name":"To Me, My X-Men","overview":"Cyclops races to find the source of new anti-mutant technology.","airDate":"2024-03-20","runtime":33,"image":"https://image.tmdb.org/t/p/w300/zLXRYta8yBVXvl1Hr6jjgL6Ofxh.jpg"},{"number":2,"name":"Mutant Liberation Begins","overview":"When Magneto is forced by the UN to stand trial, a group of anti-mutant rioters test his resolve.","airDate":"2024-03-20","runtime":33,"image":"https://image.tmdb.org/t/p/w300/28IFCY8Ac2DBSwMNiN9JG0KcYWf.jpg"},{"number":3,"name":"Fire Made Flesh","overview":"The team is propelled into a tragic confrontation with an immortal mad scientist.","airDate":"2024-03-27","runtime":33,"image":"https://image.tmdb.org/t/p/w300/4OrsWyKwX23DLRvDcIH65hkXkR7.jpg"},{"number":4,"name":"Motendo / Lifedeath (1)","overview":"Jubilee must relive the X-Men's greatest adventures when she's transported into a 16-bit video game.","airDate":"2024-04-03","runtime":30,"image":"https://image.tmdb.org/t/p/w300/tgSlV8iSSiYzQ9NGmzl6m28vdmZ.jpg"},{"number":5,"name":"Remember It","overview":"Team members hit Genosha as UN honorees while a press event risks exposing the team's dirty laundry.","airDate":"2024-04-10","runtime":37,"image":"https://image.tmdb.org/t/p/w300/1xrDxXEnRSC9R9Fu5zDba6gnmsp.jpg"},{"number":6,"name":"Lifedeath (2)","overview":"Storm is forced to face her worst fears in order to free herself.","airDate":"2024-04-17","runtime":34,"image":"https://image.tmdb.org/t/p/w300/wdGC6xOP2qEkUgS9UexR3fHIB1T.jpg"},{"number":7,"name":"Bright Eyes","overview":"The X-Men finds Sentinel inventor Bolivar Trask, realizing they've been played by a mastermind.","airDate":"2024-04-24","runtime":34,"image":"https://image.tmdb.org/t/p/w300/ajVbdVC5M8snrAeLyRSfPQYGmFP.jpg"},{"number":8,"name":"Tolerance Is Extinction (1)","overview":"The X-Men must unite to face a new threat.","airDate":"2024-05-01","runtime":34,"image":"https://image.tmdb.org/t/p/w300/5XkNl84mTrmg2gtVDBGK3edJerN.jpg"},{"number":9,"name":"Tolerance Is Extinction (2)","overview":"The X-Men work to settle the score before it is too late.","airDate":"2024-05-08","runtime":32,"image":"https://image.tmdb.org/t/p/w300/3a0bFAIlfHRiMx9TlvFiePDIfZm.jpg"},{"number":10,"name":"Tolerance Is Extinction (3)","overview":"The X-Men's dream is put to the test as mutant-human relations reach a tipping point.","airDate":"2024-05-15","runtime":43,"image":"https://image.tmdb.org/t/p/w300/uuhP8ILtwpIk4edTiZ9Tu6oGQQm.jpg"}]}}

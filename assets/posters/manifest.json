@@ -1,1 +1,706 @@
-{}
+{
+  "iron-man": {
+    "path": "assets/posters/iron-man.webp",
+    "size": 52422,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:33:56+00:00",
+    "revision": 1795109636057,
+    "source": "https://image.tmdb.org/t/p/w500/78lPtwv72eTNqFW9COBYI0dWDJa.jpg"
+  },
+  "incredible-hulk": {
+    "path": "assets/posters/incredible-hulk.webp",
+    "size": 42318,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:33:56+00:00",
+    "revision": 1795109636870,
+    "source": "https://image.tmdb.org/t/p/w500/gKzYx79y0AQTL4UAk1cBQJ3nvrm.jpg"
+  },
+  "iron-man-2": {
+    "path": "assets/posters/iron-man-2.webp",
+    "size": 56218,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:33:57+00:00",
+    "revision": 1795109637572,
+    "source": "https://image.tmdb.org/t/p/w500/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg"
+  },
+  "thor": {
+    "path": "assets/posters/thor.webp",
+    "size": 42108,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:33:58+00:00",
+    "revision": 1795109638316,
+    "source": "https://image.tmdb.org/t/p/w500/prSfAi1xGrhLQNxVSUFh61xQ4Qy.jpg"
+  },
+  "cap-first": {
+    "path": "assets/posters/cap-first.webp",
+    "size": 97178,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:33:59+00:00",
+    "revision": 1795109639156,
+    "source": "https://image.tmdb.org/t/p/w500/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg"
+  },
+  "avengers": {
+    "path": "assets/posters/avengers.webp",
+    "size": 100260,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:00+00:00",
+    "revision": 1795109640077,
+    "source": "https://image.tmdb.org/t/p/w500/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg"
+  },
+  "iron-man-3": {
+    "path": "assets/posters/iron-man-3.webp",
+    "size": 86076,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:00+00:00",
+    "revision": 1795109640916,
+    "source": "https://image.tmdb.org/t/p/w500/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg"
+  },
+  "thor-dark": {
+    "path": "assets/posters/thor-dark.webp",
+    "size": 67798,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:02+00:00",
+    "revision": 1795109642206,
+    "source": "https://image.tmdb.org/t/p/w500/wp6OxE4poJ4G7c0U2ZIXasTSMR7.jpg"
+  },
+  "cap-winter": {
+    "path": "assets/posters/cap-winter.webp",
+    "size": 61164,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:02+00:00",
+    "revision": 1795109642934,
+    "source": "https://image.tmdb.org/t/p/w500/tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg"
+  },
+  "guardians-1": {
+    "path": "assets/posters/guardians-1.webp",
+    "size": 69376,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:03+00:00",
+    "revision": 1795109643748,
+    "source": "https://image.tmdb.org/t/p/w500/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg"
+  },
+  "avengers-ultron": {
+    "path": "assets/posters/avengers-ultron.webp",
+    "size": 95472,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:04+00:00",
+    "revision": 1795109644772,
+    "source": "https://image.tmdb.org/t/p/w500/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg"
+  },
+  "ant-man": {
+    "path": "assets/posters/ant-man.webp",
+    "size": 59730,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:05+00:00",
+    "revision": 1795109645518,
+    "source": "https://image.tmdb.org/t/p/w500/rQRnQfUl3kfp78nCWq8Ks04vnq1.jpg"
+  },
+  "civil-war": {
+    "path": "assets/posters/civil-war.webp",
+    "size": 75368,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:06+00:00",
+    "revision": 1795109646324,
+    "source": "https://image.tmdb.org/t/p/w500/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg"
+  },
+  "doctor-strange": {
+    "path": "assets/posters/doctor-strange.webp",
+    "size": 97102,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:07+00:00",
+    "revision": 1795109647114,
+    "source": "https://image.tmdb.org/t/p/w500/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg"
+  },
+  "guardians-2": {
+    "path": "assets/posters/guardians-2.webp",
+    "size": 133822,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:08+00:00",
+    "revision": 1795109648022,
+    "source": "https://image.tmdb.org/t/p/w500/y4MBh0EjBlMuOzv9axM4qJlmhzz.jpg"
+  },
+  "spider-home": {
+    "path": "assets/posters/spider-home.webp",
+    "size": 414248,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:10+00:00",
+    "revision": 1795109650019,
+    "source": "https://artofthemovies.co.uk/cdn/shop/products/IMG_8130_6e953a53-6019-4535-8269-63f420467f7a_1024x1024%402x.jpg?v=1659454975"
+  },
+  "thor-ragnarok": {
+    "path": "assets/posters/thor-ragnarok.webp",
+    "size": 71796,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:10+00:00",
+    "revision": 1795109650966,
+    "source": "https://image.tmdb.org/t/p/w500/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg"
+  },
+  "black-panther": {
+    "path": "assets/posters/black-panther.webp",
+    "size": 106332,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:11+00:00",
+    "revision": 1795109651838,
+    "source": "https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg"
+  },
+  "infinity-war": {
+    "path": "assets/posters/infinity-war.webp",
+    "size": 117094,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:12+00:00",
+    "revision": 1795109652685,
+    "source": "https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg"
+  },
+  "antman-wasp": {
+    "path": "assets/posters/antman-wasp.webp",
+    "size": 64376,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:13+00:00",
+    "revision": 1795109653414,
+    "source": "https://image.tmdb.org/t/p/w500/cFQEO687n1K6umXbInzocxcnAQz.jpg"
+  },
+  "captain-marvel": {
+    "path": "assets/posters/captain-marvel.webp",
+    "size": 100360,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:14+00:00",
+    "revision": 1795109654295,
+    "source": "https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg"
+  },
+  "endgame": {
+    "path": "assets/posters/endgame.webp",
+    "size": 116644,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:15+00:00",
+    "revision": 1795109655331,
+    "source": "https://image.tmdb.org/t/p/w500/jtDv3lCnST0fZRvdYFwR5CVwK2x.jpg"
+  },
+  "spider-far": {
+    "path": "assets/posters/spider-far.jpg",
+    "size": 1139851,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:17+00:00",
+    "revision": 1795109657042,
+    "source": "https://cdn.marvel.com/content/2x/sffh_venice-high-res.jpg"
+  },
+  "black-widow": {
+    "path": "assets/posters/black-widow.webp",
+    "size": 54168,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:17+00:00",
+    "revision": 1795109657846,
+    "source": "https://image.tmdb.org/t/p/w500/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg"
+  },
+  "shang-chi": {
+    "path": "assets/posters/shang-chi.webp",
+    "size": 88020,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:18+00:00",
+    "revision": 1795109658632,
+    "source": "https://image.tmdb.org/t/p/w500/9f2Q0U3IOsLgrI2HkvldwSABZy5.jpg"
+  },
+  "eternals": {
+    "path": "assets/posters/eternals.webp",
+    "size": 31500,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:19+00:00",
+    "revision": 1795109659356,
+    "source": "https://image.tmdb.org/t/p/w500/lFByFSLV5WDJEv3KabbdAF959F2.jpg"
+  },
+  "spider-no": {
+    "path": "assets/posters/spider-no.webp",
+    "size": 129842,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:20+00:00",
+    "revision": 1795109660263,
+    "source": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"
+  },
+  "strange-mom": {
+    "path": "assets/posters/strange-mom.webp",
+    "size": 93904,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:21+00:00",
+    "revision": 1795109661097,
+    "source": "https://image.tmdb.org/t/p/w500/ddJcSKbcp4rKZTmuyWaMhuwcfMz.jpg"
+  },
+  "thor-love": {
+    "path": "assets/posters/thor-love.webp",
+    "size": 97072,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:21+00:00",
+    "revision": 1795109661892,
+    "source": "https://image.tmdb.org/t/p/w500/pIkRyD18kl4FhoCNQuWxWu5cBLM.jpg"
+  },
+  "wakanda": {
+    "path": "assets/posters/wakanda.webp",
+    "size": 76798,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:22+00:00",
+    "revision": 1795109662790,
+    "source": "https://image.tmdb.org/t/p/w500/sv1xJUazXeYqALzczSZ3O6nkH75.jpg"
+  },
+  "quantumania": {
+    "path": "assets/posters/quantumania.webp",
+    "size": 64116,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:23+00:00",
+    "revision": 1795109663542,
+    "source": "https://image.tmdb.org/t/p/w500/qnqGbB22YJ7dSs4o6M7exTpNxPz.jpg"
+  },
+  "guardians-3": {
+    "path": "assets/posters/guardians-3.webp",
+    "size": 83536,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:24+00:00",
+    "revision": 1795109664384,
+    "source": "https://image.tmdb.org/t/p/w500/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg"
+  },
+  "marvels": {
+    "path": "assets/posters/marvels.jpg",
+    "size": 2177528,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:25+00:00",
+    "revision": 1795109665796,
+    "source": "https://lumiere-a.akamaihd.net/v1/images/56245l01_goat_singaporemalaysia_apac_poster_1sht_0edff935.jpeg"
+  },
+  "deadpool-wolverine": {
+    "path": "assets/posters/deadpool-wolverine.webp",
+    "size": 89994,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:26+00:00",
+    "revision": 1795109666730,
+    "source": "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
+  },
+  "cap-brave": {
+    "path": "assets/posters/cap-brave.webp",
+    "size": 61918,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:27+00:00",
+    "revision": 1795109667526,
+    "source": "https://image.tmdb.org/t/p/w500/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg"
+  },
+  "thunderbolts": {
+    "path": "assets/posters/thunderbolts.webp",
+    "size": 94536,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:28+00:00",
+    "revision": 1795109668317,
+    "source": "https://image.tmdb.org/t/p/w500/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg"
+  },
+  "fantastic-four": {
+    "path": "assets/posters/fantastic-four.webp",
+    "size": 57442,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:29+00:00",
+    "revision": 1795109669091,
+    "source": "https://image.tmdb.org/t/p/w500/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg"
+  },
+  "spider-brand": {
+    "path": "assets/posters/spider-brand.webp",
+    "size": 74886,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:29+00:00",
+    "revision": 1795109669857,
+    "source": "https://image.tmdb.org/t/p/w500/bjiS5ipwxb9JFy3XRRN4OAilSeX.jpg"
+  },
+  "agent-carter-1": {
+    "path": "assets/posters/agent-carter-1.jpg",
+    "size": 27398,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:30+00:00",
+    "revision": 1795109670667,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/agentc.jpg"
+  },
+  "agent-carter-2": {
+    "path": "assets/posters/agent-carter-2.jpg",
+    "size": 27398,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:31+00:00",
+    "revision": 1795109671314,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/agentc.jpg"
+  },
+  "daredevil-1": {
+    "path": "assets/posters/daredevil-1.jpg",
+    "size": 49945,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:32+00:00",
+    "revision": 1795109672164,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/dd1.jpg"
+  },
+  "jessica-1": {
+    "path": "assets/posters/jessica-1.jpg",
+    "size": 97592,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:33+00:00",
+    "revision": 1795109673129,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/jj1.jpg"
+  },
+  "daredevil-2": {
+    "path": "assets/posters/daredevil-2.jpg",
+    "size": 49945,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:33+00:00",
+    "revision": 1795109673975,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/dd2.jpg"
+  },
+  "luke-1": {
+    "path": "assets/posters/luke-1.jpg",
+    "size": 82757,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:34+00:00",
+    "revision": 1795109674910,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/lc1.jpg"
+  },
+  "iron-fist-1": {
+    "path": "assets/posters/iron-fist-1.jpg",
+    "size": 55876,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:35+00:00",
+    "revision": 1795109675780,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/if1.jpg"
+  },
+  "defenders": {
+    "path": "assets/posters/defenders.jpg",
+    "size": 56042,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:36+00:00",
+    "revision": 1795109676726,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/def.jpg"
+  },
+  "punisher-1": {
+    "path": "assets/posters/punisher-1.jpg",
+    "size": 102186,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:37+00:00",
+    "revision": 1795109677738,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/pun1.jpg"
+  },
+  "jessica-2": {
+    "path": "assets/posters/jessica-2.jpg",
+    "size": 97592,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:38+00:00",
+    "revision": 1795109678826,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/jj2.jpg"
+  },
+  "luke-2": {
+    "path": "assets/posters/luke-2.jpg",
+    "size": 82757,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:39+00:00",
+    "revision": 1795109679760,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/lc2.jpg"
+  },
+  "iron-fist-2": {
+    "path": "assets/posters/iron-fist-2.jpg",
+    "size": 55876,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:40+00:00",
+    "revision": 1795109680627,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/if2.jpg"
+  },
+  "daredevil-3": {
+    "path": "assets/posters/daredevil-3.jpg",
+    "size": 49945,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:41+00:00",
+    "revision": 1795109681521,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/dd3.jpg"
+  },
+  "punisher-2": {
+    "path": "assets/posters/punisher-2.jpg",
+    "size": 102186,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:42+00:00",
+    "revision": 1795109682460,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/pun2.jpg"
+  },
+  "jessica-3": {
+    "path": "assets/posters/jessica-3.jpg",
+    "size": 97592,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:43+00:00",
+    "revision": 1795109683390,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/jj3.jpg"
+  },
+  "wandavision": {
+    "path": "assets/posters/wandavision.webp",
+    "size": 88758,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:44+00:00",
+    "revision": 1795109684208,
+    "source": "https://image.tmdb.org/t/p/w500/ijWWwINc8h71NQ8j1LTJMFSj5wr.jpg"
+  },
+  "falcon": {
+    "path": "assets/posters/falcon.webp",
+    "size": 60674,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:44+00:00",
+    "revision": 1795109684978,
+    "source": "https://image.tmdb.org/t/p/w500/6kbAMLteGO8yyewYau6bJ683sw7.jpg"
+  },
+  "loki-1": {
+    "path": "assets/posters/loki-1.webp",
+    "size": 83428,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:45+00:00",
+    "revision": 1795109685745,
+    "source": "https://image.tmdb.org/t/p/w500/kEl2t3OhXc3Zb9FBh1AuYzRTgZp.jpg"
+  },
+  "whatif-1": {
+    "path": "assets/posters/whatif-1.jpg",
+    "size": 91581,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:46+00:00",
+    "revision": 1795109686698,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/wi1.jpg"
+  },
+  "hawkeye": {
+    "path": "assets/posters/hawkeye.webp",
+    "size": 100684,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:47+00:00",
+    "revision": 1795109687463,
+    "source": "https://image.tmdb.org/t/p/w500/ct5pNE5dDHryHLDnxyZPYcqO1sz.jpg"
+  },
+  "moon-knight": {
+    "path": "assets/posters/moon-knight.webp",
+    "size": 99364,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:48+00:00",
+    "revision": 1795109688294,
+    "source": "https://image.tmdb.org/t/p/w500/9K3lbMf8TKvL9xGEbzi7TggWCNQ.jpg"
+  },
+  "ms-marvel": {
+    "path": "assets/posters/ms-marvel.webp",
+    "size": 120702,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:34:49+00:00",
+    "revision": 1795109689240,
+    "source": "https://image.tmdb.org/t/p/w500/3HWWh92kZbD7odwJX7nKmXNZsYo.jpg"
+  },
+  "groot-1": {
+    "path": "assets/posters/groot-1.jpg",
+    "size": 139117,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:50+00:00",
+    "revision": 1795109690619,
+    "source": "https://cdn.marvel.com/content/2x/iamgroot_lob_crd_04.jpg"
+  },
+  "she-hulk": {
+    "path": "assets/posters/she-hulk.jpg",
+    "size": 1485206,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:52+00:00",
+    "revision": 1795109692613,
+    "source": "https://resizing.flixster.com/dycgiNwjOvRc9_ypb0N48nAPXqs%3D/ems.cHJkLWVtcy1hc3NldHMvdHZzZWFzb24vNmE3NWM4MWItMjZlNi00MjAxLTkwMzMtYzhhYmYxNzdjMDczLmpwZw%3D%3D"
+  },
+  "loki-2": {
+    "path": "assets/posters/loki-2.jpg",
+    "size": 112591,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:53+00:00",
+    "revision": 1795109693621,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/loki2.jpg"
+  },
+  "whatif-2": {
+    "path": "assets/posters/whatif-2.jpg",
+    "size": 91581,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:54+00:00",
+    "revision": 1795109694593,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/wi2.jpg"
+  },
+  "secret-invasion": {
+    "path": "assets/posters/secret-invasion.jpg",
+    "size": 881725,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:56+00:00",
+    "revision": 1795109696854,
+    "source": "https://m.media-amazon.com/images/M/MV5BNmYzYzA2NzMtOTVmMC00ZDY4LThlMDctZmUyN2NlMjQ2ODViXkEyXkFqcGc%40._V1_.jpg"
+  },
+  "groot-2": {
+    "path": "assets/posters/groot-2.jpg",
+    "size": 831501,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:58+00:00",
+    "revision": 1795109698049,
+    "source": "https://resizing.flixster.com/-ZTkQJaKmcdwm4JNrM6JssY4Yz4%3D/ems.cHJkLWVtcy1hc3NldHMvdHZzZWFzb24vOWU1ZDRmZDktM2I1Yy00OTRkLWJkZjktMGVkNDA0YmM5ODE2LmpwZw%3D%3D"
+  },
+  "echo": {
+    "path": "assets/posters/echo.jpg",
+    "size": 172070,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:58+00:00",
+    "revision": 1795109698941,
+    "source": "https://image.tmdb.org/t/p/w500/vFyJH630cF68LohVYjQW49074Sy.jpg"
+  },
+  "agatha": {
+    "path": "assets/posters/agatha.jpg",
+    "size": 146078,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:34:59+00:00",
+    "revision": 1795109699775,
+    "source": "https://image.tmdb.org/t/p/w500/mGsxKwXUjojitRv2E9qMTbxbBRd.jpg"
+  },
+  "whatif-3": {
+    "path": "assets/posters/whatif-3.jpg",
+    "size": 59908,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:00+00:00",
+    "revision": 1795109700643,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/wi3.jpg"
+  },
+  "friendly-spider-1": {
+    "path": "assets/posters/friendly-spider-1.jpg",
+    "size": 113722,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:01+00:00",
+    "revision": 1795109701654,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/yfnsm.jpg"
+  },
+  "daredevil-born-1": {
+    "path": "assets/posters/daredevil-born-1.jpg",
+    "size": 139960,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:02+00:00",
+    "revision": 1795109702611,
+    "source": "https://image.tmdb.org/t/p/w500/xDUoAsU8lQHOOoRkFiBuarmACDN.jpg"
+  },
+  "ironheart": {
+    "path": "assets/posters/ironheart.jpg",
+    "size": 84738,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:03+00:00",
+    "revision": 1795109703414,
+    "source": "https://image.tmdb.org/t/p/w500/dOh6MJpdlQhYpLBhzhNQeYGKTZ5.jpg"
+  },
+  "eyes-wakanda": {
+    "path": "assets/posters/eyes-wakanda.jpg",
+    "size": 145636,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:04+00:00",
+    "revision": 1795109704501,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/eow.jpg"
+  },
+  "marvel-zombies": {
+    "path": "assets/posters/marvel-zombies.jpg",
+    "size": 112963,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:05+00:00",
+    "revision": 1795109705585,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/mz.jpg"
+  },
+  "wonder-man": {
+    "path": "assets/posters/wonder-man.jpg",
+    "size": 100626,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:06+00:00",
+    "revision": 1795109706583,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/wm.jpg"
+  },
+  "daredevil-born-2": {
+    "path": "assets/posters/daredevil-born-2.jpg",
+    "size": 77169,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:07+00:00",
+    "revision": 1795109707544,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/ddba2.jpg"
+  },
+  "visionquest": {
+    "path": "assets/posters/visionquest.jpg",
+    "size": 101844,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:08+00:00",
+    "revision": 1795109708596,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/vq.jpg"
+  },
+  "werewolf": {
+    "path": "assets/posters/werewolf.jpg",
+    "size": 52521,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:09+00:00",
+    "revision": 1795109709530,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/wbn.jpg"
+  },
+  "guardians-holiday": {
+    "path": "assets/posters/guardians-holiday.jpg",
+    "size": 86889,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:10+00:00",
+    "revision": 1795109710795,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/gotg-hs.jpg"
+  },
+  "punisher-special": {
+    "path": "assets/posters/punisher-special.jpg",
+    "size": 76429,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:11+00:00",
+    "revision": 1795109711797,
+    "source": "https://raw.githubusercontent.com/HaithamAmireh/MCU/main/images/posters/pun-olk.jpg"
+  },
+  "xmen": {
+    "path": "assets/posters/xmen.jpg",
+    "size": 114068,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:13+00:00",
+    "revision": 1795109713595,
+    "source": "https://image.tmdb.org/t/p/w500/bRDAc4GogyS9ci3ow7UnInOcriN.jpg"
+  },
+  "x2": {
+    "path": "assets/posters/x2.jpg",
+    "size": 174856,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:14+00:00",
+    "revision": 1795109714832,
+    "source": "https://image.tmdb.org/t/p/w500/qWOkNog3hfC8AXRiWzXyMA4awmh.jpg"
+  },
+  "deadpool": {
+    "path": "assets/posters/deadpool.jpg",
+    "size": 139668,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:16+00:00",
+    "revision": 1795109716154,
+    "source": "https://image.tmdb.org/t/p/w500/jTl9Xnhbvzmf5QRwzsUAfdcWrRT.jpg"
+  },
+  "deadpool-2": {
+    "path": "assets/posters/deadpool-2.webp",
+    "size": 268872,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:35:17+00:00",
+    "revision": 1795109717957,
+    "source": "https://www.originalfilmart.com/cdn/shop/products/deadpool_2_2018_advance_style_E_original_film_art_2000x.jpg?v=1643317418"
+  },
+  "logan": {
+    "path": "assets/posters/logan.jpg",
+    "size": 167214,
+    "mime": "image/jpeg",
+    "updatedAt": "2026-11-19T17:35:19+00:00",
+    "revision": 1795109719498,
+    "source": "https://image.tmdb.org/t/p/w500/fnbjcRDYn6YviCcePDnGdyAkYsB.jpg"
+  },
+  "all-hail": {
+    "path": "assets/posters/all-hail.webp",
+    "size": 56518,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T17:35:20+00:00",
+    "revision": 1795109720970,
+    "source": "https://media-cache.cinematerial.com/p/500x/nix6yedw/marvel-one-shot-all-hail-the-king-poster.jpg?v=1456343902"
+  },
+  "xmen97-1": {
+    "path": "assets/posters/xmen97-1.webp",
+    "size": 50824,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T18:14:58+00:00",
+    "revision": 1795112098502,
+    "source": "https://image.tmdb.org/t/p/w500/383PV0WolYYQvTriH0NfvMUA28R.jpg"
+  },
+  "xmen97-2": {
+    "path": "assets/posters/xmen97-2.webp",
+    "size": 90134,
+    "mime": "image/webp",
+    "updatedAt": "2026-11-19T18:14:59+00:00",
+    "revision": 1795112099333,
+    "source": "https://image.tmdb.org/t/p/w500/2HKBc5UiFw8JrruHq8S1Y7TnlW0.jpg"
+  }
+}

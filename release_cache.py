@@ -59,6 +59,8 @@ self.addEventListener('activate',e=>e.waitUntil((async()=>{
 })()));
 self.addEventListener('fetch',e=>{
  const r=e.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==self.location.origin)return;
+ // Streams/range responses are handled by the origin, never cached as whole files.
+ if(u.pathname==='/assets/media/doomsday-background.mp4')return;
  if(u.pathname==='/sw.js'||u.pathname==='/release.json'){e.respondWith(network(r));return;}
  if(r.mode==='navigate'){
   e.respondWith((async()=>{

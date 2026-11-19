@@ -1034,6 +1034,31 @@ html.mp-gs-open{overflow:hidden}
  .route-mode-switch .route-mode-segments button{min-height:40px;font-size:11px}
 }
 
+/* Full-size cinematic countdown; its height follows the current next-up hero. */
+.doomsday-countdown{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(18px,3vw,34px);box-sizing:border-box;width:100%;height:var(--countdown-height,375px);margin:30px 0 0;padding:24px clamp(12px,4vw,48px);border:1px solid #ffffff29;border-radius:17px;background:#111814 url('/assets/media/doomsday-background.jpg') center / cover no-repeat;color:#fff;text-align:center;box-shadow:0 20px 65px #0004}
+.doomsday-countdown::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#050a08a8,#050a0859 45%,#050a08b5);z-index:1;pointer-events:none}
+.countdown-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none;z-index:0}
+.countdown-video[hidden]{display:none}
+.countdown-copy,.countdown-clock{position:relative;z-index:2;min-width:0}
+.countdown-copy h2{font-size:clamp(23px,3.2vw,42px);line-height:1.3;font-weight:850;margin:5px 0 8px;color:#fff;text-shadow:0 2px 22px #0009}
+.countdown-eyebrow{display:block;font-size:clamp(9px,1.1vw,12px);font-weight:800;letter-spacing:2px;color:#dcefe0}
+.countdown-copy p{font-size:clamp(11px,1.4vw,14px);color:#e2e8e3;margin:0}
+.countdown-clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,4vw,46px);width:min(100%,670px)}
+.countdown-clock[hidden]{display:none}
+.countdown-unit{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;position:relative}
+.countdown-unit:not(:last-child)::after{content:":";position:absolute;inset-inline-end:calc(clamp(12px,4vw,46px) / -2 - 5px);top:.1em;font-size:clamp(24px,4vw,52px);font-weight:300;color:#ffffff80;line-height:1}
+.countdown-unit strong{font-size:clamp(40px,6.1vw,86px);line-height:1.05;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#fff;font-weight:800;white-space:nowrap;text-shadow:0 4px 25px #0009}
+.countdown-unit span{font-size:clamp(12px,1.5vw,16px);color:#dfe8e0}
+.doomsday-countdown+.home-guide{margin-top:20px}
+@media(max-width:700px){
+ .doomsday-countdown{height:var(--countdown-height,300px);margin-top:24px;gap:22px;padding:18px 12px}
+ .countdown-copy h2{font-size:clamp(20px,5.8vw,29px)}
+ .countdown-clock{gap:12px}
+ .countdown-unit strong{font-size:clamp(33px,9vw,56px)}
+ .countdown-unit:not(:last-child)::after{inset-inline-end:-10px;font-size:28px}
+ .countdown-unit span{font-size:11px}
+}
+
 .public-people-pager{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;color:var(--muted);font-size:12px}.public-people-pager button:disabled{opacity:.4;cursor:not-allowed}
 
 .seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}

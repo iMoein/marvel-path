@@ -2,8 +2,10 @@
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),http=require('node:http'),{spawn}=require('node:child_process');
 const root=path.resolve(__dirname,'../docs'),tmp=fs.mkdtempSync(path.join(os.tmpdir(),'marvel-cdp-'));
 let mode='current';const oldHTML=require('node:child_process').execFileSync('git',['show','2e410f8f:docs/index.html'],{cwd:path.resolve(root,'..'),encoding:'utf8'});const currentHTML=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const currentVersion=JSON.parse(fs.readFileSync(path.join(root,'release.json'),'utf8')).version;
+const parts=currentVersion.split('.').map(Number);parts[2]++;const nextVersion=parts.join('.');
 const types={'.html':'text/html; charset=utf-8','.js':'application/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.woff2':'font/woff2'};
-const srv=http.createServer((req,res)=>{try{const u=new URL(req.url,'http://localhost');res.setHeader('Cache-Control','no-store');if(u.pathname==='/'&&mode!=='current'){res.setHeader('Content-Type','text/html; charset=utf-8');return res.end(mode==='stale'?oldHTML:currentHTML.replace('name="marvel-release" content="3.5.12"','name="marvel-release" content="3.5.13"'));}let f=path.join(root,decodeURIComponent(u.pathname));if(fs.statSync(f).isDirectory())f=path.join(f,'index.html');res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');fs.createReadStream(f).pipe(res);}catch(_){res.writeHead(404).end();}});
+const srv=http.createServer((req,res)=>{try{const u=new URL(req.url,'http://localhost');res.setHeader('Cache-Control','no-store');if(u.pathname==='/'&&mode!=='current'){res.setHeader('Content-Type','text/html; charset=utf-8');return res.end(mode==='stale'?oldHTML:currentHTML.replace('name="marvel-release" content="'+currentVersion+'"','name="marvel-release" content="'+nextVersion+'"'));}let f=path.join(root,decodeURIComponent(u.pathname));if(fs.statSync(f).isDirectory())f=path.join(f,'index.html');res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');fs.createReadStream(f).pipe(res);}catch(_){res.writeHead(404).end();}});
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));let chrome,ws,seq=0;const requests=new Map();
 async function send(method,params={}){return new Promise((resolve,reject)=>{const id=++seq;requests.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}));});}
 async function ev(expression,awaitPromise=false){const x=await send('Runtime.evaluate',{expression,awaitPromise,returnByValue:true});if(x.exceptionDetails)throw Error(x.exceptionDetails.text+' '+JSON.stringify(x.exceptionDetails.exception));return x.result.value;}
@@ -21,10 +23,10 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
  assert(await ev('navigator.serviceWorker.controller.scriptURL.endsWith("/sw.js")'),'stable worker');
  await ev('localStorage.setItem("mp-cache-test","keep");save()');
  const before=await ev('localStorage.getItem("marvel-path-tracker-v2")');
- await wait('document.querySelector(".sidebar-end").textContent.includes("3.5.12")');
+ await wait('document.querySelector(".sidebar-end").textContent.includes('+JSON.stringify(currentVersion)+')');
  console.log('PASS current release and active service worker');
- mode='stale';await go();assert(await ev('document.querySelector("meta[name=marvel-release]").content==="3.5.12"'),'stale response rejected');console.log('PASS stale HTML uses correct cached release');
- mode='future';await go();assert(await ev('document.querySelector("meta[name=marvel-release]").content==="3.5.13"'),'new version not masked');console.log('PASS next release is not masked by old worker');
+ mode='stale';await go();assert(await ev('document.querySelector("meta[name=marvel-release]").content==='+JSON.stringify(currentVersion)),'stale response rejected');console.log('PASS stale HTML uses correct cached release');
+ mode='future';await go();assert(await ev('document.querySelector("meta[name=marvel-release]").content==='+JSON.stringify(nextVersion)),'new version not masked');console.log('PASS next release is not masked by old worker');
  mode='current';await go();assert(await ev('localStorage.getItem("mp-cache-test")==="keep"'),'localStorage preserved');assert(await ev('localStorage.getItem("marvel-path-tracker-v2")')===before,'watch state preserved');
  console.log('PASS viewing state remains intact');
 

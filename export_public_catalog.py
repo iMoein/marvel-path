@@ -61,7 +61,7 @@ def local_ref(v,kind):
     m=re.fullmatch(r"\.?/?assets/"+kind+r"/([a-z0-9-]{1,110})\.(jpg|jpeg|png|webp)",v)
     return m.group(1)+"."+m.group(2) if m else None
 
-def export(src,out,include_manual=False):
+def export(src,out,include_manual=False,previous=None):
     base=src/"assets/metadata"
     catalog=read(ROOT/"catalog.json")
     idx=read(base/"index.json")["people"]
@@ -69,6 +69,7 @@ def export(src,out,include_manual=False):
     if any(not SAFE_ID.fullmatch(k) for k in list(idx)+list(catalog)):raise ValueError("Invalid identifier")
     image_maps={"people":{},"posters":{}}
     manual_skipped=0
+    retained_titles=[]
     def image_file(ref,kind,key):
         fname=local_ref(ref,kind)
         if not fname:return ""
@@ -114,7 +115,27 @@ def export(src,out,include_manual=False):
     titles={}
     for tid,name in catalog.items():
         path=base/"titles"/(tid+".json")
-        if not path.is_file() or path.is_symlink():raise ValueError("Missing local title: "+tid)
+        if path.is_symlink():raise ValueError("Symlink title")
+        if not path.is_file():
+            # A deliberately incomplete local installation must not erase an
+            # already published record. Retain only its existing public data.
+            fallback=previous/"titles"/(tid+".json") if previous else None
+            if not fallback or not fallback.is_file() or fallback.is_symlink():raise ValueError("Missing local title: "+tid)
+            snapshot=read(fallback)
+            title=snapshot["data"]
+            if title.get("id")!=tid:raise ValueError("Fallback ID mismatch")
+            for c in title.get("cast",[]):
+                pid=c.get("personId")
+                if pid not in people:raise ValueError("Missing retained cast profile: "+str(pid))
+                c["photo"]=people[pid]["photo"] or url(c.get("photo"),IMAGE_HOSTS)
+                credit={"id":tid,"title":name,"character":c.get("character","")}
+                if not any(x.get("id")==tid for x in people[pid]["credits"]):
+                    people[pid]["credits"].append(credit)
+                    put(out/"people"/(pid+".json"),{"ready":True,"data":people[pid]})
+            titles[tid]=title
+            put(out/"titles"/(tid+".json"),snapshot)
+            retained_titles.append(tid)
+            continue
         record=read(path)
         if record.get("id")!=tid:raise ValueError("Title ID mismatch")
         title=select(record,TITLE_FIELDS)
@@ -147,7 +168,7 @@ def export(src,out,include_manual=False):
     put(out/"people.json",{"items":directory})
     put(out/"poster-urls.json",posters)
     put(out/"poster-sources.json",sources)
-    report={"titles":len(titles),"people":len(people),"detailedProfiles":detailed,
+    report={"titles":len(titles),"retainedTitles":retained_titles,"people":len(people),"detailedProfiles":detailed,
         "castCredits":sum(len(x["cast"]) for x in titles.values()),
         "episodes":sum(len(x["episodes"]) for x in titles.values()),
         "episodeImages":sum(bool(e["image"]) for t in titles.values() for e in t["episodes"]),
@@ -166,11 +187,15 @@ if __name__=="__main__":
     ap.add_argument("--include-manual-images",action="store_true",help="Publish manually uploaded images only where rights and privacy are cleared")
     args=ap.parse_args()
     source=args.local_installation.resolve()
-    if source==ROOT:raise SystemExit("Use the separate private installation as the source.")
+    dest=ROOT/"public-data"
+    # Only the allowlisted exporter reads local catalogue fields and image bytes.
+    if not (source/"assets/metadata/index.json").is_file():raise SystemExit("Local catalogue not found.")
     with tempfile.TemporaryDirectory(prefix=".catalog-export-",dir=ROOT) as temp:
         stage=Path(temp)/"public-data"
         stage.mkdir()
-        report=export(source,stage,args.include_manual_images)
+        report=export(source,stage,args.include_manual_images,previous=dest if dest.is_dir() else None)
+        if dest.is_dir() and (dest/"images/remote").is_dir():
+            shutil.copytree(dest/"images/remote",stage/"images/remote",dirs_exist_ok=True)
         old=Path(temp)/"old-public-data"
         dest=ROOT/"public-data"
         if dest.exists():dest.rename(old)

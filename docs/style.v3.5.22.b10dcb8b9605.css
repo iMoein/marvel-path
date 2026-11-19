@@ -1010,6 +1010,55 @@ html.mp-gs-open{overflow:hidden}
 .encore-info{margin:0}.encore-info h3{font-size:16px;margin:9px 0}.encore-info p{font-size:12px;line-height:1.9;color:var(--muted)}.encore-info dl{display:grid;gap:8px;margin:14px 0}.encore-info dl>div{display:flex;justify-content:space-between;gap:8px;font-size:12px}.encore-info dt{color:var(--muted)}.encore-info dd{margin:0;text-align:left}
 @media(max-width:700px){.release-stats{gap:6px}.release-stats>div{flex:1 1 0;min-width:0;padding:10px}.release-stats span{line-height:1.6;font-size:10px}}
 
+/* Marathon masthead: one introduction, with only its compact switch sticky. */
+.doomsday-intro{margin-bottom:14px;animation:none}
+.doomsday-intro p{margin-bottom:0;line-height:1.8}
+.route-mode-switch{display:block;width:min(100%,360px);max-width:100%;margin:0 0 18px auto;padding:0;border:0;border-radius:11px;background:none;box-shadow:0 5px 18px #0003;top:calc(var(--mp-bar-height) + var(--mp-safe-top) + 8px)}
+.route-mode-switch .route-mode-segments{width:100%;min-width:0;box-sizing:border-box;background:var(--surface);border:1px solid var(--border2);border-radius:11px;padding:4px}
+.route-mode-switch .route-mode-segments button{min-width:0;min-height:38px;padding:6px 8px;font-size:12px;white-space:nowrap}
+.route-mode-switch:focus-within{outline:1px solid var(--border2)}
+@media(min-width:1100px){
+ .doomsday-intro{padding-inline-end:384px;min-height:48px;margin-bottom:0}
+ .route-mode-switch{margin:-48px auto 20px 0}
+ [dir="rtl"] .route-mode-switch{margin-inline-start:auto;margin-inline-end:0}
+}
+@media(max-width:1099px){
+ .route-mode-switch{margin-inline-start:0;margin-inline-end:auto}
+}
+@media(max-width:700px){
+ .doomsday-intro{margin-bottom:14px}
+ .doomsday-intro .page-kicker{font-size:10px;letter-spacing:1px;margin-bottom:4px}
+ .doomsday-intro h1{font-size:clamp(25px,7.4vw,32px);line-height:1.3;letter-spacing:-.7px}
+ .doomsday-intro p{font-size:12px;line-height:1.75;margin-top:8px}
+ .route-mode-switch{width:100%;top:calc(var(--mp-bar-height) + var(--mp-header-safe) + 8px);margin:0 0 14px}
+ .route-mode-switch .route-mode-segments button{min-height:40px;font-size:11px}
+}
+
+/* Full-size cinematic countdown; its height follows the current next-up hero. */
+.doomsday-countdown{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(18px,3vw,34px);box-sizing:border-box;width:100%;height:var(--countdown-height,375px);margin:30px 0 0;padding:24px clamp(12px,4vw,48px);border:1px solid #ffffff29;border-radius:17px;background:#111814 url('/assets/media/doomsday-background.jpg') center / cover no-repeat;color:#fff;text-align:center;box-shadow:0 20px 65px #0004}
+.doomsday-countdown::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#050a08a8,#050a0859 45%,#050a08b5);z-index:1;pointer-events:none}
+.countdown-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none;z-index:0}
+.countdown-video[hidden]{display:none}
+.countdown-copy,.countdown-clock{position:relative;z-index:2;min-width:0}
+.countdown-copy h2{font-size:clamp(23px,3.2vw,42px);line-height:1.3;font-weight:850;margin:5px 0 8px;color:#fff;text-shadow:0 2px 22px #0009}
+.countdown-eyebrow{display:block;font-size:clamp(9px,1.1vw,12px);font-weight:800;letter-spacing:2px;color:#dcefe0}
+.countdown-copy p{font-size:clamp(11px,1.4vw,14px);color:#e2e8e3;margin:0}
+.countdown-clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,4vw,46px);width:min(100%,670px)}
+.countdown-clock[hidden]{display:none}
+.countdown-unit{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;position:relative}
+.countdown-unit:not(:last-child)::after{content:":";position:absolute;inset-inline-end:calc(clamp(12px,4vw,46px) / -2 - 5px);top:.1em;font-size:clamp(24px,4vw,52px);font-weight:300;color:#ffffff80;line-height:1}
+.countdown-unit strong{font-size:clamp(40px,6.1vw,86px);line-height:1.05;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#fff;font-weight:800;white-space:nowrap;text-shadow:0 4px 25px #0009}
+.countdown-unit span{font-size:clamp(12px,1.5vw,16px);color:#dfe8e0}
+.doomsday-countdown+.home-guide{margin-top:20px}
+@media(max-width:700px){
+ .doomsday-countdown{height:var(--countdown-height,300px);margin-top:24px;gap:22px;padding:18px 12px}
+ .countdown-copy h2{font-size:clamp(20px,5.8vw,29px)}
+ .countdown-clock{gap:12px}
+ .countdown-unit strong{font-size:clamp(33px,9vw,56px)}
+ .countdown-unit:not(:last-child)::after{inset-inline-end:-10px;font-size:28px}
+ .countdown-unit span{font-size:11px}
+}
+
 .public-people-pager{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;color:var(--muted);font-size:12px}.public-people-pager button:disabled{opacity:.4;cursor:not-allowed}
 
 .seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}

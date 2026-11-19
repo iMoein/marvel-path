@@ -19,6 +19,9 @@ for name in ['index.html','app.js','data.js','meta.js','posters.js','enrichment.
     shutil.copy2(ROOT/name,OUT/name)
 (OUT/'assets').mkdir()
 shutil.copy2(ROOT/'assets/favicon.svg',OUT/'assets/favicon.svg')
+(OUT/'assets/media').mkdir()
+for name in ('doomsday-background.mp4','doomsday-background.jpg'):
+    shutil.copy2(ROOT/'assets/media'/name,OUT/'assets/media'/name)
 (OUT/'assets/fonts').mkdir()
 for name in ('Vazirmatn-wght.woff2','OFL.txt','AUTHORS.txt'):
     shutil.copy2(ROOT/'assets/fonts'/name,OUT/'assets/fonts'/name)

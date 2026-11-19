@@ -1,6 +1,6 @@
 'use strict';
-const RELEASE="3.5.21", CORE="marvel-path-v3521-core", DATA='marvel-path-v340-data';
-const RUNTIME=["/style.v3.5.21.a225e654f484.css", "/data.v3.5.21.e439df7c2fdd.js", "/meta.v3.5.21.6da6e853a2a3.js", "/posters.v3.5.21.c3d5c6ad86fd.js", "/admin.v3.5.21.3f5f93a72d83.js", "/enrichment.v3.5.21.b8913267d184.js", "/app.v3.5.21.f514c4678acf.js"];
+const RELEASE="3.5.22", CORE="marvel-path-v3522-core", DATA='marvel-path-v340-data';
+const RUNTIME=["/style.v3.5.22.b10dcb8b9605.css", "/data.v3.5.22.e1c8c665df92.js", "/meta.v3.5.22.6da6e853a2a3.js", "/posters.v3.5.22.c3d5c6ad86fd.js", "/admin.v3.5.22.4020141fe272.js", "/enrichment.v3.5.22.7a1fb550f92f.js", "/app.v3.5.22.581c68253ba6.js"];
 const EXTRAS=['/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 const PAGES=['/','/archive/','/timeline/','/actors/','/settings/','/watchlist/'];
 const pageRelease=async r=>r.ok&&(r.headers.get('content-type')||'').includes('text/html')?((await r.clone().text()).match(/<meta name="marvel-release" content="(\d+\.\d+\.\d+)"\s*\/?>/)||[])[1]||'':'';
@@ -31,6 +31,8 @@ self.addEventListener('activate',e=>e.waitUntil((async()=>{
 })()));
 self.addEventListener('fetch',e=>{
  const r=e.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==self.location.origin)return;
+ // Streams/range responses are handled by the origin, never cached as whole files.
+ if(u.pathname==='/assets/media/doomsday-background.mp4')return;
  if(u.pathname==='/sw.js'||u.pathname==='/release.json'){e.respondWith(network(r));return;}
  if(r.mode==='navigate'){
   e.respondWith((async()=>{

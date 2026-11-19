@@ -19,3 +19,5 @@ assets/people/
 assets/metadata/
 assets/posters/*
 !assets/posters/manifest.json
+
+assets/episodes/

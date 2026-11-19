@@ -131,3 +131,32 @@ are recorded without creating a duplicate watch-progress entry.
 Sources: https://thewaltdisneycompany.com/news/x-men-97-marvel-debut-disney/
 and https://press.disney.co.uk/news/marvel-animations-x-men-97-season-2-now-streaming-exclusively-on-disney
 and https://www.disneyplus.com/explore/articles/avengers-endgame-encore
+
+### Local episode image cache
+The local metadata synchronization downloads episode stills into
+`assets/episodes/` (ignored by Git). The local viewer receives only local
+image paths, with no browser requests to TMDB/TVmaze for episode stills.
+Run `python3 episode_cache.py` to backfill or retry missing images without
+refreshing title metadata. Existing public image-cache files are reused.
+Original source URLs remain in local metadata for provenance and export.
+
+### Incremental local administration
+Bulk metadata jobs skip complete title records. Incomplete records retain
+existing nonempty fields and merge episode details by episode number; if only
+cached episode artwork is missing, the job fetches the artwork without
+refetching title metadata. A separate explicit per-title refresh is available.
+Bulk poster jobs skip verified on-disk files, reuse cached TMDB poster URLs,
+and discover remote artwork only when necessary. Explicit replacement remains
+available. Missing-source artwork with no URL is not counted as a failed local
+download; a refresh can discover newly published artwork.
+
+### Doomsday countdown background
+Countdown target: 2026-12-18T05:00:00Z, matching the fan-made
+https://avengerscountdown.com/; not a confirmed first showtime.
+The date and UTC time are in the release calendar entry.
+Background source supplied by the owner:
+https://media.rekydev.fr/avengerscountdown/background.webm
+Locally transcoded to 720p silent H.264 MP4, with a local JPEG still.
+Silent inline video autoplays and loops without a control. Reduced-motion users receive a static background.
+Permission to redistribute this third-party footage has not been verified;
+confirm rights before public deployment.

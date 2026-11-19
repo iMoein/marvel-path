@@ -25,6 +25,7 @@ from pathlib import Path
 
 import metadata_service as metadata
 import localize_catalog
+import episode_cache
 
 ROOT = Path(__file__).resolve().parent
 POSTER_DIR = ROOT / 'assets' / 'posters'
@@ -73,6 +74,20 @@ def read_manifest():
         except (OSError, ValueError):
             return {}
 
+
+def valid_poster_entry(id_,entry):
+    if not isinstance(entry,dict):return False
+    ref=entry.get('path','')
+    if not isinstance(ref,str) or not re.fullmatch(r'assets/posters/'+re.escape(id_)+r'\.(jpg|png|webp)',ref):return False
+    f=POSTER_DIR/Path(ref).name
+    try:
+        if f.is_symlink() or not f.is_file() or f.stat().st_size!=entry.get('size'):return False
+        with f.open('rb') as stream:head=stream.read(40)
+        return (detect_image(head)[1]==entry.get('mime'))
+    except (ValueError,OSError):return False
+
+def available_manifest():
+    return {id_:e for id_,e in read_manifest().items() if id_ in CATALOG and valid_poster_entry(id_,e)}
 
 def write_manifest(data):
     with lock:
@@ -157,21 +172,39 @@ def store_image(id_, data, source):
 def store_from_urls(id_, urls, force=False):
     if id_ not in CATALOG:
         return (False, 'عنوان نامعتبر')
-    if not force and id_ in read_manifest():
+    if not force and id_ in available_manifest():
         return (True, 'قبلاً ذخیره شده')
     if not isinstance(urls, list):
         return (False, 'نشانی‌ها معتبر نیستند')
     failures = []
-    for url in urls[:8]:
-        try:
-            if not isinstance(url, str) or len(url) > 1500:
-                continue
-            data = fetch_image(url)
-            store_image(id_, data, url)
-            return (True, 'ذخیره شد')
-        except (ValueError, OSError, urllib.error.URLError, TimeoutError) as ex:
-            failures.append(str(ex)[:120])
-    return (False, 'منبع قابل دریافت نبود' + (': ' + failures[-1] if failures else ''))
+    attempted = set()
+    def try_urls(candidates):
+        for url in candidates[:8]:
+            try:
+                if not isinstance(url, str) or len(url)>1500 or url in attempted:
+                    continue
+                attempted.add(url)
+                data = fetch_image(url)
+                store_image(id_, data, url)
+                return True
+            except (ValueError, OSError, urllib.error.URLError, TimeoutError) as ex:
+                failures.append(str(ex)[:120])
+        return False
+    # Explicit replacement preserves the supplied URL priority; otherwise reuse metadata first.
+    if not force and try_urls(metadata.cached_poster_candidates(id_)):
+        return (True, 'کاور از اطلاعات ذخیره‌شده دریافت شد')
+    if try_urls(urls):
+        return (True, 'ذخیره شد')
+    # Works for catalogue additions that have no hardcoded image URLs,
+    # for both single downloads and batch jobs.
+    try:
+        dynamic_urls = metadata.tmdb_poster_candidates(id_)
+        if try_urls(dynamic_urls):
+            return (True, 'کاور از TMDB ذخیره شد')
+    except (ValueError, OSError, urllib.error.URLError, TimeoutError):
+        failures.append('بازیابی پوستر از TMDB ناموفق بود.')
+    return (False, 'منبع قابل دریافت نبود' + (': ' + failures[-1] if failures else '؛ آدرس تصویر ثبت نشده یا کلید TMDB تنظیم نشده است.'))
+
 
 
 def background_batch(entries, force):
@@ -244,10 +277,41 @@ class AppHandler(SimpleHTTPRequestHandler):
             return False
         return Path(parts[-1]).suffix.lower() in ('.jpg','.jpeg','.png','.webp','.svg','.woff2','.woff','.ttf','.json')
 
+    def _serve_countdown_video(self,head=False):
+        # Explicit allowlisted video endpoint; byte ranges support Safari/iOS.
+        p=ROOT/'assets/media/doomsday-background.mp4'
+        if not p.is_file() or p.is_symlink():
+            self.send_error(404);return
+        size=p.stat().st_size
+        start,end=0,size-1
+        value=self.headers.get('Range')
+        if value:
+            match=re.fullmatch(r'bytes=(\d*)-(\d*)',value)
+            if match and (match[1] or match[2]):
+                if match[1]:
+                    start=int(match[1]);end=min(end,int(match[2])) if match[2] else end
+                else:start=max(0,size-int(match[2]))
+            else:start=size
+            if start>end or start>=size:
+                self.send_response(416);self.send_header('Content-Range',f'bytes */{size}');self.send_header('Content-Length','0');self.end_headers();return
+        self.send_response(206 if value else 200)
+        self.send_header('Content-Type','video/mp4')
+        self.send_header('Accept-Ranges','bytes')
+        self.send_header('Content-Length',str(end-start+1))
+        self.send_header('X-Content-Type-Options','nosniff')
+        if value:self.send_header('Content-Range',f'bytes {start}-{end}/{size}')
+        self.end_headers()
+        if not head:
+            with p.open('rb') as f:
+                f.seek(start)
+                try:self.wfile.write(f.read(end-start+1))
+                except (BrokenPipeError,ConnectionResetError):pass
+
     def do_GET(self):
         if not self._safe_host():
             self._send_json(403,{'error':'Invalid host'});return
         path = urllib.parse.urlsplit(self.path).path
+        if path == '/assets/media/doomsday-background.mp4':return self._serve_countdown_video()
         if path == '/api/metadata/status':
             self._send_json(200,metadata.status());return
         if path == '/api/metadata/people':
@@ -257,7 +321,7 @@ class AppHandler(SimpleHTTPRequestHandler):
             raw=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
             id_=(raw.get('id') or [''])[0]
             if id_ not in CATALOG:self._send_json(404,{'error':'عنوان یافت نشد.'});return
-            record=localize_catalog.title(metadata.title_record(id_),id_)
+            record=episode_cache.localize_record(localize_catalog.title(metadata.title_record(id_),id_))
             self._send_json(200,{'ready':bool(record),'data':record});return
         if path == '/api/metadata/person':
             raw=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
@@ -269,9 +333,9 @@ class AppHandler(SimpleHTTPRequestHandler):
             if not self._authorized():self._send_json(401,{'error':'دسترسی مدیریت نیاز به کد دارد.'});return
             self._send_json(200,metadata.job_status());return
         if path == '/api/posters/manifest':
-            self._send_json(200,read_manifest());return
+            self._send_json(200,available_manifest());return
         if path == '/api/admin/status':
-            self._send_json(200,{'localServer':True,'saved':len(read_manifest()),'total':len(CATALOG),'loginRequired':True});return
+            self._send_json(200,{'localServer':True,'saved':len(available_manifest()),'total':len(CATALOG),'loginRequired':True});return
         if path == '/api/admin/check':
             self._send_json(200 if self._authorized() else 401,{'authorized':self._authorized()});return
         if path == '/api/admin/posters/job':
@@ -293,6 +357,7 @@ class AppHandler(SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_HEAD(self):
+        if self._safe_host() and urllib.parse.urlsplit(self.path).path=='/assets/media/doomsday-background.mp4':return self._serve_countdown_video(head=True)
         if not self._safe_host() or not self._allowed_static():
             self.send_response(404);self.end_headers();return
         return super().do_HEAD()
@@ -321,7 +386,7 @@ class AppHandler(SimpleHTTPRequestHandler):
                 if data.get('scope')=='all':ids=list(CATALOG)
                 if not isinstance(ids,list) or len(ids)>len(CATALOG) or any(not isinstance(i,str) for i in ids):raise ValueError('فهرست عنوان‌ها معتبر نیست.')
                 try:
-                    job_info=metadata.start_job(ids)
+                    job_info=metadata.start_job(ids,force=data.get('force') is True)
                 except RuntimeError as e:
                     self._send_json(409,{'error':str(e)});return
                 self._send_json(202,{'ok':True,'job':job_info});return
@@ -355,7 +420,7 @@ class AppHandler(SimpleHTTPRequestHandler):
             if path == '/api/admin/posters/save':
                 params=self._read_json()
                 id_=params.get('id','')
-                ok, msg=store_from_urls(id_,params.get('urls',[]),force=True)
+                ok, msg=store_from_urls(id_,params.get('urls',[]),force=params.get('force') is True)
                 self._send_json(200 if ok else 422,{'ok':ok,'message':msg,'entry':read_manifest().get(id_)});return
             if path == '/api/admin/posters/upload':
                 parsed=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
@@ -384,12 +449,15 @@ class AppHandler(SimpleHTTPRequestHandler):
                 if not isinstance(entries,list) or len(entries)>len(CATALOG):
                     raise ValueError('محدوده درخواست گروهی معتبر نیست.')
                 entries=[e for e in entries if isinstance(e,dict) and e.get('id') in CATALOG]
+                requested=len(entries)
+                existing=available_manifest()
+                if not force:entries=[e for e in entries if e['id'] not in existing]
                 with job_lock:
                     if job['running']:
                         self._send_json(409,{'error':'دانلود گروهی دیگری در حال انجام است.'});return
-                    job.update({'running':True,'total':len(entries),'done':0,'success':0,'failed':0,'last':'','errors':[]})
-                threading.Thread(target=background_batch,args=(entries,force),daemon=True).start()
-                self._send_json(202,{'ok':True,'total':len(entries)});return
+                    job.update({'running':bool(entries),'total':len(entries),'done':0,'success':0,'failed':0,'skipped':requested-len(entries),'last':'','errors':[]})
+                if entries:threading.Thread(target=background_batch,args=(entries,force),daemon=True).start()
+                self._send_json(202,{'ok':True,'total':len(entries),'job':dict(job)});return
             self._send_json(404,{'error':'Not found'})
         except (ValueError,UnicodeError,json.JSONDecodeError) as ex:
             self._send_json(422,{'error':str(ex)})

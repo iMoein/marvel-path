@@ -112,7 +112,7 @@ function shell(body,active){const s=stats(routeIds());return `<div class="app-sh
  <aside class="sidebar"><a class="logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
  <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','timeline','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
- <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.21</div></aside>
+ <div class="sidebar-end">MARVEL PATH <span> / </span> v3.5.22</div></aside>
  <div class="workspace"><header class="topbar"><a class="mobile-logo" href="#doomsday" data-home-logo aria-label="مسیر مارول؛ بازگشت به صفحه اصلی"><span class="mini-m" aria-hidden="true">M</span><span>مسیر مارول</span></a><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions"><button type="button" class="mp-search-launch" data-global-search aria-label="جستجوی سراسری" aria-keyshortcuts="Meta+K Control+K">${ico('search',18)}<span>جستجو</span><kbd class="mp-search-hint"></kbd></button>${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status" role="status" title="${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}" data-storage-ok="${storageReady}"><span class="local-dot" aria-hidden="true"></span><span class="storage-label">${storageReady?'ذخیره خودکار فعال است':'خطا در ذخیره اطلاعات'}</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer"><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer></div>
  <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','timeline','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
@@ -137,6 +137,58 @@ function bonusCard(f){
 function homeGuide(){
  return `<section class="home-guide" aria-labelledby="home-guide-heading"><span class="home-guide-icon" aria-hidden="true">${ico('info',22)}</span><div class="home-guide-copy"><div class="home-guide-head"><h2 id="home-guide-heading">${esc(HOME_GUIDE.title)}</h2><span class="home-guide-tag">پروژه مستقل · کد منبع عمومی</span></div>${HOME_GUIDE.paragraphs.map(p=>'<p>'+esc(p)+'</p>').join('')}<a class="home-guide-repo" href="${esc(HOME_GUIDE.repo)}" target="_blank" rel="noopener noreferrer">${ico('external',15)} ${esc(HOME_GUIDE.linkLabel)}</a></div></section>`;
 }
+/* Countdown uses the same date as the release calendar, not a second hardcoded deadline. */
+const doomsdayRelease=()=>RELEASE_CALENDAR_EXTRA.find(r=>r.id==='doomsday-film'&&r.precision==='day');
+function doomsdayRemaining(now=Date.now()){
+ const release=doomsdayRelease();
+ if(!release||!/^\d{4}-\d{2}-\d{2}$/.test(release.date))return null;
+ const deadline=Date.parse(release.date+'T'+release.countdownUtcTime+'Z');
+ if(!Number.isFinite(deadline))return null;
+ const total=Math.max(0,Math.ceil((deadline-now)/1000));
+ return {total,days:Math.floor(total/86400),hours:Math.floor(total%86400/3600),minutes:Math.floor(total%3600/60),seconds:total%60};
+}
+const countdownNumber=value=>String(value).padStart(2,'0').replace(/[0-9]/g,n=>'۰۱۲۳۴۵۶۷۸۹'[Number(n)]);
+function doomsdayCountdown(){
+ const release=doomsdayRelease(),left=doomsdayRemaining();
+ if(!left)return '';
+ const [y,m,d]=release.date.split('-').map(Number);
+ const date=new Intl.DateTimeFormat('fa-IR-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'}).format(new Date(y,m-1,d));
+ const units=[['days','روز'],['hours','ساعت'],['minutes','دقیقه'],['seconds','ثانیه']];
+ return `<section class="doomsday-countdown" aria-labelledby="doomsday-countdown-title"><video class="countdown-video" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video><div class="countdown-copy"><span class="countdown-eyebrow">COUNTDOWN TO DOOMSDAY</span><h2 id="doomsday-countdown-title" data-countdown-heading>${left.total?'تا اکران Doomsday':'موعد رسمی اکران فرا رسیده است'}</h2><p><time datetime="${esc(release.date+'T'+release.countdownUtcTime+'Z')}">${esc(date)}</time> · اکران آمریکا</p></div><div class="countdown-clock" role="timer" aria-label="زمان باقی‌مانده تا موعد شمارش معکوس اکران" dir="rtl" ${left.total?'':'hidden'}>${units.map(([key,label])=>`<div class="countdown-unit"><strong data-countdown-unit="${key}">${countdownNumber(left[key])}</strong><span>${label}</span></div>`).join('')}</div></section>`;
+}
+let countdownTimer=null,countdownSizeObserver=null;
+function syncCountdownMotion(){
+ const video=document.querySelector('.countdown-video');
+ if(!video)return;
+ // Silent inline autoplay, with a still fallback for platform accessibility settings.
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches){video.pause();video.hidden=true;return;}
+ video.hidden=false;video.defaultMuted=true;video.muted=true;video.autoplay=true;video.loop=true;video.playsInline=true;
+ if(!video.getAttribute('src'))video.src='/assets/media/doomsday-background.mp4';
+ if(video.paused)video.play().catch(()=>{});
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncCountdownMotion()});
+window.addEventListener('pageshow',syncCountdownMotion);
+function updateDoomsdayCountdown(){
+ const card=document.querySelector('.doomsday-countdown'),left=doomsdayRemaining();
+ if(!card||!left)return;
+ for(const el of card.querySelectorAll('[data-countdown-unit]'))el.textContent=countdownNumber(left[el.dataset.countdownUnit]);
+ card.querySelector('.countdown-clock').hidden=left.total===0;
+ const heading=card.querySelector('[data-countdown-heading]');
+ heading.textContent=left.total?'تا اکران Doomsday':'موعد رسمی اکران فرا رسیده است';
+ if(!left.total){clearInterval(countdownTimer);countdownTimer=null;}
+}
+function mountDoomsdayCountdown(){
+ clearInterval(countdownTimer);countdownTimer=null;
+ countdownSizeObserver?.disconnect();countdownSizeObserver=null;
+ const card=document.querySelector('.doomsday-countdown'),hero=document.querySelector('.feature');
+ if(!card)return;
+ if(hero){
+  const fit=()=>card.style.setProperty('--countdown-height',hero.getBoundingClientRect().height+'px');
+  fit();if(typeof ResizeObserver==='function'){countdownSizeObserver=new ResizeObserver(fit);countdownSizeObserver.observe(hero);}
+ }
+ updateDoomsdayCountdown();syncCountdownMotion();
+ if(doomsdayRemaining()?.total)countdownTimer=setInterval(updateDoomsdayCountdown,1000);
+}
 function doomsdayPage(){
  const base=routeIds(),s=stats(base),next=nextOf(base),disney=state.routeMode==='disney';
  const ids=base.filter(id=>{const f=BY_ID[id];return state.routeStatus==='remaining'?!done(f):state.routeStatus==='watched'?done(f):true});
@@ -150,8 +202,9 @@ function doomsdayPage(){
  ${filterButtons('route-status',[['all','همه وضعیت‌ها'],['remaining','باقی‌مانده'],['watched','دیده‌شده']],state.routeStatus)}
  <div class="route-list">${ids.map(id=>filmRow(BY_ID[id],base.indexOf(id)+1,'doomsday')).join('')||empty('اثری با این وضعیت در مسیر انتخابی پیدا نشد.')}</div>
  ${!disney?`<section class="bonus-section"><div><div class="bonus-kicker">EXTRA CHAPTERS</div><h3>داستان واندا و ویژن رو کامل‌تر ببین</h3><p>این دو سریال تکمیلی، خارج از ۲۳ پیش‌نیاز اصلی هستند.</p></div><div class="bonus-grid">${BONUS.map(id=>bonusCard(BY_ID[id])).join('')}</div></section>`:''}
- <p class="footnote">${disney?'منبع انتخاب عناوین: مجموعه Countdown to Avengers: Doomsday در Disney+. ترتیب نمایش برای این اپ تنظیم شده است؛ Loki در دو فصل جداگانه حساب می‌شود.':'آثار پیشنهادی ما شامل چند پیش‌نیاز تکمیلی هستند و فهرست الزام‌آور رسمی مارول محسوب نمی‌شوند.'}</p>
- ${homeGuide()}`}
+ ${doomsdayCountdown()}
+ ${homeGuide()}
+ <p class="footnote">${disney?'منبع انتخاب عناوین: مجموعه Countdown to Avengers: Doomsday در Disney+. ترتیب نمایش برای این اپ تنظیم شده است؛ Loki در دو فصل جداگانه حساب می‌شود.':'آثار پیشنهادی ما شامل چند پیش‌نیاز تکمیلی هستند و فهرست الزام‌آور رسمی مارول محسوب نمی‌شوند.'}</p>` }
 const mcuIds=()=>MCU.filter(f=>f.universe!=='bonus').map(f=>f.id);
 const arcInfo=()=>STORY_ARCS[state.arc]||STORY_ARCS.main;
 const orderedMCU=()=>state.order==='arc'?arcInfo().items.map(id=>BY_ID[id]).filter(f=>f&&MCU.includes(f)):MCU.slice().sort((a,b)=>state.order==='release'?a.release.localeCompare(b.release)||a.title.localeCompare(b.title):(STORY_INDEX[a.id]??9999)-(STORY_INDEX[b.id]??9999)||a.release.localeCompare(b.release));
@@ -357,10 +410,15 @@ function render(){
    else if(p.name==='settings'){body=settingsPage();title='تنظیمات'}
    else{body=doomsdayPage();title='مسیر Doomsday'}
  }
+ const priorVideo=document.querySelector('.countdown-video');
  document.getElementById('app').innerHTML=shell(body,title);
  seoLinks();
  window.marvelBootReady?.();
+ const nextVideo=document.querySelector('.countdown-video');
+ if(priorVideo&&nextVideo)nextVideo.replaceWith(priorVideo);
+ else if(priorVideo){priorVideo.pause();priorVideo.removeAttribute('src');priorVideo.load();}
  if(previous){const nav=document.querySelector('.cinema-section-nav');if(nav){if(previous.value)selectDetailSection(nav,previous.value);nav.scrollLeft=previous.scroll;}}
+ mountDoomsdayCountdown();
  document.querySelectorAll('.poster-image').forEach(img=>{if(img.complete&&!img.naturalWidth)img.classList.add('broken')});
  if(typeof loadInfoForPage==='function')setTimeout(()=>loadInfoForPage(p),0);
 }
