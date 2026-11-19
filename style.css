@@ -452,7 +452,7 @@ body{background:var(--bg);line-height:1.75}
 .cinema-episode-grid .episode{display:flex;flex-direction:column;align-items:stretch;position:relative;gap:5px;min-height:169px;text-align:right;padding:19px 17px 14px;background:radial-gradient(ellipse at 18% 0,rgba(92,74,87,.28),transparent 85%),var(--surface2);border:1px solid #ffffff19;border-radius:12px;transition:transform .22s,border-color .22s,box-shadow .22s}
 .cinema-episode-grid .episode:hover{transform:translateY(-4px);border-color:#ffffff40;box-shadow:0 15px 25px #0003}
 .cinema-episode-grid .ep-number{font-family:var(--font-en);font-size:24px;font-weight:900;line-height:1.4;color:#fff;letter-spacing:-.5px;direction:ltr;text-align:right}
-.cinema-episode-grid .ep-number::before{content:'EP';font-size:10px;color:#ff6874;margin-right:5px;letter-spacing:1px}
+
 .cinema-episode-grid .ep-check{position:absolute;top:16px;left:15px;width:27px;height:27px;border-radius:9px;border:1px solid #ffffff4b;color:#ffffff60;display:grid;place-items:center}
 .cinema-episode-grid .ep-copy{margin:19px 0 0;display:grid;gap:1px}
 .cinema-episode-grid .ep-copy strong{font-size:13px}
@@ -852,7 +852,7 @@ html.mp-gs-open{overflow:hidden}
 /* Long episode names should wrap rather than push the card beyond its column. */
 .cinema-episode-grid .ep-rich-body,.cinema-episode-grid .ep-rich-head,.cinema-episode-grid .ep-rich-head>div{min-width:0}
 .cinema-episode-grid .ep-rich-head>div{flex:1}
-.cinema-episode-grid .ep-rich-head .ep-number{flex:0 0 34px;white-space:nowrap}
+
 .cinema-episode-grid .ep-rich-head h4,.cinema-episode-grid .ep-rich-head small,.cinema-episode-grid .ep-synopsis{overflow-wrap:anywhere;white-space:normal}
 .cinema-episode-grid .episode-watch-button{white-space:normal;min-width:0;overflow-wrap:anywhere}
 
@@ -933,3 +933,20 @@ html.mp-gs-open{overflow:hidden}
  .feature-next .feature-index{font-size:8px}
 }
 @media(prefers-reduced-motion:reduce){.feature-next a.feature-poster{transition:none}}
+
+
+/* Explicit episode badge, independent of card direction and inherited grid rules. */
+.cinema-episode-grid .episode-rich .ep-rich-head .ep-number{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ flex:0 0 42px;width:42px;min-width:42px;height:44px;
+ gap:3px;padding:4px 2px;border-radius:9px;direction:ltr;text-align:center;
+ background:var(--surface);border:1px solid var(--border2);color:var(--red);
+ letter-spacing:0;line-height:1;white-space:nowrap;
+}
+.cinema-episode-grid .ep-rich-head .ep-number::before{content:none;display:none}
+.ep-number-label{display:block;font:bold 9px/1 var(--font-en);letter-spacing:1px;color:inherit}
+.ep-number-value{display:block;font:800 18px/1.1 var(--font);font-variant-numeric:tabular-nums;color:inherit}
+.cinema-episode-grid .episode-rich.episode-checked .ep-rich-head .ep-number{
+ background:rgba(56,180,113,.14);border-color:rgba(56,180,113,.35);color:#59d999;
+}
+:root[data-theme=light] .cinema-episode-grid .episode-rich.episode-checked .ep-rich-head .ep-number{color:#197244}

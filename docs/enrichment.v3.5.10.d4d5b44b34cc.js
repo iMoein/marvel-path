@@ -15,7 +15,7 @@ function episodeDisplay(f,n){const meta=titleMetadata(f.id),ep=meta?.episodes?.f
  const title=ep?.name||META[f.id]?.episodes?.[n-1]||`Episode ${n}`;
  const checked=getEpisodes(f).includes(n);
  const image=safePhoto(ep?.image);
- return `<article class="episode episode-rich ${checked?'episode-checked':''}" data-episode="${n}">${image?`<div class="episode-still"><img alt="تصویر قسمت ${num(n)}" src="${esc(image)}" loading="lazy" /></div>`:''}<div class="ep-rich-body"><div class="ep-rich-head"><span class="ep-number">${num(n)}</span><div><h4 dir="ltr" lang="en">${esc(title)}</h4><small>قسمت ${num(n)}${ep?.runtime?' · '+duration(ep.runtime):''}${ep?.airDate?' · '+esc(ep.airDate):''}</small></div></div>${ep?.overview?`<p class="ep-synopsis">${esc(ep.overview)}</p>`:meta?.source?'<p class="ep-synopsis subtle">برای این قسمت هنوز خلاصه‌ای در منبع ثبت نشده است.</p>':''}<button type="button" class="episode-watch-button ${checked?'checked':''}" role="checkbox" aria-checked="${checked}" data-action="episode" data-id="${esc(f.id)}" data-value="${n}">${ico('check',15)} ${checked?'دیده‌شده؛ برای لغو بزن':'ثبت تماشای قسمت'}</button></div></article>`;
+ return `<article class="episode episode-rich ${checked?'episode-checked':''}" data-episode="${n}">${image?`<div class="episode-still"><img alt="تصویر قسمت ${num(n)}" src="${esc(image)}" loading="lazy" /></div>`:''}<div class="ep-rich-body"><div class="ep-rich-head"><span class="ep-number" aria-hidden="true"><span class="ep-number-label" lang="en">EP</span><span class="ep-number-value">${num(n)}</span></span><div><h4 dir="ltr" lang="en">${esc(title)}</h4><small>قسمت ${num(n)}${ep?.runtime?' · '+duration(ep.runtime):''}${ep?.airDate?' · '+esc(ep.airDate):''}</small></div></div>${ep?.overview?`<p class="ep-synopsis">${esc(ep.overview)}</p>`:meta?.source?'<p class="ep-synopsis subtle">برای این قسمت هنوز خلاصه‌ای در منبع ثبت نشده است.</p>':''}<button type="button" class="episode-watch-button ${checked?'checked':''}" role="checkbox" aria-checked="${checked}" data-action="episode" data-id="${esc(f.id)}" data-value="${n}">${ico('check',15)} ${checked?'دیده‌شده؛ برای لغو بزن':'ثبت تماشای قسمت'}</button></div></article>`;
 }
 function peoplePage(){const items=information.directory?.items||[],busy=!information.directory;
  return `<div class="page-intro"><span class="page-kicker">THE PEOPLE BEHIND THE STORIES</span><h1>بازیگران <em>مارول</em></h1><p>پروفایل‌ها از روی حضور واقعی بازیگران در عناوین ذخیره‌شده به هم متصل می‌شن.</p></div><div class="people-toolbar"><label class="vault-search">${ico('search',17)}<input id="people-search" placeholder="نام بازیگر یا شخصیت..." autocomplete="off" value="${esc(peopleSearchTerm)}" /></label><span>${num(items.length)} بازیگر در آرشیو</span></div><div id="people-results" class="people-directory">${peopleCards(items,peopleSearchTerm)}</div>${busy?'<p class="metadata-empty">در حال بارگذاری فهرست بازیگران…</p>':''}`;
@@ -39,7 +39,7 @@ function personPage(id){const data=information.people[id],p=data?.data;
 }
 async function publicJson(path){
  const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),12000);
- try{const r=await fetch(path+'?v=3.5.7',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
+ try{const r=await fetch(path+'?v=3.5.10',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
 }
 async function loadInfoForPage(page){
  if(page.name==='title'&&BY_ID[page.id]&&!information.requested.has(page.id)){
