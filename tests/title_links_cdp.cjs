@@ -22,7 +22,7 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
   for(const selector of ['.feature-title-link','.feature a.feature-poster']){
    await go('/?feature-test='+Date.now());
    const result=await ev(`(()=>{
-    const a=document.querySelector(${JSON.stringify(selector)}),h=document.querySelector('.feature h1'),label=document.querySelector('.feature-next-label'),c=document.querySelector('.feature-content');
+    const a=document.querySelector(${JSON.stringify(selector)}),h=document.querySelector('.feature h1'),label=document.querySelector('.feature-next-label'),c=document.querySelector('.feature-identity');
     if(!a||!h||!label)return null;
     const lb=label.getBoundingClientRect(),hb=h.getBoundingClientRect(),cb=c.getBoundingClientRect(),st=getComputedStyle(c),edge=cb.right-parseFloat(st.paddingRight);
     const aligned=Math.abs(lb.right-edge)<3&&Math.abs(hb.right-edge)<3&&lb.bottom<=hb.top+1&&getComputedStyle(label).direction==='rtl';
