@@ -25,12 +25,12 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
   for(const mode of ['all','disney']){
    await ev(`document.querySelector('[data-action="route-mode"][data-value="${mode}"]').click();window.scrollTo(0,0)`);
    await sleep(80);
-   const initial=await ev(`(()=>{const c=document.querySelector('.route-mode-switch'),r=c.getBoundingClientRect(),h=document.querySelector('.topbar').getBoundingClientRect();return {top:r.top,header:h.bottom,fit:c.scrollWidth<=c.clientWidth+2&&document.documentElement.scrollWidth<=innerWidth+2,position:getComputedStyle(c).position,year:document.querySelector('.row-description>span')?.textContent,grouped:/[۰-۹]٬[۰-۹]{3}/.test([...document.querySelectorAll('.row-description>span')].map(e=>e.textContent).join(' '))}})()`);
-   assert(initial.top>initial.header&&initial.fit&&initial.position==='sticky'&&!initial.grouped&&/[۰-۹]{4}/.test(initial.year),JSON.stringify({width,mode,initial}));
+   const initial=await ev(`(()=>{const c=document.querySelector('.route-mode-switch'),r=c.getBoundingClientRect(),h=document.querySelector('.topbar').getBoundingClientRect();return {top:r.top,header:h.bottom,fit:c.scrollWidth<=c.clientWidth+2&&document.documentElement.scrollWidth<=innerWidth+2,position:getComputedStyle(c).position,onlyButtons:!c.querySelector('.route-mode-copy')&&c.querySelectorAll('button').length===2&&c.previousElementSibling.matches('.route-mode-copy'),compact:r.width<=361&&r.height<=56,year:document.querySelector('.row-description>span')?.textContent,grouped:/[۰-۹]٬[۰-۹]{3}/.test([...document.querySelectorAll('.row-description>span')].map(e=>e.textContent).join(' '))}})()`);
+   assert(initial.top>initial.header&&initial.fit&&initial.position==='sticky'&&initial.onlyButtons&&initial.compact&&!initial.grouped&&/[۰-۹]{4}/.test(initial.year),JSON.stringify({width,mode,initial}));
    await ev('window.scrollTo(0,window.scrollY+document.querySelector(".route-mode-switch").getBoundingClientRect().top+250)');
    await sleep(80);
-   const pinned=await ev(`(()=>{const c=document.querySelector('.route-mode-switch'),r=c.getBoundingClientRect(),h=document.querySelector('.topbar').getBoundingClientRect(),b=c.querySelector('button').getBoundingClientRect();return {top:r.top,header:h.bottom,hit:c.contains(document.elementFromPoint(b.x+b.width/2,b.y+b.height/2)),selected:c.querySelector('[aria-pressed=true]').dataset.value}})()`);
-   assert(Math.abs(pinned.top-pinned.header)<2&&pinned.hit&&pinned.selected===mode,JSON.stringify({width,mode,pinned}));
+   const pinned=await ev(`(()=>{const c=document.querySelector('.route-mode-switch'),r=c.getBoundingClientRect(),h=document.querySelector('.topbar').getBoundingClientRect(),b=c.querySelector('button').getBoundingClientRect();return {top:r.top,header:h.bottom,hit:c.contains(document.elementFromPoint(b.x+b.width/2,b.y+b.height/2)),selected:c.querySelector('[aria-pressed=true]').dataset.value,copyAbove:c.previousElementSibling.getBoundingClientRect().bottom<h.bottom,compact:r.width<=361&&r.height<=56}})()`);
+   assert(Math.abs(pinned.top-pinned.header-8)<2&&pinned.copyAbove&&pinned.compact&&pinned.hit&&pinned.selected===mode,JSON.stringify({width,mode,pinned}));
   }
   console.log('PASS sticky both modes',width);
  }
