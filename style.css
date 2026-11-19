@@ -739,3 +739,15 @@ html.mp-gs-open{overflow:hidden}
  .app-shell:not(.admin-app) .mobile-logo{font-size:13px;gap:6px}
  .app-shell:not(.admin-app) .mp-search-launch{padding-inline:8px;gap:6px;font-size:12px}
 }
+
+
+/* Notifications are informational only: never intercept clicks or touch. */
+#toasts,#toasts .toast{pointer-events:none}
+#toasts:empty{display:none}
+#toasts .toast{max-width:min(360px,calc(100vw - 60px));overflow-wrap:anywhere;line-height:1.7}
+#toasts .toast.fade{animation:none;opacity:0;transform:translateY(8px);transition:opacity .24s ease,transform .24s ease}
+@media(max-width:700px){
+ #toasts{align-items:center}
+ #toasts .toast{max-width:100%;padding:10px 15px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){#toasts .toast,#toasts .toast.fade{animation:none;transition:none}}
