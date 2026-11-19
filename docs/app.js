@@ -38,28 +38,7 @@ const isAnimation=f=>!!META[f.id]?.animation;
 const kind=f=>isAnimation(f)?'انیمیشن':f.type==='movie'?'فیلم سینمایی':f.type==='series'?'سریال':f.id==='all-hail'?'فیلم کوتاه':'ویژه‌برنامه';
 const seasonCount=f=>f.episodes||0;
 const maxVal=f=>f.episodes||f.minutes||1;
-const posterCandidates=f=>{
- const custom=state?.customPosters?.[f.id]||'';
- const main=META[f.id]?.poster||'';
- const secondary=POSTER_BACKUPS[f.id]||'';
- const extra=POSTER_EXTRA[f.id]||[];
- const local=localCover(f);
- const candidates=[local,custom];
- // Broken covers observed by the user: try a verified, different picture/host before the old one.
- if(extra.length)candidates.push(...extra);
- candidates.push(main,secondary);
- // An independent image CDN host for *all* TMDB picture paths. No API key is required.
- const tmdbUrls=[main,...extra].filter(u=>u.startsWith('https://image.tmdb.org/t/p/'));
- for(const url of tmdbUrls){
-   
-   candidates.push(url.replace(/\/t\/p\/w(?:185|342|500|780)\//,'/t/p/w342/'));
- }
- for(const url of [main,secondary]){
-   if(url.includes('raw.githubusercontent.com/HaithamAmireh/MCU/main/'))
-     candidates.push(url.replace('https://raw.githubusercontent.com/HaithamAmireh/MCU/main/','https://cdn.jsdelivr.net/gh/HaithamAmireh/MCU@main/'));
- }
- return [...new Set(candidates.filter(u=>u===local&&!!local || /^https:\/\/(?:image\.tmdb\.org|cdn\.marvel\.com|lumiere-a\.akamaihd\.net|raw\.githubusercontent\.com|cdn\.jsdelivr\.net)\//.test(u)))];
-};
+const posterCandidates=f=>{const local=localCover(f);return local?[local]:[];};
 const posterUrl=f=>posterCandidates(f)[0]||'';
 function blank(){const progress={};for(const id of SEEN){const f=BY_ID[id];if(f&& !f.episodes)progress[id]=maxVal(f)}const episodes={};for(const id of SEEN){const f=BY_ID[id];if(f?.episodes)episodes[id]=Array.from({length:f.episodes},(_,i)=>i+1)}return {schema:2,order:'story',arc:'main',mcuFilter:'all',mcuStatus:'all',mcuView:'grid',mcuPage:0,mcuPageSize:10,routeMode:'all',routeStatus:'all',routeFilter:'all',theme:'dark',progress,episodes,watching:{},saved:{doomsday:[],mcu:[]},notes:{},customPosters:{}}}
 const safeIds=arr=>Array.isArray(arr)?[...new Set(arr.filter(id=>!!BY_ID[id]))]:[];
@@ -108,7 +87,7 @@ function shell(body,active){const s=stats(routeIds());return `<div class="app-sh
  <aside class="sidebar"><a class="logo" href="#doomsday"><span class="logo-mark">M<span>／</span></span><span class="logo-name"><b>مسیر مارول</b><small>MARVEL PATH</small></span></a>
  <div class="nav-caption">کتابخانه شخصی</div><nav class="nav-column" aria-label="منوی اصلی">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav>
  <div class="sidebar-spacer"></div><div class="sidebar-foot"><div class="sidebar-foot-art">EARTH-616 <span>✳</span></div><span>${state.routeMode==='disney'?'منتخب دیزنی+':'مسیر پیشنهادی Doomsday'}</span><strong>${num(s.watched)} <small>از ${num(s.count)} عنوان</small></strong><div class="thin-meter"><i style="width:${s.percent}%"></i></div></div>
- <div class="sidebar-end">MARVEL PATH <span> / </span> v3.0</div></aside>
+ <div class="sidebar-end">MARVEL PATH <span> / </span> v3.2</div></aside>
  <div class="workspace"><header class="topbar"><div class="mobile-logo"><span class="mini-m">M</span><span>مسیر مارول</span></div><div class="breadcrumb">WATCH HUB <span class="slash">/</span> <b>${esc(active)}</b></div><div class="top-actions">${nextOf(routeIds())?`<a class="top-resume" href="#title/${nextOf(routeIds()).id}">${ico('play',13)}<span>ادامه مسیر</span></a>`:''}<span class="top-status"><span class="local-dot" title="داده‌ها فقط در مرورگر ذخیره می‌شوند"></span><span class="storage-label">ذخیره خودکار روشن است</span></span><span class="top-clock top-earth">EARTH-616</span></div></header><main id="main-content" class="main-content">${body}</main><footer class="main-footer"><span class="footer-tagline">ساخته‌شده برای دنبال کردن داستان‌ها</span></footer></div>
  <nav class="mobile-nav" aria-label="منوی موبایل">${['doomsday','mcu','watchlist','people','settings'].map(navLink).join('')}</nav></div>`}
 function buttonOpen(f,caption='مشاهده جزئیات',more=''){return `<a href="#title/${encodeURIComponent(f.id)}" class="btn btn-primary ${more}">${ico('play',17)} ${caption} ${ico('arrow',16)}</a>`}
@@ -163,12 +142,7 @@ function mcuPage(){const s=stats(MCU.map(f=>f.id)),visible=filterMCU(),{page,pag
 function watchlistPage(){const a=state.saved.doomsday.filter(id=>BY_ID[id]),b=state.saved.mcu.filter(id=>BY_ID[id]);const r=stats(a),m=stats(b);return `<div class="page-intro"><div class="page-kicker">YOUR COLLECTION <span class="accent-slash">/</span> ذخیره‌شده‌ها</div><h1>واچ‌لیست <em>من</em></h1><p>آثاری که برای بعد کنار گذاشتی؛ واچ‌لیست Doomsday و آرشیو MCU مستقل هستند.</p></div><div class="watch-summary">${metric('bookmark','در لیست Doomsday',num(a.length),'باقی‌مانده: '+num(r.pending))}${metric('layers','در لیست MCU',num(b.length),'باقی‌مانده: '+num(m.pending))}${metric('clock','زمان لیست‌ها',duration(r.remaining+m.remaining),'تخمین مستقل هر لیست')}</div>${sectionTitle('واچ‌لیست Doomsday','آثار نشان‌گذاری‌شده در مسیر اصلی.')}<div class="route-list">${a.length?a.map((id,i)=>filmRow(BY_ID[id],i+1,'doomsday')).join(''):empty('هنوز موردی از مسیر Doomsday نشان‌گذاری نکردی.')}</div>${sectionTitle('واچ‌لیست MCU','فیلم‌ها و سریال‌های انتخابی از آرشیو.')}<div class="route-list">${b.length?b.map((id,i)=>filmRow(BY_ID[id],i+1,'mcu')).join(''):empty('از آرشیو MCU روی آیکن نشانک بزن تا اینجا اضافه بشه.')}</div>`}
 function empty(m){return `<div class="empty"><span>${ico('search',28)}</span><b>موردی پیدا نشد</b><p>${m}</p></div>`}
 /* v2.6: Film detail follows the Figma film-page composition: full-height poster, contextual backdrop, editorial content, and episode-first progress. */
-function cinemaBackdropUrl(f){
-  const backup=POSTER_BACKUPS[f.id]||'';
-  if(backup.includes('/images/posters/'))return backup.replace('/images/posters/','/images/backdrops/');
-  // The poster remains the visible fallback when no landscape artwork is available.
-  return posterUrl(f);
-}
+function cinemaBackdropUrl(f){return posterUrl(f);}
 function cinemaHero(f,inDoom,inMcu){
  const watched=done(f),pct=Math.round(fraction(f)*100), next=f.episodes?Array.from({length:f.episodes},(_,i)=>i+1).find(n=>!getEpisodes(f).includes(n)):null;
  const tag=f.universe==='fox'?'FOX UNIVERSE':f.universe==='mcu'?'MARVEL CINEMATIC UNIVERSE':'MARVEL STORIES';
@@ -333,6 +307,6 @@ document.addEventListener('load',e=>{if(e.target.matches?.('.poster-image')&&e.t
 document.addEventListener('keydown',e=>{if(ADMIN_MODE)return;if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(activePage().name!=='mcu')location.hash='#mcu';requestAnimationFrame(()=>document.getElementById('search')?.focus())}});
 if(!location.hash)location.hash=ADMIN_MODE?'#dashboard':'#doomsday';else goHash();
 
-if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost','127.0.0.1'].includes(location.hostname))){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost','127.0.0.1'].includes(location.hostname))){navigator.serviceWorker.register('./sw.js?v=3.2',{updateViaCache:'none'}).catch(()=>{});}
 
 document.addEventListener('error',e=>{const img=e.target;if(img.matches?.('.actor-img img,.person-portrait img'))img.remove();else if(img.matches?.('.episode-still img'))img.parentNode.remove();},true);

@@ -26,3 +26,12 @@ rights and privacy have been checked. Commit the exported public-data and docs,
 not the local installation. GitHub Pages serves static JSON and artwork with
 no runtime TMDB credentials. The public catalogue is an offline snapshot;
 metadata and image rights remain with the respective providers.
+
+### Same-origin public viewer (3.2)
+After exporting the catalogue, run `python3 cache_public_images.py` before
+`python3 build_public.py` to cache the allowlisted remote episode stills and
+portraits as sanitized WebP images. The public build embeds the poster map
+and actor directory in its startup script, never waits for external images,
+and uses same-origin-only CSP and public metadata requests. Remote-only
+images without a cached copy are not requested by the browser. Public
+viewer fonts fall back to system fonts when no licensed local font is bundled.

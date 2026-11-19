@@ -1,13 +1,14 @@
-/* Optional offline-after-first-view cache. Never stores watch status or personal data. */
-const CORE='marvel-path-v31-core';const IMG='marvel-path-v31-posters';
-const SHELL=['./','./index.html','./style.css','./data.js','./meta.js','./posters.js','./app.js','./admin.js','./enrichment.js','./assets/favicon.svg'];
-self.addEventListener('install',event=>{event.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()).catch(()=>self.skipWaiting()));});
-self.addEventListener('activate',event=>{event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('marvel-path-v')&&![CORE,IMG].includes(k)).map(k=>caches.delete(k)))),self.clients.claim()]));});
+'use strict';
+const CORE='marvel-path-v32-core', DATA='marvel-path-v32-data';
+const SHELL=['./','./index.html','./style.css?v=3.2','./data.js?v=3.2','./meta.js?v=3.2','./posters.js?v=3.2','./admin.js?v=3.2','./enrichment.js?v=3.2','./app.js?v=3.2','./assets/favicon.svg'];
+self.addEventListener('install',event=>{self.skipWaiting();event.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).catch(()=>{}));});
+self.addEventListener('activate',event=>event.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',event=>{
- const req=event.request;if(req.method!=='GET')return;
- const url=new URL(req.url);
- const isPoster=req.destination==='image'&&(/image\.tmdb\.org$/.test(url.hostname)||/raw\.githubusercontent\.com$/.test(url.hostname)||/cdn\.jsdelivr\.net$/.test(url.hostname)||/img\.amodb\.dev$/.test(url.hostname)||/cdn\.marvel\.com$/.test(url.hostname)||/lumiere-a\.akamaihd\.net$/.test(url.hostname));
- if(isPoster){event.respondWith(caches.open(IMG).then(async c=>{const cached=await c.match(req);if(cached)return cached;try{const r=await fetch(req);if(r.ok||r.type==='opaque')c.put(req,r.clone()).catch(()=>{});return r}catch(e){return Response.error()}}));return;}
- if(url.origin===self.location.origin&&SHELL.some(s=>new URL(s,self.registration.scope).pathname===url.pathname)){
-   event.respondWith(fetch(req).then(async r=>{if(r.ok){const c=await caches.open(CORE);c.put(req,r.clone()).catch(()=>{});}return r}).catch(()=>caches.match(req)));}
+ const r=event.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==self.location.origin)return;
+ if(u.pathname.includes('/public-data/')){
+  event.respondWith(caches.open(DATA).then(async c=>{const old=await c.match(r);if(old)return old;const res=await fetch(r);if(res.ok)c.put(r,res.clone()).catch(()=>{});return res;}));return;
+ }
+ if(r.mode==='navigate'||SHELL.some(s=>new URL(s,self.registration.scope).pathname===u.pathname)){
+  event.respondWith(fetch(r).then(async res=>{if(res.ok){const c=await caches.open(CORE);c.put(r,res.clone()).catch(()=>{});}return res;}).catch(async()=>{const c=await caches.open(CORE);return await c.match(r)||await c.match(r.mode==='navigate'?'./index.html':r)||Response.error();}));
+ }
 });

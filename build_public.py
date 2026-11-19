@@ -95,3 +95,6 @@ p.write_text(s)
 p=OUT/'sw.js';s=p.read_text().replace('marvel-path-v29-','marvel-path-v31-')
 p.write_text(s)
 print('Built public pages:',sum(p.is_file() for p in OUT.rglob('*')))
+
+import harden_public
+harden_public.main()
