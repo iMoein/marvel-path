@@ -46,7 +46,7 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
  assert(await ev("document.querySelector('.cinema-facts-panel dd').textContent==='۲۰۲۱'&&document.querySelector('.cinema-pretitle').textContent.includes('۲۰۲۱')"),'title years');
  console.log('PASS title year');
  await go('/person/stan-lee/?year-test='+Date.now());
- for(let i=0;i<80;i++){if(await ev('!!document.querySelector(".person-film")'))break;await sleep(100);}
- assert(await ev("[...document.querySelectorAll('.person-film>div:last-child>span')].length>0&&[...document.querySelectorAll('.person-film>div:last-child>span')].every(x=>/[۰-۹]{4}/.test(x.textContent)&&!/[۰-۹]٬[۰-۹]{3}/.test(x.textContent))"),'person credit years');
+ for(let i=0;i<80;i++){if(await ev('!!document.querySelector(".person-film-grid .title-card")'))break;await sleep(100);}
+ assert(await ev("[...document.querySelectorAll('.person-film-grid .card-top-meta>span:first-child')].length>0&&[...document.querySelectorAll('.person-film-grid .card-top-meta>span:first-child')].every(x=>/[۰-۹]{4}/.test(x.textContent)&&!/[۰-۹]٬[۰-۹]{3}/.test(x.textContent))"),'person credit years');
  console.log('PASS person years');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>{ws?.close();chrome?.kill();srv.close();setTimeout(()=>{try{fs.rmSync(tmp,{recursive:true,force:true})}catch(_){}},300);});

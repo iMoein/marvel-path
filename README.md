@@ -84,3 +84,26 @@ The stored TMDB records for Daredevil season 3 (207555) and The Defenders (32736
 were identified as unrelated titles. Their synopsis, episode details and cast
 are withheld from the title page until the source records are corrected.
 Actor directory linkage from those records requires a separate source audit.
+
+### MCU phases and curated viewing steps (3.5.17)
+Release phases are separate from the project's editorial story arcs. Films and
+series share a phase label only where there is a phase assignment; older Marvel
+Television seasons are included as related continuity rather than given a
+Marvel Studios phase, and legacy Fox films retain their independent-universe
+label. Arc steps are one-based positions within the selected editorial path,
+not phase numbers or television season numbers. Actor filmographies reuse
+archive poster cards while retaining credit roles.
+
+Phase audit, 2026-11-19: all 86 catalogue entries, including 38 MCU films,
+were checked against the following references and recorded in the regression
+fixture `tests/catalog_phase_actor_cdp.cjs`:
+- Disney+ release-order phase guide: https://www.disneyplus.com/explore/articles/marvel-movies-in-order
+- Sony-distributed MCU films: https://en.wikipedia.org/wiki/List_of_Marvel_Cinematic_Universe_films
+- Marvel Studios series and specials: https://en.wikipedia.org/wiki/List_of_Marvel_Cinematic_Universe_television_series_(Marvel_Studios)
+- Phase Four and Five shorts: https://en.wikipedia.org/wiki/Marvel_Cinematic_Universe:_Phase_Four and https://en.wikipedia.org/wiki/Marvel_Cinematic_Universe:_Phase_Five
+- Phase Six: https://en.wikipedia.org/wiki/Marvel_Cinematic_Universe:_Phase_Six
+- One-shots/background: https://www.ebsco.com/research-starters/film/marvel-cinematic-universe-mcu/
+- Legacy TV distinction: https://www.tomsguide.com/news/marvel-movies-in-order
+
+The audit covers existing catalogue records, not completeness of the catalogue
+or all possible story chronology interpretations.

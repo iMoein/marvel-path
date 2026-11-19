@@ -37,7 +37,7 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
       heroFit:hero.scrollWidth<=hero.clientWidth+2,pageFit:document.documentElement.scrollWidth<=innerWidth+2,
       textFit:intro.scrollWidth<=intro.clientWidth+2,
       fullText:paragraphs.every(n=>Math.abs(n.getBoundingClientRect().width-i.width)<2&&getComputedStyle(n).maxWidth==='none'),
-      topAligned:Math.abs(p.top-i.top)<2,photoRight:p.left>=i.right-1,
+      topAligned:Math.abs(p.top-i.top)<2,verticalCentered:Math.abs((p.top+p.bottom-i.top-i.bottom)/2)<2,photoRight:p.left>=i.right-1,
       stacked:i.top>=p.bottom-1,centered:Math.abs((p.left+p.right-h.left-h.right)/2)<2,
       kind:bio?'translated':details?'original':'missing',
       counter:!!intro.querySelector('.person-counter'),credit:!!bio?.querySelector('.translation-credit'),
@@ -46,7 +46,7 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
    })()`);
    assert(r.heroFit&&r.pageFit&&r.textFit&&r.fullText&&r.counter&&r.kind===kind&&Math.abs(r.imageRatio-.75)<.02,JSON.stringify({slug,...r}));
    if(kind==='translated')assert(r.credit,JSON.stringify({slug,...r}));
-   assert(width<=700?r.cols===1&&r.stacked&&r.centered:r.cols===2&&r.topAligned&&r.photoRight,JSON.stringify({slug,...r}));
+   assert(width<=700?r.cols===1&&r.stacked&&r.centered:r.cols===2&&(kind==='missing'?r.verticalCentered:r.topAligned)&&r.photoRight,JSON.stringify({slug,...r}));
    console.log('PASS',slug,width,kind,r.cols+' columns');
   }
  }
