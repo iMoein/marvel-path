@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Add crawlable entry points, same-origin PWA assets, and social previews to the public build."""
 import html,json,re,shutil,subprocess
+import boot_shell
 from pathlib import Path
 from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.4.0'; SITE='https://marvel.imoein.com'
+VERSION='3.4.1'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -62,6 +63,7 @@ def main():
         if schema:
             tags.append('<script type="application/ld+json">'+jscript(schema)+'</script>')
         code=head.replace('<!--PAGE-META-->','\n'.join(tags)).replace('<!--PAGE-CONTENT-->',body).replace('<!--PAGE-DATA-->','<script type="application/json" id="page-data">'+jscript(record)+'</script>' if record is not None else '')
+        code=boot_shell.insert_shell(boot_shell.prepare_head(code),path,title)
         dest=OUT/path.strip('/')/'index.html';dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(code,encoding='utf-8')
         if index:urls.append(canonical)
     def list_titles(ids):return '<ul class="seo-catalog">'+''.join('<li>'+link('/title/'+fid+'/',films[fid]['fa']+' — '+films[fid]['title'])+'</li>' for fid in ids if fid in films)+'</ul>'
@@ -121,7 +123,7 @@ function seoLinks(){document.querySelectorAll('a[href^="#"]').forEach(a=>{const 
     s=s.replace("document.title=\x60"+'\${title} | مسیر مارول'+ "\x60;","seoLinks();")
     needle=" document.getElementById('app').innerHTML=shell(body,title);"
     assert needle in s
-    s=s.replace(needle,needle+"\n seoLinks();",1)
+    s=s.replace(needle,needle+"\n seoLinks();\n window.marvelBootReady?.();",1)
     s="\n".join(line for line in s.split("\n") if not line.strip().startswith("document.title="))
     # Runtime titles remain the accurate pre-rendered title; legacy fragment links navigate to canonical pages.
     s=s.replace("if(!location.hash)location.hash=ADMIN_MODE?'#dashboard':'#doomsday';else goHash();", """if(location.hash){const path=seoPath(location.hash.slice(1));if(path&&path!==location.pathname){location.replace(path);}else{history.replaceState(null,'',location.pathname+location.search);goHash();}}else goHash();
@@ -152,8 +154,8 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
     css=OUT/'style.css'
     with css.open('a') as f:f.write('\n.seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}\n')
     worker="""'use strict';
-const CORE='marvel-path-v340-core', DATA='marvel-path-v340-data';
-const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.4.0','/data.js?v=3.4.0','/meta.js?v=3.4.0','/posters.js?v=3.4.0','/admin.js?v=3.4.0','/enrichment.js?v=3.4.0','/app.js?v=3.4.0','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
+const CORE='marvel-path-v341-core', DATA='marvel-path-v340-data';
+const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.4.1','/data.js?v=3.4.1','/meta.js?v=3.4.1','/posters.js?v=3.4.1','/admin.js?v=3.4.1','/enrichment.js?v=3.4.1','/app.js?v=3.4.1','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{
