@@ -1,6 +1,30 @@
 # Marvel Path — مسیر مارول
 A Persian, RTL, local-first, unofficial Marvel viewing tracker. Public viewer: https://marvel.imoein.com/
  
+## Current release — 3.5.25
+
+- Persian RTL viewing tracker with two Doomsday routes, progress tracking, watchlists, and notes.
+- 88 catalogue entries and posters, 1,518 actor profiles, release timeline, and bilingual search.
+- Installable PWA with a footer install action and platform-specific installation instructions.
+- Cinematic Doomsday countdown with a locally hosted, silent looping video.
+- Local-only administration, incremental metadata/image retrieval, and static public export.
+
+## Install the PWA
+
+Open https://marvel.imoein.com/ and choose **نصب برنامه** in the footer.
+Chrome/Edge and other supporting browsers may show a native install prompt.
+On iPhone/iPad, open Safari, use Share → Add to Home Screen → Add.
+On macOS Safari use File → Add to Dock where supported. On Android, use the
+browser menu → Install app / Add to Home screen. The footer provides the matching
+instructions when no native prompt is available. The installed display mode
+disables the install action. Installation availability is browser-dependent;
+no installation or prompt is triggered without user action.
+
+Progress and notes are device/browser-local, not synced to an account.
+Export a backup from Settings before moving to a different browser or standalone
+app, and import it there if needed. Previously cached content may be available
+offline, but the entire catalogue is not guaranteed to be cached.
+
 ## Public viewer
 The static site is built with `python3 build_public.py` and deployed from `main:/docs` on GitHub Pages. No user accounts or backend are required. Progress and notes are stored in each browser. Import a personal backup from Settings to migrate from localhost; browser storage is origin-specific.
  
@@ -16,6 +40,7 @@ Artwork and source data belong to their respective owners. This product uses the
 From the repository, install Pillow in your Python environment if needed. Run:
 
     python3 export_public_catalog.py /path/to/private/marvel-path-installation
+    python3 cache_public_images.py
     python3 build_public.py
 
 The exporter reads only named catalogue records and referenced artwork. It never
@@ -127,7 +152,7 @@ legacy Marvel Television release.
 ### Release catalogue reconciliation (3.5.19)
 The two released X-Men ’97 seasons now belong to the archive with official
 premiere dates and episode counts (10 and 9). No invented runtime or cast
-metadata is included; artwork and episode-level metadata are pending.
+metadata is included; artwork and episode-level metadata were initially pending; both season posters and episode records are now exported, with any unavailable fields left empty.
 The timeline derives its released-title total from the same catalogue.
 Avengers Endgame: Encore is a 2026 release variant of the 2019 film, not a
 new MCU film; its September 25 theatrical and November 13 Disney+ dates
@@ -160,7 +185,7 @@ https://avengerscountdown.com/; not a confirmed first showtime.
 The date and UTC time are in the release calendar entry.
 Background source supplied by the owner:
 https://media.rekydev.fr/avengerscountdown/background.webm
-Locally transcoded to 720p silent H.264 MP4, with a local JPEG still.
+Locally transcoded to silent H.264 MP4 with encoded top/bottom bars cropped (1280 × 536), with a matching local JPEG still. The mobile card has a compact responsive height; desktop follows the next-up hero.
 Silent inline video autoplays and loops without a control. Reduced-motion users receive a static background.
 Permission to redistribute this third-party footage has not been verified;
 confirm rights before public deployment.

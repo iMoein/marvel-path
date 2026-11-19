@@ -1,0 +1,76 @@
+let selectedMetadataTitle = "";
+'use strict';
+/* Metadata UX. Title progress stays exclusively in the v2 localStorage schema. */
+const information={titles:Object.create(null),people:Object.create(null),directory:publicPeopleDirectory,status:null,requested:new Set(),personRequested:new Set(),busy:false};
+
+const titleMetadata=id=>information.titles[id]?.data||null;
+const actorName=p=>p.nameFa||p.name||'';
+const roleName=c=>c.characterFa||c.character||'';
+const faSearch=value=>String(value||'').toLowerCase().replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[\u200c\u200d]/g,' ').trim();
+const personSearchText=p=>faSearch([p.name,p.nameFa,...(p.credits||[]).flatMap(c=>[c.character,c.characterFa])].filter(Boolean).join(' '));
+const showTranslatedBio=p=>{
+ if(p.bioFa){const bio=p.bioFa.split(/\n\s*\n/).map(t=>'<p lang="fa" dir="rtl">'+esc(t)+'</p>').join('');return '<div class="person-bio-fa">'+bio+(p.bioFaAttribution?'<small class="translation-credit" lang="en" dir="ltr">'+esc(p.bioFaAttribution)+' · Persian translation</small>':'')+'</div>';}
+ if(p.bio)return '<details class="untranslated-source"><summary>بیوگرافی به زبان اصلی (ترجمه نشده)</summary><p lang="en" dir="ltr">'+esc(p.bio)+'</p></details>';
+ const films=(p.credits||[]).map(c=>BY_ID[c.id]?.fa).filter(Boolean);
+ return '<p>هنوز بیوگرافی این بازیگر در منبع ثبت نشده است.'+(films.length?' حضور ثبت‌شده در آرشیو: '+esc(films.slice(0,5).join('، '))+'.':'')+'</p>';
+};
+
+const safePhoto=url=>{if(typeof url!=='string')return '';if(/^\.\/public-data\/images\/(?:people|remote)\/[a-z0-9-]+\.webp$/.test(url))return url;return Object.hasOwn(publicImageMap,url)?publicImageMap[url]:'';};
+const picture=(src,caption,cls='actor-img')=>{const safe=safePhoto(src);return `<span class="${cls}">${safe?`<img src="${esc(safe)}" loading="lazy" alt="${esc(caption)}" referrerpolicy="no-referrer">`:''}<span class="actor-fallback">${esc((caption||'?').trim().charAt(0).toUpperCase())}</span></span>`};
+const creditCard=(p)=>`<a class="cast-card" href="#person/${encodeURIComponent(p.personId)}" title="پروفایل ${esc(actorName(p))}">${picture(p.photo,p.name)}<span class="cast-actor" dir="auto">${esc(actorName(p))}</span>${p.nameFa?`<span class="actor-name-en" dir="ltr">${esc(p.name)}</span>`:''}<span class="cast-character" dir="auto">${esc(roleName(p)||'بازیگر')}</span></a>`;
+function castSection(f){const meta=titleMetadata(f.id), cast=meta?.sourceMismatch?[]:meta?.cast||[];if(information.titles[f.id]?.failed)return '<section class="cinema-panel metadata-empty"><p>دریافت اطلاعات اثر ناموفق بود.</p><button class="btn btn-outline" data-retry-info>تلاش دوباره</button></section>';
+ const info=meta?.source?`اطلاعات: ${esc(meta.source)}`:'اطلاعات بازیگران';
+ return `<section class="cinema-panel cast-panel" id="title-cast"><header class="cinema-section-head"><div><span class="cinema-kicker">CAST & CHARACTERS</span><h2>بازیگران و نقش‌ها</h2><p>${info} · روی هر بازیگر بزن تا حضورهایش در آثار دیگر را ببینی.</p></div><a class="small-btn" href="#people">همه بازیگران</a></header>${cast.length?`<div class="cast-grid">${cast.slice(0,16).map(creditCard).join('')}</div>${cast.length>16?`<details class="cast-rest"><summary>نمایش ${num(cast.length-16)} بازیگر دیگر</summary><div class="cast-grid">${cast.slice(16).map(creditCard).join('')}</div></details>`:''}`:`<div class="metadata-empty">${ico('info',23)}<div><strong>هنوز فهرست بازیگران این اثر ذخیره نشده.</strong><p>هنوز اطلاعات بازیگران این اثر به کتابخانه اضافه نشده است.</p></div>${ADMIN_MODE&&posterAdmin.authorized?`<button class="small-btn" data-info-action="sync-title" data-id="${esc(f.id)}">دریافت اطلاعات این اثر</button>`:''}</div>`}</section>`;
+}
+function episodeDisplay(f,n){const meta=titleMetadata(f.id),ep=(meta?.sourceMismatch?null:meta?.episodes?.find(x=>x.number===n))||null;
+ const title=ep?.nameFa||ep?.name||META[f.id]?.episodes?.[n-1]||`قسمت ${num(n)}`;
+ const checked=getEpisodes(f).includes(n);
+ const image=safePhoto(ep?.image);
+ return `<article class="episode episode-rich ${checked?'episode-checked':''}" data-episode="${n}">${image?`<div class="episode-still"><img alt="تصویر قسمت ${num(n)}" src="${esc(image)}" loading="lazy" /></div>`:''}<div class="ep-rich-body"><div class="ep-rich-head"><span class="ep-number" aria-hidden="true"><span class="ep-number-label" lang="en">EP</span><span class="ep-number-value">${num(n)}</span></span><div class="episode-heading"><h4 dir="auto" lang="${ep?.nameFa?'fa':'en'}">${esc(title)}</h4>${ep?.nameFa&&ep.name?`<small class="episode-original-name" lang="en" dir="ltr">${esc(ep.name)}</small>`:''}</div><div class="episode-meta" dir="rtl"><span class="episode-meta-number">قسمت ${num(n)}</span>${ep?.runtime?`<span class="episode-meta-runtime">${duration(ep.runtime)}</span>`:''}${ep?.airDate?`<span class="episode-meta-date" dir="ltr">${esc(ep.airDate)}</span>`:''}</div></div>${ep?.overviewFa?`<p class="ep-synopsis" lang="fa" dir="rtl">${esc(ep.overviewFa)}</p>`:ep?.overview?`<details class="untranslated-source"><summary>خلاصه به زبان اصلی (ترجمه نشده)</summary><p class="ep-synopsis" lang="en" dir="ltr">${esc(ep.overview)}</p></details>`:meta?.source?'<p class="ep-synopsis subtle">برای این قسمت هنوز خلاصه‌ای در منبع ثبت نشده است.</p>':''}<button type="button" class="episode-watch-button ${checked?'checked':''}" role="checkbox" aria-checked="${checked}" data-action="episode" data-id="${esc(f.id)}" data-value="${n}">${ico('check',15)} ${checked?'دیده‌شده؛ برای لغو بزن':'ثبت تماشای قسمت'}</button></div></article>`;
+}
+function peoplePage(){const items=information.directory?.items||[],busy=!information.directory;
+ return `<div class="page-intro"><span class="page-kicker">THE PEOPLE BEHIND THE STORIES</span><h1>بازیگران <em>مارول</em></h1><p>پروفایل‌ها از روی حضور واقعی بازیگران در عناوین ذخیره‌شده به هم متصل می‌شن.</p></div><div class="people-toolbar"><label class="vault-search">${ico('search',17)}<input id="people-search" placeholder="نام بازیگر یا شخصیت..." autocomplete="off" value="${esc(peopleSearchTerm)}" /></label><span>${num(items.length)} بازیگر در آرشیو</span></div><div id="people-results" class="people-directory">${busy?'':peopleCards(items,peopleSearchTerm)}</div>${busy?'<p class="metadata-empty">در حال بارگذاری فهرست بازیگران…</p>':''}`;
+}
+let peopleSearchTerm='';
+let publicPeoplePage=0;
+function peopleCards(items,term=''){
+ const q=faSearch(term);
+ const chosen=items.filter(p=>personSearchText(p).includes(q));
+ const pages=Math.max(1,Math.ceil(chosen.length/60));
+ publicPeoplePage=Math.max(0,Math.min(publicPeoplePage,pages-1));
+ const cards=chosen.slice(publicPeoplePage*60,(publicPeoplePage+1)*60).map(p=>`<a class="people-card" href="/person/${encodeURIComponent(p.id)}/">${picture(p.photo,p.name)}<strong dir="auto">${esc(actorName(p))}</strong>${p.nameFa?`<span class="actor-name-en" dir="ltr">${esc(p.name)}</span>`:''}<span>${num((p.credits||[]).length)} حضور در آرشیو</span></a>`).join('');
+ if(!cards)return empty('نام بازیگر یا شخصیت دیگری را جست‌وجو کن.','بازیگری پیدا نشد');
+ return cards+(pages>1?`<div class="public-people-pager"><button class="btn btn-outline" data-people-page="-1" ${publicPeoplePage===0?'disabled':''}>قبلی</button><span>صفحه ${num(publicPeoplePage+1)} از ${num(pages)} · ${num(chosen.length)} بازیگر</span><button class="btn btn-outline" data-people-page="1" ${publicPeoplePage===pages-1?'disabled':''}>بعدی</button></div>`:'');
+}
+function personPage(id){const data=information.people[id],p=data?.data;
+ if(data?.failed)return '<div class="metadata-empty"><p>دریافت اطلاعات ممکن نشد. اتصال اینترنت را بررسی کنید.</p><button class="btn btn-outline" data-retry-info>تلاش دوباره</button></div>';
+ if(!p)return `<div class="page-intro"><h1>پروفایل بازیگر</h1><p>${data?.missing?'این بازیگر در آرشیو فعلی ثبت نشده.':'در حال خواندن پروفایل و فیلموگرافی…'}</p><a class="btn btn-outline" href="#people">بازگشت به فهرست</a></div>`;
+ const films=p.credits||[],external=(p.filmography||[]).filter(x=>x?.name);
+ return `<div class="person-profile"><a class="film-backlink" href="#people">${ico('back',16)} بازگشت به بازیگران</a><section class="person-hero${!p.bioFa&&!p.bio?' person-hero-short':''}">${picture(p.photo,p.name,'person-portrait')}<div class="person-intro"><span class="cinema-kicker">ACTOR PROFILE / ${esc(p.source||'LOCAL CATALOGUE')}</span><h1 dir="auto">${esc(actorName(p))}</h1>${p.nameFa?`<p class="person-name-original" dir="ltr">${esc(p.name)}</p>`:''}${p.birthDate?`<p>تولد: ${esc(p.birthDate)}${p.birthPlace?' · '+esc(p.birthPlaceFa||p.birthPlace):''}</p>`:''}${showTranslatedBio(p)}<div class="person-counter">${num(films.length)} حضور در مجموعه خودت</div>${ADMIN_MODE&&posterAdmin.authorized?`<div class="person-admin-controls"><button class="btn btn-primary" data-info-action="sync-person" data-id="${esc(id)}">${ico('download',16)} یافتن خودکار اطلاعات و عکس</button>${posterAdmin.authorized?`<button class="btn btn-outline" data-info-action="upload-person-photo" data-id="${esc(id)}">${ico('upload',16)} آپلود عکس دلخواه</button><input hidden type="file" accept="image/jpeg,image/png,image/webp" id="person-photo-upload-${esc(id)}" data-person-id="${esc(id)}" />` :''}</div>${!p.tmdbId&&posterAdmin.authorized?`<div class="person-tmdb-manual"><label for="person-tmdb-id">اگر بازیگر به اشتباه شناسایی شد یا نتیجه‌ای نداشت، شناسه TMDB اون رو وارد کن.</label><div><input id="person-tmdb-id" type="number" min="1" placeholder="شناسه عددی بازیگر در TMDB" /><button class="btn btn-outline" data-info-action="link-person" data-id="${esc(id)}">ثبت شناسه</button></div></div>`:''}`:''}</div></section><section class="cinema-panel person-credits"><div class="cinema-section-head"><div><span class="cinema-kicker">IN YOUR MARVEL LIBRARY</span><h2>فیلم‌ها و سریال‌های این بازیگر</h2></div></div><div class="poster-grid person-film-grid">${films.map(c=>{const f=BY_ID[c.id];return f?filmCard(f,0,f.universe==='fox'?'doomsday':'mcu','grid',{actor:true,role:roleName(c)}):''}).join('')||empty('هنوز اثری از این بازیگر در آرشیو ثبت نشده است.')}</div></section>${external.length?`<section class="cinema-panel person-outside"><h2>سایر آثار در فیلموگرافی</h2><p>این عناوین لزوماً در آرشیو Marvel Path وجود ندارند.</p><div class="external-film-list">${external.map(x=>`<div><strong dir="ltr">${esc(x.name)}</strong><span>${formatYear(x.year)} · ${esc(roleName(x))}</span></div>`).join('')}</div></section>`:''}</div>`;
+}
+async function publicJson(path){
+ const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),12000);
+ try{const r=await fetch(path+'?v=3.5.25',{signal:ctl.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(timer);}
+}
+async function loadInfoForPage(page){
+ if(page.name==='title'&&BY_ID[page.id]&&!information.requested.has(page.id)){
+  information.requested.add(page.id);
+  try{information.titles[page.id]=await publicJson('./public-data/titles/'+encodeURIComponent(page.id)+'.json');}catch(_){information.titles[page.id]={ready:false,failed:true};}
+  if(activePage().name==='title'&&activePage().id===page.id)render();
+ }
+ if(page.name==='person'&&/^[a-z0-9-]{1,110}$/.test(page.id)&&!information.personRequested.has(page.id)){
+  information.personRequested.add(page.id);
+  try{information.people[page.id]=await publicJson('./public-data/people/'+encodeURIComponent(page.id)+'.json');}catch(_){information.people[page.id]={failed:true};}
+  if(activePage().name==='person'&&activePage().id===page.id)render();
+ }
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-retry-info]');if(!b)return;const page=activePage();if(page.name==='title'){information.requested.delete(page.id);delete information.titles[page.id];}else if(page.name==='person'){information.personRequested.delete(page.id);delete information.people[page.id];}else return;render();});
+document.addEventListener('input',e=>{if(e.target.id==='people-search'){peopleSearchTerm=e.target.value;publicPeoplePage=0;const el=document.getElementById('people-results');if(el)el.innerHTML=peopleCards(information.directory?.items||[],peopleSearchTerm);}});
+
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-people-page]');
+ if(!b||b.disabled)return;
+ publicPeoplePage+=Number(b.dataset.peoplePage);
+ const el=document.getElementById('people-results');
+ if(el){el.innerHTML=peopleCards(information.directory?.items||[],peopleSearchTerm);el.scrollIntoView({block:'start',behavior:'instant'});}
+});
