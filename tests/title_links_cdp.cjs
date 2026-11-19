@@ -47,7 +47,7 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
    const all=FILMS.every(f=>typeof OFFICIAL_TITLE_LINKS[f.id]?.url==='string'&&OFFICIAL_TITLE_LINKS[f.id].url.startsWith('https://')&&titleExternalLinks(f).includes('google.com/search?q=')&&titleExternalLinks(f).includes(OFFICIAL_TITLE_LINKS[f.id].url));
    return {safe,all,count:FILMS.length,links:nodes.map(a=>a.href)};
   })()`);
-  assert(links.safe&&links.all&&links.count===86,JSON.stringify(links));console.log('PASS '+width+' official and Google URLs for '+links.count+' titles');
+  assert(links.safe&&links.all&&links.count===88,JSON.stringify(links));console.log('PASS '+width+' official and Google URLs for '+links.count+' titles');
  }
 
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>{ws?.close();chrome?.kill();srv.close();setTimeout(()=>{try{fs.rmSync(tmp,{recursive:true,force:true})}catch(_){}},300);});

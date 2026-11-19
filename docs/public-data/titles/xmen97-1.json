@@ -1,0 +1,16 @@
+{
+  "ready": true,
+  "data": {
+    "id": "xmen97-1",
+    "title": "X-Men ’97 — Season 1",
+    "type": "tv",
+    "season": 1,
+    "seasonCountExpected": 10,
+    "source": "Disney Press",
+    "sourceUrl": "https://thewaltdisneycompany.com/news/x-men-97-marvel-debut-disney/",
+    "fetchedAt": "2026-11-19",
+    "overviewFa": "گروه مردان ایکس در ادامه ماجراهای مجموعه انیمیشنی دهه ۹۰ با آینده‌ای تازه و دشوار روبه‌رو می‌شوند.",
+    "cast": [],
+    "episodes": []
+  }
+}

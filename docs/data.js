@@ -79,6 +79,9 @@ const ROWS = [
 ['wonder-man','Wonder Man','واندر من',2026,'2026-01-27',300,8,'series',6,'WM','gold'],
 ['daredevil-born-2','Daredevil: Born Again — Season 2','دردویل: تولد دوباره — فصل ۲',2026,'2026-03-24',400,8,'series',6,'DD','red'],
 ['visionquest','VisionQuest','ویژن‌کوئست',2026,'2026-10-14',360,8,'series',6,'V','gold'],
+// Related Marvel Animation, alternate universe; no numbered MCU phase.
+['xmen97-1','X-Men ’97 — Season 1','مردان ایکس ۹۷ — فصل ۱',2024,'2024-03-20',null,10,'series',0,'X97','blue'],
+['xmen97-2','X-Men ’97 — Season 2','مردان ایکس ۹۷ — فصل ۲',2026,'2026-07-01',null,9,'series',0,'X97','blue'],
 // Specials
 ['werewolf','Werewolf by Night','گرگینه در شب',2022,'2022-10-07',54,0,'special',4,'WW','gold'],
 ['guardians-holiday','Guardians of the Galaxy Holiday Special','ویژه کریسمس نگهبانان کهکشان',2022,'2022-11-25',44,0,'special',4,'G','purple'],
@@ -91,7 +94,7 @@ const ROWS = [
 ['logan','Logan','لوگان',2017,'2017-03-03',137,0,'movie',0,'L','gold'],
 ['all-hail','All Hail the King','درود بر پادشاه',2014,'2014-02-04',14,0,'special',2,'K','amber']
 ];
-const FILMS = ROWS.map(r=>({id:r[0],title:r[1],fa:r[2],year:r[3],release:r[4],minutes:r[5],episodes:r[6],type:r[7],phase:r[8],sigil:r[9],palette:r[10],universe:['xmen','x2','deadpool','deadpool-2','logan'].includes(r[0])?'fox':r[0]==='all-hail'?'bonus':'mcu'}));
+const FILMS = ROWS.map(r=>({id:r[0],title:r[1],fa:r[2],year:r[3],release:r[4],minutes:r[5],episodes:r[6],type:r[7],phase:r[8],sigil:r[9],palette:r[10],universe:['xmen','x2','deadpool','deadpool-2','logan'].includes(r[0])?'fox':r[0]==='all-hail'?'bonus':r[0].startsWith('xmen97-')?'animation':'mcu'}));
 const BY_ID = Object.fromEntries(FILMS.map(x=>[x.id,x]));
 const DOOMSDAY = ['xmen','x2','cap-first','avengers','infinity-war','endgame','loki-1','loki-2','shang-chi','spider-home','spider-far','spider-no','wandavision','strange-mom','wakanda','falcon','deadpool','deadpool-2','logan','deadpool-wolverine','cap-brave','thunderbolts','fantastic-four'];
 const BONUS = ['agatha','visionquest'];
@@ -99,16 +102,18 @@ const OFFICIAL = new Set(['xmen','x2','cap-first','avengers','infinity-war','end
 const SEEN = [];
 // A linear viewing order, grouping multiversal titles at a convenient point rather than assigning fictitious dates.
 const STORY_ORDER = [
-'eyes-wakanda','cap-first','agent-carter-1','agent-carter-2','captain-marvel','iron-man','iron-man-2','incredible-hulk','thor','avengers','thor-dark','iron-man-3','all-hail','cap-winter','guardians-1','guardians-2','groot-1','groot-2','daredevil-1','jessica-1','avengers-ultron','ant-man','daredevil-2','luke-1','iron-fist-1','defenders','civil-war','black-widow','black-panther','punisher-1','spider-home','doctor-strange','jessica-2','luke-2','iron-fist-2','daredevil-3','thor-ragnarok','punisher-2','jessica-3','antman-wasp','infinity-war','endgame','loki-1','loki-2','whatif-1','whatif-2','whatif-3','marvel-zombies','wandavision','shang-chi','falcon','spider-far','eternals','spider-no','strange-mom','hawkeye','moon-knight','wakanda','echo','she-hulk','ms-marvel','thor-love','ironheart','werewolf','guardians-holiday','quantumania','guardians-3','secret-invasion','marvels','deadpool-wolverine','agatha','daredevil-born-1','cap-brave','thunderbolts','fantastic-four','wonder-man','punisher-special','daredevil-born-2','spider-brand','visionquest','friendly-spider-1'
+'eyes-wakanda','cap-first','agent-carter-1','agent-carter-2','captain-marvel','iron-man','iron-man-2','incredible-hulk','thor','avengers','thor-dark','iron-man-3','all-hail','cap-winter','guardians-1','guardians-2','groot-1','groot-2','daredevil-1','jessica-1','avengers-ultron','ant-man','daredevil-2','luke-1','iron-fist-1','defenders','civil-war','black-widow','black-panther','punisher-1','spider-home','doctor-strange','jessica-2','luke-2','iron-fist-2','daredevil-3','thor-ragnarok','punisher-2','jessica-3','antman-wasp','infinity-war','endgame','loki-1','loki-2','whatif-1','whatif-2','whatif-3','xmen97-1','xmen97-2','marvel-zombies','wandavision','shang-chi','falcon','spider-far','eternals','spider-no','strange-mom','hawkeye','moon-knight','wakanda','echo','she-hulk','ms-marvel','thor-love','ironheart','werewolf','guardians-holiday','quantumania','guardians-3','secret-invasion','marvels','deadpool-wolverine','agatha','daredevil-born-1','cap-brave','thunderbolts','fantastic-four','wonder-man','punisher-special','daredevil-born-2','spider-brand','visionquest','friendly-spider-1'
 ];
 const STORY_INDEX = Object.fromEntries(STORY_ORDER.map((id,i)=>[id,i]));
-const MCU = FILMS.filter(f=>f.universe==='mcu'||f.universe==='bonus');
+const MCU = FILMS.filter(f=>f.universe==='mcu'||f.universe==='bonus'||f.universe==='animation');
 
 /* Curated character/continuity arcs. Editorial viewing paths — not Marvel Studios official timelines. */
-const STORY_ARCS = {"main":{"name":"خط اصلی انتقام‌جویان","en":"THE MAIN SAGA","icon":"✦","desc":"از شکل‌گیری تیم تا پیامد Endgame و پیوند داستان‌های چندجهانی. یک مسیر گزینش‌شده، نه تقویم رسمی.","items":["iron-man","iron-man-2","thor","cap-first","avengers","iron-man-3","cap-winter","avengers-ultron","civil-war","spider-home","black-panther","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","wandavision","falcon","spider-far","spider-no","strange-mom","wakanda","shang-chi","quantumania","deadpool-wolverine","cap-brave","thunderbolts","fantastic-four","visionquest"]},"ironman":{"name":"تونی استارک و میراثش","en":"IRON MAN LEGACY","icon":"◈","desc":"داستان تونی، روابطش با انتقام‌جویان، پیتر پارکر و ادامه میراث فناوری زره.","items":["iron-man","iron-man-2","avengers","iron-man-3","avengers-ultron","civil-war","spider-home","infinity-war","endgame","ironheart"]},"captain":{"name":"از استیو تا سم و باکی","en":"CAPTAIN AMERICA","icon":"✪","desc":"مسیر سپر کاپیتان آمریکا، سرباز زمستان و تیم جدید.","items":["cap-first","avengers","cap-winter","avengers-ultron","civil-war","infinity-war","endgame","falcon","cap-brave","thunderbolts"]},"thorloki":{"name":"ثور، لوکی و آزگارد","en":"THOR & LOKI","icon":"ϟ","desc":"روابط دو برادر، سرنوشت آزگارد و نقش نسخه متفاوت لوکی در TVA.","items":["thor","avengers","thor-dark","avengers-ultron","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","thor-love"]},"wanda":{"name":"واندا، ویژن و جادو","en":"THE SCARLET PATH","icon":"✧","desc":"مسیر واندا از انتقام‌جویان تا جادوی آشوب و ادامه داستان ویژن.","items":["avengers-ultron","civil-war","infinity-war","endgame","wandavision","strange-mom","agatha","visionquest"]},"spider":{"name":"مرد عنکبوتی پیتر پارکر","en":"SPIDER-MAN","icon":"✺","desc":"ورود پیتر به جهان انتقام‌جویان، پیامدهای Endgame و ادامه داستان خودش.","items":["civil-war","spider-home","infinity-war","endgame","spider-far","spider-no","spider-brand"]},"multiverse":{"name":"دکتر استرنج و مولتی‌ورس","en":"THE MULTIVERSE","icon":"⌘","desc":"از جادوهای محافظ زمین تا TVA، جهان‌های موازی و Fantastic Four.","items":["doctor-strange","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","wandavision","spider-no","strange-mom","whatif-1","whatif-2","whatif-3","quantumania","deadpool-wolverine","fantastic-four"]},"wakanda":{"name":"واکاندا و پلنگ سیاه","en":"WAKANDA","icon":"◇","desc":"از معرفی واکاندا تا تغییر نسل قهرمانان و فناوری آیرون‌هارت.","items":["civil-war","black-panther","infinity-war","endgame","wakanda","ironheart","eyes-wakanda"]},"guardians":{"name":"نگهبانان کهکشان","en":"GUARDIANS OF THE GALAXY","icon":"✷","desc":"داستان خانواده کیهانیِ نگهبانان، نقششان در نبرد تانوس و پایان سه‌گانه.","items":["guardians-1","guardians-2","groot-1","groot-2","infinity-war","endgame","thor-love","guardians-holiday","guardians-3"]},"street":{"name":"دردویل و قهرمانان خیابانی","en":"STREET-LEVEL HEROES","icon":"⌁","desc":"مسیر نیویورکی Defenders تا بازگشت دردویل و مجازات‌گر.","items":["daredevil-1","jessica-1","daredevil-2","luke-1","iron-fist-1","defenders","punisher-1","daredevil-3","punisher-2","hawkeye","echo","daredevil-born-1","daredevil-born-2","punisher-special"]},"marvels":{"name":"کاپیتان مارول و قهرمانان فضایی","en":"THE MARVELS","icon":"★","desc":"کارول دنورز، کامالا خان، مونیکا رمبو و پرونده اسکرال‌ها.","items":["captain-marvel","endgame","wandavision","ms-marvel","secret-invasion","marvels"]},"antman":{"name":"انت‌من و قلمرو کوانتومی","en":"QUANTUM REALM","icon":"◎","desc":"اسکات لنگ، خانواده پیم و پیوند فناوری کوانتومی با رویدادهای Endgame.","items":["ant-man","civil-war","antman-wasp","endgame","quantumania"]},"animated":{"name":"انیمیشن‌ها و جهان‌های متفاوت","en":"ANIMATED MULTIVERSE","icon":"✳","desc":"انیمیشن‌های داستانی MCU و شاخه‌های موازی؛ بعضی آثار مستقل و غیرخطی‌اند.","items":["whatif-1","whatif-2","whatif-3","marvel-zombies","friendly-spider-1","groot-1","groot-2","eyes-wakanda"]}};
+const STORY_ARCS = {"main":{"name":"خط اصلی انتقام‌جویان","en":"THE MAIN SAGA","icon":"✦","desc":"از شکل‌گیری تیم تا پیامد Endgame و پیوند داستان‌های چندجهانی. یک مسیر گزینش‌شده، نه تقویم رسمی.","items":["iron-man","iron-man-2","thor","cap-first","avengers","iron-man-3","cap-winter","avengers-ultron","civil-war","spider-home","black-panther","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","wandavision","falcon","spider-far","spider-no","strange-mom","wakanda","shang-chi","quantumania","deadpool-wolverine","cap-brave","thunderbolts","fantastic-four","visionquest"]},"ironman":{"name":"تونی استارک و میراثش","en":"IRON MAN LEGACY","icon":"◈","desc":"داستان تونی، روابطش با انتقام‌جویان، پیتر پارکر و ادامه میراث فناوری زره.","items":["iron-man","iron-man-2","avengers","iron-man-3","avengers-ultron","civil-war","spider-home","infinity-war","endgame","ironheart"]},"captain":{"name":"از استیو تا سم و باکی","en":"CAPTAIN AMERICA","icon":"✪","desc":"مسیر سپر کاپیتان آمریکا، سرباز زمستان و تیم جدید.","items":["cap-first","avengers","cap-winter","avengers-ultron","civil-war","infinity-war","endgame","falcon","cap-brave","thunderbolts"]},"thorloki":{"name":"ثور، لوکی و آزگارد","en":"THOR & LOKI","icon":"ϟ","desc":"روابط دو برادر، سرنوشت آزگارد و نقش نسخه متفاوت لوکی در TVA.","items":["thor","avengers","thor-dark","avengers-ultron","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","thor-love"]},"wanda":{"name":"واندا، ویژن و جادو","en":"THE SCARLET PATH","icon":"✧","desc":"مسیر واندا از انتقام‌جویان تا جادوی آشوب و ادامه داستان ویژن.","items":["avengers-ultron","civil-war","infinity-war","endgame","wandavision","strange-mom","agatha","visionquest"]},"spider":{"name":"مرد عنکبوتی پیتر پارکر","en":"SPIDER-MAN","icon":"✺","desc":"ورود پیتر به جهان انتقام‌جویان، پیامدهای Endgame و ادامه داستان خودش.","items":["civil-war","spider-home","infinity-war","endgame","spider-far","spider-no","spider-brand"]},"multiverse":{"name":"دکتر استرنج و مولتی‌ورس","en":"THE MULTIVERSE","icon":"⌘","desc":"از جادوهای محافظ زمین تا TVA، جهان‌های موازی و Fantastic Four.","items":["doctor-strange","thor-ragnarok","infinity-war","endgame","loki-1","loki-2","wandavision","spider-no","strange-mom","whatif-1","whatif-2","whatif-3","quantumania","deadpool-wolverine","fantastic-four"]},"wakanda":{"name":"واکاندا و پلنگ سیاه","en":"WAKANDA","icon":"◇","desc":"از معرفی واکاندا تا تغییر نسل قهرمانان و فناوری آیرون‌هارت.","items":["civil-war","black-panther","infinity-war","endgame","wakanda","ironheart","eyes-wakanda"]},"guardians":{"name":"نگهبانان کهکشان","en":"GUARDIANS OF THE GALAXY","icon":"✷","desc":"داستان خانواده کیهانیِ نگهبانان، نقششان در نبرد تانوس و پایان سه‌گانه.","items":["guardians-1","guardians-2","groot-1","groot-2","infinity-war","endgame","thor-love","guardians-holiday","guardians-3"]},"street":{"name":"دردویل و قهرمانان خیابانی","en":"STREET-LEVEL HEROES","icon":"⌁","desc":"مسیر نیویورکی Defenders تا بازگشت دردویل و مجازات‌گر.","items":["daredevil-1","jessica-1","daredevil-2","luke-1","iron-fist-1","defenders","punisher-1","daredevil-3","punisher-2","hawkeye","echo","daredevil-born-1","daredevil-born-2","punisher-special"]},"marvels":{"name":"کاپیتان مارول و قهرمانان فضایی","en":"THE MARVELS","icon":"★","desc":"کارول دنورز، کامالا خان، مونیکا رمبو و پرونده اسکرال‌ها.","items":["captain-marvel","endgame","wandavision","ms-marvel","secret-invasion","marvels"]},"antman":{"name":"انت‌من و قلمرو کوانتومی","en":"QUANTUM REALM","icon":"◎","desc":"اسکات لنگ، خانواده پیم و پیوند فناوری کوانتومی با رویدادهای Endgame.","items":["ant-man","civil-war","antman-wasp","endgame","quantumania"]},"animated":{"name":"انیمیشن‌ها و جهان‌های متفاوت","en":"ANIMATED MULTIVERSE","icon":"✳","desc":"انیمیشن‌های داستانی MCU و شاخه‌های موازی؛ بعضی آثار مستقل و غیرخطی‌اند.","items":["whatif-1","whatif-2","whatif-3","marvel-zombies","friendly-spider-1","groot-1","groot-2","eyes-wakanda","xmen97-1","xmen97-2"]}};
 
 /* Official title/studio destinations sourced from public studio links and catalogues. */
 const OFFICIAL_TITLE_LINKS = {
+  "xmen97-1": {"url":"https://thewaltdisneycompany.com/news/x-men-97-marvel-debut-disney/","label":"Disney"},
+  "xmen97-2": {"url":"https://www.disneyplus.com/explore/articles/x-men-97-season-2","label":"Disney"},
   "iron-man-3": {
     "url": "https://movies.disney.com/marvels-iron-man-3",
     "label": "Disney Movies"
@@ -470,30 +475,6 @@ const HOME_GUIDE = {
 const RELEASE_CALENDAR_CHECKED="2026-11-19";
 const RELEASE_CALENDAR_EXTRA = [
   {
-    "id": "xmen97-1",
-    "title": "X-Men ’97 — Season 1",
-    "fa": "مردان ایکس ۹۷ — فصل ۱",
-    "date": "2024-03-20",
-    "precision": "day",
-    "type": "animation",
-    "phase": 0,
-    "status": "released",
-    "source": "https://thewaltdisneycompany.com/news/x-men-97-marvel-debut-disney/",
-    "note": "انیمیشن جهان موازی"
-  },
-  {
-    "id": "xmen97-2",
-    "title": "X-Men ’97 — Season 2",
-    "fa": "مردان ایکس ۹۷ — فصل ۲",
-    "date": "2026-07-01",
-    "precision": "day",
-    "type": "animation",
-    "phase": 0,
-    "status": "released",
-    "source": "https://www.disneyplus.com/explore/articles/x-men-97-season-2",
-    "note": "انیمیشن جهان موازی"
-  },
-  {
     "id": "doomsday-film",
     "title": "Avengers: Doomsday",
     "fa": "انتقام‌جویان: روز رستاخیز",
@@ -648,5 +629,20 @@ const RELEASE_CALENDAR_EXTRA = [
     "status": "planned",
     "source": "https://prensa.disney.es/noticias/new-york-comic-con-presenta-a-visionquest,-daredevil:-born-again-y-un-adelanto-de-las-pr%C3%B3ximas-series-de-marvel-televison-y-marvel-animation-en-disney%2B",
     "note": "ویژه‌برنامه دو قسمتی؛ حوالی هالووین"
+  },
+  {
+    "id": "endgame-encore",
+    "title": "Avengers Endgame: Encore",
+    "fa": "انتقام‌جویان: پایان بازی — انکور",
+    "date": "2026-09-25",
+    "precision": "day",
+    "type": "movie",
+    "phase": 3,
+    "status": "released",
+    "variantOf": "endgame",
+    "minutes": 185,
+    "streamDate": "2026-11-13",
+    "source": "https://www.disneyplus.com/explore/articles/avengers-endgame-encore",
+    "note": "نسخه تکمیلی فیلم ۲۰۱۹ با حدود چهار دقیقه صحنه تازه مرتبط با Doomsday و اصلاح رنگ؛ عرضه در Disney+ در ۱۳ نوامبر ۲۰۲۶."
   }
 ];

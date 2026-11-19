@@ -33,8 +33,8 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
    const arcErrors=Object.entries(STORY_ARCS).flatMap(([k,a])=>a.items.filter((id,i)=>!BY_ID[id]||a.items.indexOf(id)!==i).map(id=>[k,id]));
    return {total:FILMS.length,movies:FILMS.filter(f=>f.type==='movie'&&f.universe==='mcu').length,bad,arcErrors,arcs:Object.keys(STORY_ARCS).length};
  })()`);
- assert(audit.total===86&&audit.movies===38&&audit.bad.length===0&&audit.arcErrors.length===0,JSON.stringify(audit));
- console.log('PASS phase audit of all 86 records and '+audit.arcs+' arcs');
+ assert(audit.total===88&&audit.movies===38&&audit.bad.length===0&&audit.arcErrors.length===0,JSON.stringify(audit));
+ console.log('PASS phase audit of all 88 records and '+audit.arcs+' arcs');
  const arcs=await ev('Object.keys(STORY_ARCS)');
  await ev("document.querySelector('[data-action=order][data-value=arc]').click()");
  await ev("(()=>{const el=document.querySelector('#page-size');el.value='all';el.dispatchEvent(new Event('change',{bubbles:true}))})()");

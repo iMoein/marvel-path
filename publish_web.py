@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from xml.etree.ElementTree import Element,SubElement,ElementTree
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'docs'; P=OUT/'public-data'
-VERSION='3.5.18'; SITE='https://marvel.imoein.com'
+VERSION='3.5.19'; SITE='https://marvel.imoein.com'
 OG='/assets/social/og.jpg'
 def esc(s):return html.escape(str(s or ''),quote=True)
 def get(p):return json.loads(p.read_text())
@@ -76,7 +76,7 @@ def main():
     page('/archive/','آرشیو MCU و فیلم‌ها و سریال‌های مارول | مسیر مارول','فهرست فیلم‌ها، سریال‌ها و ویژه‌برنامه‌های آرشیو مارول؛ داستان، بازیگران، قسمت‌ها و ترتیب تماشا.',static('آرشیو فیلم‌ها و سریال‌های مارول','<p>فهرست '+str(len(films))+' عنوان ثبت‌شده در آرشیو مسیر مارول، شامل آثار MCU و جهان‌های مرتبط.</p><h2>همه عناوین</h2>'+list_titles(list(films))))
     page('/actors/','بازیگران مارول؛ نقش‌ها و آثار | مسیر مارول','فهرست بازیگران آرشیو مارول، نقش‌ها، پروفایل و فیلموگرافی در مسیر مارول.',static('بازیگران مارول','<p>فهرست '+str(len(actors))+' بازیگر مرتبط با آثار آرشیو. برای مشاهده نقش‌ها و آثار روی نام بازیگر بزنید.</p>'+list_people(actors)))
     calendar_rows=[(f['release'],'<li>'+esc(f['release'])+' · '+link('/title/'+f['id']+'/',f['title'])+'</li>') for f in films.values() if f['id'] in data['mcu']]
-    calendar_rows += [(r['date'],'<li>'+esc(r['date'])+' · '+esc(r['title'])+' · '+('برنامه‌ریزی‌شده' if r['status']=='planned' else 'منتشرشده')+' · '+link(r['source'],'منبع')+'</li>') for r in data['releaseExtra']]
+    calendar_rows += [(r['date'],'<li>'+esc(r['date'])+' · '+(link('/title/'+r['variantOf']+'/',r['title']) if r.get('variantOf') else esc(r['title']))+' · '+('برنامه‌ریزی‌شده' if r['status']=='planned' else 'انتشار مجدد' if r.get('variantOf') else 'منتشرشده')+' · '+link(r['source'],'منبع')+'</li>') for r in data['releaseExtra']]
     page('/timeline/','خط زمانی انتشار فیلم‌ها و سریال‌های MCU | مسیر مارول','تقویم انتشار آثار مارول از ۲۰۰۸، فیلم‌ها و سریال‌های منتشرشده و برنامه‌های اعلام‌شده آینده.',static('خط زمانی انتشار مارول','<p>تاریخ انتشار آثار آرشیو و بازه‌های اعلام‌شده آینده؛ زمان‌های آینده ممکن است تغییر کنند.</p><ul class="seo-catalog">'+''.join(row for _,row in sorted(calendar_rows))+'</ul>'))
     for private,label in [('settings','تنظیمات'),('watchlist','واچ‌لیست من')]:
         page('/'+private+'/',label+' | مسیر مارول','فضای شخصی ثبت و مدیریت اطلاعات تماشا.',static(label,'<p>این بخش اطلاعات شخصی را فقط در مرورگر شما ذخیره می‌کند.</p>'),index=False)
@@ -134,7 +134,7 @@ function seoLinks(){document.querySelectorAll('a[href^="#"]').forEach(a=>{const 
     # Runtime titles remain the accurate pre-rendered title; legacy fragment links navigate to canonical pages.
     s=s.replace("if(!location.hash)location.hash=ADMIN_MODE?'#dashboard':'#doomsday';else goHash();", """if(location.hash){const path=seoPath(location.hash.slice(1));if(path&&path!==location.pathname){location.replace(path);}else{history.replaceState(null,'',location.pathname+location.search);goHash();}}else goHash();
 new MutationObserver(seoLinks).observe(document.getElementById('app'),{childList:true,subtree:true});
-document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a)return;const href=a.getAttribute('href');if(href==='/archive/'||href==='/actors/'||href==='/'){try{sessionStorage.setItem('marvel-path-origin',href==='/'?'doomsday':href==='/archive/'?'mcu':'people');}catch(_){}}});
+document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a)return;const href=a.getAttribute('href');if(location.pathname==='/timeline/'&&href?.startsWith('/title/')){try{sessionStorage.setItem('marvel-path-origin','timeline');}catch(_){}}if(href==='/archive/'||href==='/timeline/'||href==='/actors/'||href==='/'){try{sessionStorage.setItem('marvel-path-origin',href==='/'?'doomsday':href==='/archive/'?'mcu':href==='/timeline/'?'timeline':'people');}catch(_){}}});
 """)
     s=s.replace("function goHash(){const p=activePage();","function goHash(){const p=activePage();if(location.hash){const path=seoPath(location.hash.slice(1));if(path&&path!==location.pathname){location.assign(path);return;}}if(p.name==='title'){try{detailOrigin=sessionStorage.getItem('marvel-path-origin')||'mcu';}catch(_){}}")
     # Add an install/help setting without creating an inert button.
@@ -160,7 +160,7 @@ document.addEventListener('click',async e=>{if(!e.target.closest('[data-install-
     with css.open('a') as f:f.write('\n.seo-content{max-width:1000px;margin:auto;padding:28px;color:var(--text);font:16px/1.9 Vazirmatn,Tahoma,Arial}.seo-content h1{font-size:clamp(25px,5vw,44px);line-height:1.5}.seo-content a{color:#f46b77;text-decoration:underline;text-underline-offset:3px}.seo-nav{display:flex;flex-wrap:wrap;gap:20px}.seo-catalog{columns:2;column-gap:30px;padding-inline-start:24px}.seo-catalog li{break-inside:avoid;margin:5px 0}.seo-hero{display:flex;gap:20px;align-items:start}.seo-hero img{max-width:32%;height:auto;border-radius:12px}.seo-note{color:var(--muted);margin-top:40px}@media(max-width:600px){.seo-catalog{columns:1}.seo-content{padding:18px}}.pwa-install{margin-top:16px}.pwa-install #install-hint:empty{display:none}\n')
     worker="""'use strict';
 const CORE='marvel-path-v3512-core', DATA='marvel-path-v340-data';
-const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.18','/data.js?v=3.5.18','/meta.js?v=3.5.18','/posters.js?v=3.5.18','/admin.js?v=3.5.18','/enrichment.js?v=3.5.18','/app.js?v=3.5.18','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
+const SHELL=['/','/archive/','/actors/','/settings/','/watchlist/','/style.css?v=3.5.19','/data.js?v=3.5.19','/meta.js?v=3.5.19','/posters.js?v=3.5.19','/admin.js?v=3.5.19','/enrichment.js?v=3.5.19','/app.js?v=3.5.19','/assets/favicon.svg','/favicon.ico','/manifest.webmanifest','/assets/icons/icon-192.png','/assets/icons/icon-512.png','/assets/fonts/Vazirmatn-wght.woff2?v=33.003-r2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CORE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('marvel-path-v')&&![CORE,DATA].includes(k)).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{

@@ -117,6 +117,17 @@ and an announced/scheduled status; titles without a confirmed release
 window are omitted. Dates refer to first premieres and US theatrical dates.
 Only the existing watch catalogue contributes to personal progress;
 calendar-only records are not automatically promoted into that catalogue.
-The calendar is a curated snapshot, not a live feed. Historical coverage
-is the current archive plus the two released X-Men ’97 seasons; the archive
-does not claim to cover every legacy Marvel Television release.
+The calendar is a curated snapshot, not a live feed. Historical coverage is the shared archive; it does not claim to cover every
+legacy Marvel Television release.
+
+### Release catalogue reconciliation (3.5.19)
+The two released X-Men ’97 seasons now belong to the archive with official
+premiere dates and episode counts (10 and 9). No invented runtime or cast
+metadata is included; artwork and episode-level metadata are pending.
+The timeline derives its released-title total from the same catalogue.
+Avengers Endgame: Encore is a 2026 release variant of the 2019 film, not a
+new MCU film; its September 25 theatrical and November 13 Disney+ dates
+are recorded without creating a duplicate watch-progress entry.
+Sources: https://thewaltdisneycompany.com/news/x-men-97-marvel-debut-disney/
+and https://press.disney.co.uk/news/marvel-animations-x-men-97-season-2-now-streaming-exclusively-on-disney
+and https://www.disneyplus.com/explore/articles/avengers-endgame-encore

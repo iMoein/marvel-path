@@ -24,7 +24,7 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
   await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:width<=700});
   await go('/timeline/?test='+Date.now());
   let r=await ev(`(()=>{const cards=[...document.querySelectorAll('.release-entry')],planned=cards.filter(x=>x.classList.contains('release-planned')),nav=document.querySelector(widthTest());function widthTest(){return innerWidth<=700?'.mobile-nav':'.nav-column'}return {total:cards.length,future:planned.length,source:planned.every(x=>x.querySelector('.release-source')?.href.startsWith('https://')),noProgress:planned.every(x=>!x.querySelector('[data-action=toggle-done]')),unique:new Set(cards.map(x=>x.dataset.releaseId)).size,fit:document.documentElement.scrollWidth<=innerWidth+2&&cards.every(x=>x.scrollWidth<=x.clientWidth+2),nav:nav.querySelector('a[href="/timeline/"]')?.getAttribute('aria-current'),navFit:nav.scrollWidth<=nav.clientWidth+2,core:MCU.length}})()`);
-  assert(r.total===96&&r.future===13&&r.unique===r.total&&r.core===81&&r.source&&r.noProgress&&r.fit&&r.nav==='page'&&r.navFit,JSON.stringify({width,...r}));
+  assert(r.total===97&&r.future===13&&r.unique===r.total&&r.core===83&&r.source&&r.noProgress&&r.fit&&r.nav==='page'&&r.navFit,JSON.stringify({width,...r}));
   await click('release-filter','planned');
   assert(await ev('document.querySelectorAll(".release-entry").length===13&&!document.querySelector(".release-entry:not(.release-planned)")'),'future filter');
   await select('release-type','movie');
@@ -34,10 +34,25 @@ async function ev(expression,awaitPromise=false){const x=await send('Runtime.eva
   await select('release-year','2008');
   assert(await ev('!!document.querySelector(".empty")&&!document.querySelector(".release-entry")'),'zero state');
   await select('release-type','all');await select('release-year','all');await click('release-filter','released');
-  assert(await ev('document.querySelectorAll(".release-entry").length===83&&!document.querySelector(".release-planned")'),'history filter');
+  assert(await ev('document.querySelectorAll(".release-entry").length===84&&!document.querySelector(".release-planned")'),'history filter');
   await click('release-filter','all');
   console.log('PASS timeline',width,'all filters and no overflow');
  }
- assert(await ev('!BY_ID["doomsday-film"]&&formatYear(2026)==="۲۰۲۶"'),'progress isolation');
+ assert(await ev(`(()=>{
+ const items=releaseRecords(),released=items.filter(r=>r.status==='released'&&!r.variantOf);
+ const encore=items.find(r=>r.id==='endgame-encore');
+ const e=document.querySelector('[data-release-id="endgame-encore"]');
+ return released.length===MCU.length&&released.every(r=>BY_ID[r.id])&&
+ !BY_ID['endgame-encore']&&encore.variantOf==='endgame'&&encore.minutes===185&&
+ encore.streamDate==='2026-11-13'&&e.querySelector('.release-title').getAttribute('href')==='/title/endgame/'&&e.textContent.includes('انتشار مجدد')&&
+ BY_ID['xmen97-1'].episodes===10&&BY_ID['xmen97-2'].episodes===9&&!BY_ID['doomsday-film']&&formatYear(2026)==='۲۰۲۶';
+ })()`),'catalogue identity and release variant isolation');
+ await go('/title/endgame/?encore-test='+Date.now());
+ assert(await ev('!!document.querySelector(".encore-info")&&document.querySelector(".encore-info").textContent.includes("۱۳ نوامبر ۲۰۲۶")'),'encore detail');
+ for(const [id,count] of [['xmen97-1',10],['xmen97-2',9]]){
+  await go('/title/'+id+'/?season-test='+Date.now());
+  assert(await ev('document.querySelectorAll(".cinema-episode-grid .episode").length==='+count),'season episode tracking '+id);
+ }
+ console.log('PASS shared catalogue, Encore details and X-Men season tracking');
  console.log('PASS isolation and ungrouped years');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>{ws?.close();chrome?.kill();srv.close();setTimeout(()=>{try{fs.rmSync(tmp,{recursive:true,force:true})}catch(_){}},300);});
